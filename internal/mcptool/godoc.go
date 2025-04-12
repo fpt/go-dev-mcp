@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"fujlog.net/godev-mcp/internal/app"
+	"fujlog.net/godev-mcp/internal/infra"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -14,7 +15,8 @@ func searchGoDoc(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToo
 		return mcp.NewToolResultError("Missing search query"), nil
 	}
 
-	results, err := app.SearchGoDoc(query)
+	httpcli := infra.NewHttpClient()
+	results, err := app.SearchGoDoc(httpcli, query)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Error searching Go documentation: %v", err)), nil
 	}
@@ -32,7 +34,8 @@ func readGoDoc(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolR
 		return mcp.NewToolResultError("Missing package URL"), nil
 	}
 
-	result, err := app.ReadGoDoc(packageURL)
+	httpcli := infra.NewHttpClient()
+	result, err := app.ReadGoDoc(httpcli, packageURL)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Error reading Go documentation: %v", err)), nil
 	}

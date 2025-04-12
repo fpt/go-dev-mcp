@@ -2,27 +2,23 @@ package app
 
 import (
 	"fmt"
-	"net/http"
 	"strings"
 
+	"fujlog.net/godev-mcp/internal/infra"
 	"fujlog.net/godev-mcp/pkg/htmlu"
 	"github.com/pkg/errors"
 	"golang.org/x/net/html"
 )
 
-func SearchGoDoc(query string) (string, error) {
+func SearchGoDoc(httpcli *infra.HttpClient, query string) (string, error) {
 	url := fmt.Sprintf("https://pkg.go.dev/search?q=%s", query)
-	resp, err := http.Get(url)
+	bodyrdr, err := httpcli.HttpGet(url)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to make HTTP request")
 	}
-	defer resp.Body.Close()
+	defer bodyrdr.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return "", errors.Wrapf(err, "non-200 response status: %d", resp.StatusCode)
-	}
-
-	doc, err := html.Parse(resp.Body)
+	doc, err := html.Parse(bodyrdr)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to parse HTML")
 	}
@@ -40,7 +36,7 @@ func SearchGoDoc(query string) (string, error) {
 
 	var resultStrings []string
 	for _, result := range results {
-		resultStrings = append(resultStrings, fmt.Sprintf("%s: %s\nDescription: %s", result.Name, result.URL, result.Description))
+		resultStrings = append(resultStrings, fmt.Sprintf("* %s\n\tURL: %s\n\tDescription: %s", result.Name, result.URL, result.Description))
 	}
 
 	return strings.Join(resultStrings, "\n"), nil
@@ -48,19 +44,15 @@ func SearchGoDoc(query string) (string, error) {
 
 // ReadGoDoc reads Go documentation for a given package URL.
 // packageURL must be in "golang.org/x/net/html" format.
-func ReadGoDoc(packageURL string) (string, error) {
+func ReadGoDoc(httpcli *infra.HttpClient, packageURL string) (string, error) {
 	url := fmt.Sprintf("https://pkg.go.dev/%s", packageURL)
-	resp, err := http.Get(url)
+	bodyrdr, err := httpcli.HttpGet(url)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to make HTTP request")
 	}
-	defer resp.Body.Close()
+	defer bodyrdr.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return "", errors.Wrapf(err, "non-200 response status: %d", resp.StatusCode)
-	}
-
-	doc, err := html.Parse(resp.Body)
+	doc, err := html.Parse(bodyrdr)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to parse HTML")
 	}

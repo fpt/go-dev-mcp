@@ -38,7 +38,7 @@ func Register(s *server.MCPServer, workdir string) error {
 
 	// Add GoDoc search tool
 	tool = mcp.NewTool("search_godoc",
-		mcp.WithDescription("Search Go documentation"),
+		mcp.WithDescription("Search Go documentation in pkg.go.dev"),
 		mcp.WithString("query",
 			mcp.Required(),
 			mcp.Description("Search query"),
@@ -48,7 +48,7 @@ func Register(s *server.MCPServer, workdir string) error {
 
 	// Add GoDoc read tool
 	tool = mcp.NewTool("read_godoc",
-		mcp.WithDescription("Read Go documentation"),
+		mcp.WithDescription("Read Go documentation from pkg.go.dev"),
 		mcp.WithString("package_url",
 			mcp.Required(),
 			mcp.Description("URL of the Go package (e.g., 'github.com/user/repo')"),

@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"fujlog.net/godev-mcp/internal/app"
+	"fujlog.net/godev-mcp/internal/infra"
 	"github.com/google/subcommands"
 )
 
@@ -59,7 +60,8 @@ func (p *GoDocSearchCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) s
 	}
 
 	query := f.Arg(0)
-	result, err := app.SearchGoDoc(query)
+	httpcli := infra.NewHttpClient()
+	result, err := app.SearchGoDoc(httpcli, query)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return subcommands.ExitFailure
@@ -91,7 +93,8 @@ func (p *GoDocReadCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) sub
 	}
 
 	query := f.Arg(0)
-	result, err := app.ReadGoDoc(query)
+	httpcli := infra.NewHttpClient()
+	result, err := app.ReadGoDoc(httpcli, query)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return subcommands.ExitFailure
