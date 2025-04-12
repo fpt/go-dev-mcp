@@ -56,5 +56,29 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, readGoDoc)
 
+	// Add GitHub search code tool
+	tool = mcp.NewTool("search_github_code",
+		mcp.WithDescription("Search code in GitHub"),
+		mcp.WithString("query",
+			mcp.Required(),
+			mcp.Description("Search query"),
+		),
+	)
+	s.AddTool(tool, searchCodeGitHub)
+
+	// Add GitHub get content tool
+	tool = mcp.NewTool("get_github_content",
+		mcp.WithDescription("Get content from GitHub"),
+		mcp.WithString("repo",
+			mcp.Required(),
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
+		mcp.WithString("path",
+			mcp.Required(),
+			mcp.Description("Path to the file in the repository"),
+		),
+	)
+	s.AddTool(tool, getGitHubContent)
+
 	return nil
 }

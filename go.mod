@@ -3,6 +3,8 @@ module fujlog.net/godev-mcp
 go 1.24.2
 
 require (
+	github.com/google/go-github/v71 v71.0.0 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/subcommands v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/mark3labs/mcp-go v0.20.0 // indirect

@@ -23,7 +23,7 @@ func runMakeTarget(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallT
 		return mcp.NewToolResultError(fmt.Sprintf("Makefile not found in directory: %s", workdir)), nil
 	}
 
-	stdout, stderr, exitCode, err := infra.Run(workdir, "make", []string{target})
+	stdout, stderr, exitCode, err := infra.Run(workdir, "make", target)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Command failed. Exit code: %d, Error: %+v\n%s", exitCode, err, formatOutput(stdout, stderr))), nil
 	}

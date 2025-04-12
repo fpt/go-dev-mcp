@@ -17,6 +17,7 @@ func main() {
 	subcommands.Register(&subcmd.TreeCmd{}, "")
 	subcommands.Register(&subcmd.DatetimeCmd{}, "")
 	subcommands.Register(&subcmd.GoDocCmd{}, "")
+	subcommands.Register(&subcmd.GithubCmd{}, "")
 
 	flag.Parse()
 	ctx := context.Background()

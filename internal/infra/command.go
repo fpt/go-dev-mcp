@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func Run(workdir, cmd string, args []string) (string, string, int, error) {
+func Run(workdir, cmd string, args ...string) (string, string, int, error) {
 	stdout := strings.Builder{}
 	stderr := strings.Builder{}
 
@@ -28,7 +28,6 @@ func Run(workdir, cmd string, args []string) (string, string, int, error) {
 		return stdoutStr, stderrStr, 1, errors.Wrap(err, "command execution failed")
 	}
 
-	// Print the output
 	exitCode := command.ProcessState.ExitCode()
 	return stdoutStr, stderrStr, exitCode, nil
 }

@@ -16,7 +16,7 @@ lint: ## Run lint
 	golangci-lint run
 
 inspect: ## Run in MCP inspector
-	npx @modelcontextprotocol/inspector go run ./cmd/main.go --workdir "."
+	npx @modelcontextprotocol/inspector go run ./cmd/main.go serve
 
 help: ## Display this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \

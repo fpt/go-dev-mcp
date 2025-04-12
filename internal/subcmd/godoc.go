@@ -39,8 +39,7 @@ func (c *GoDocCmd) Execute(ctx context.Context, f *flag.FlagSet, args ...any) su
 }
 
 // GoDocSearchCmd is a subcommand for searching Go documentation.
-type GoDocSearchCmd struct {
-}
+type GoDocSearchCmd struct{}
 
 func (c *GoDocSearchCmd) Name() string     { return "search" }
 func (c *GoDocSearchCmd) Synopsis() string { return "Search Go documentation." }
@@ -53,13 +52,18 @@ func (c *GoDocSearchCmd) Usage() string {
 func (c *GoDocSearchCmd) SetFlags(f *flag.FlagSet) {
 }
 
-func (p *GoDocSearchCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
+func (c *GoDocSearchCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
 	if f.NArg() < 1 {
 		fmt.Println("Error: Missing search query.")
 		return subcommands.ExitUsageError
 	}
 
 	query := f.Arg(0)
+	if query == "" {
+		fmt.Println("Error: Empty search query.")
+		return subcommands.ExitUsageError
+	}
+
 	httpcli := infra.NewHttpClient()
 	result, err := app.SearchGoDoc(httpcli, query)
 	if err != nil {
