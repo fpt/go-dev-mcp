@@ -89,3 +89,66 @@ func TestHasClass(t *testing.T) {
 		})
 	}
 }
+
+func TestWalk(t *testing.T) {
+	tests := []struct {
+		name     string
+		nodeHTML string
+		want     []string
+	}{
+		{
+			name:     "walk through nodes",
+			nodeHTML: `<div class="SearchSnippet"><p>test</p></div>`,
+			want:     []string{"div", "p"},
+		},
+		{
+			name:     "nested nodes",
+			nodeHTML: `<div><span><a href="#">link</a></span></div>`,
+			want:     []string{"div", "span", "a"},
+		},
+		{
+			name:     "flat list",
+			nodeHTML: `<ul><li>Item 1</li><li>Item 2</li></ul>`,
+			want:     []string{"ul", "li", "li"},
+		},
+		{
+			name:     "nested list",
+			nodeHTML: `<ul><li>Item 1</li><li><ul><li>Subitem 1</li></ul></li></ul>`,
+			want:     []string{"ul", "li", "li", "ul", "li"},
+		},
+		{
+			name:     "empty list",
+			nodeHTML: `<ul></ul>`,
+			want:     []string{"ul"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			doc, err := html.Parse(strings.NewReader(tt.nodeHTML))
+			if err != nil {
+				t.Fatalf("failed to parse HTML: %v", err)
+			}
+
+			var got []string
+			Walk(doc, func(n *html.Node) bool {
+				if n.Type == html.ElementNode {
+					got = append(got, n.Data)
+				}
+				return true
+			})
+			got = got[3:] // Skip [html head body]
+
+			if len(got) != len(tt.want) {
+				t.Errorf("Walk() got = %v, want %v", got, tt.want)
+				return
+			}
+
+			for i := range got {
+				if got[i] != tt.want[i] {
+					t.Errorf("Walk() got[%d] = %v, want %v", i, got[i], tt.want[i])
+				}
+			}
+		})
+	}
+}

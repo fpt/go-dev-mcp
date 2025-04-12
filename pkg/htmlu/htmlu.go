@@ -10,12 +10,10 @@ import (
 type NodeWalkFunc func(*html.Node) bool
 
 func Walk(p *html.Node, f NodeWalkFunc) {
-	if f(p) {
-		for c := p.FirstChild; c != nil; c = c.NextSibling {
-			into := f(c)
-			if into {
-				Walk(c, f)
-			}
+	for c := p.FirstChild; c != nil; c = c.NextSibling {
+		into := f(c)
+		if c.Type == html.ElementNode && into {
+			Walk(c, f)
 		}
 	}
 }
@@ -46,6 +44,19 @@ func HasAttr(n *html.Node, pattern string) bool {
 	return false
 }
 
+func SelectChildNodes(n *html.Node, patterns ...string) []*html.Node {
+	var nodes []*html.Node
+	Walk(n, func(n *html.Node) bool {
+		for _, pattern := range patterns {
+			if n.Type == html.ElementNode && n.Data == pattern {
+				nodes = append(nodes, n)
+			}
+		}
+		return true
+	})
+	return nodes
+}
+
 func GetHref(n *html.Node) string {
 	for _, attr := range n.Attr {
 		if attr.Key == "href" {
@@ -67,6 +78,22 @@ func GetText(n *html.Node, recurse bool) string {
 		}
 
 		text += GetText(c, recurse)
+	}
+	return text
+}
+
+func GetRawText(n *html.Node, recurse bool) string {
+	if n.Type == html.TextNode {
+		return n.Data
+	}
+
+	var text string
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		if c.Type == html.ElementNode && c.Data == "a" && HasAttr(c, "aria-label") {
+			continue
+		}
+
+		text += GetRawText(c, recurse)
 	}
 	return text
 }
