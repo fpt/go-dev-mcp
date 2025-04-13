@@ -63,6 +63,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Search query"),
 		),
+		mcp.WithString("repo",
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
 	)
 	s.AddTool(tool, searchCodeGitHub)
 

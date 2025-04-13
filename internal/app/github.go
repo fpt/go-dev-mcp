@@ -8,9 +8,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-func GitHubSearchCode(ctx context.Context, github repository.GitHubClient, query string) (string, error) {
+func GitHubSearchCode(ctx context.Context, github repository.GitHubClient, query string, repo *string) (string, error) {
 	// Perform the search
-	result, err := github.SearchCode(ctx, query)
+	opt := &repository.SearchCodeOption{
+		Language: "go",
+		Repo:     repo,
+	}
+	result, err := github.SearchCode(ctx, query, opt)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to search code")
 	}
@@ -23,10 +27,10 @@ func GitHubSearchCode(ctx context.Context, github repository.GitHubClient, query
 	for _, item := range result.Items {
 		response += fmt.Sprintf("Path: %s, Repository: %s\n", item.Path, item.Repository)
 		for _, fragment := range item.Fragments {
-			response += "----\n"
+			response += "```\n"
 			response += fmt.Sprintf("%s\n", fragment)
+			response += "```\n"
 		}
-		response += "----\n"
 	}
 
 	return response, nil

@@ -10,11 +10,16 @@ import (
 	"golang.org/x/net/html"
 )
 
+var ErrNotFound = errors.New("not found")
+
 func SearchGoDoc(httpcli *infra.HttpClient, query string) (string, error) {
 	url := fmt.Sprintf("https://pkg.go.dev/search?q=%s", query)
 	bodyrdr, err := httpcli.HttpGet(url)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to make HTTP request")
+	}
+	if bodyrdr == nil {
+		return "", ErrNotFound
 	}
 	defer bodyrdr.Close()
 
@@ -91,6 +96,9 @@ func ReadGoDoc(httpcli *infra.HttpClient, packageURL string) (string, error) {
 	bodyrdr, err := httpcli.HttpGet(url)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to make HTTP request")
+	}
+	if bodyrdr == nil {
+		return "", ErrNotFound
 	}
 	defer bodyrdr.Close()
 

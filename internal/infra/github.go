@@ -39,9 +39,18 @@ func NewGitHubClient() (*GitHubClient, error) {
 // SearchCode searches for code in a GitHub repository using the GitHub API.
 // https://github.com/google/go-github/blob/b98b707876c8b20b0e1dbbdffb7898a5fcc2169d/github/search.go#L62
 // GitHub API docs: https://docs.github.com/rest/search/search#search-code
-func (c *GitHubClient) SearchCode(ctx context.Context, query string) (repository.SearchCodeResult, error) {
+func (c *GitHubClient) SearchCode(ctx context.Context, query string, opt *repository.SearchCodeOption) (repository.SearchCodeResult, error) {
 	opts := &github.SearchOptions{Sort: "indexed", TextMatch: true}
-	res, _, err := c.Client.Search.Code(ctx, fmt.Sprintf("%s language:go", query), opts)
+	query = strings.TrimSpace(query)
+	if opt != nil {
+		if opt.Language != "" {
+			query += fmt.Sprintf(" language:%s ", opt.Language)
+		}
+		if opt.Repo != nil && *opt.Repo != "" {
+			query += fmt.Sprintf(" repo:%s ", *opt.Repo)
+		}
+	}
+	res, _, err := c.Client.Search.Code(ctx, query, opts)
 	if err != nil {
 		return repository.SearchCodeResult{}, err
 	}

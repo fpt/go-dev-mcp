@@ -39,7 +39,9 @@ func (c *GithubCmd) Execute(ctx context.Context, f *flag.FlagSet, args ...any) s
 	return c.cdr.Execute(ctx, args...)
 }
 
-type SearchCodeCmd struct{}
+type SearchCodeCmd struct {
+	repo string
+}
 
 func (*SearchCodeCmd) Name() string     { return "searchcode" }
 func (*SearchCodeCmd) Synopsis() string { return "Search code on GitHub." }
@@ -49,10 +51,11 @@ func (*SearchCodeCmd) Usage() string {
 `
 }
 
-func (*SearchCodeCmd) SetFlags(f *flag.FlagSet) {
+func (c *SearchCodeCmd) SetFlags(f *flag.FlagSet) {
+	f.StringVar(&c.repo, "repo", "", "Repository to search in (owner/repo)")
 }
 
-func (*SearchCodeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
+func (c *SearchCodeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
 	if f.NArg() < 1 {
 		fmt.Println("Error: Missing search query.")
 		return subcommands.ExitUsageError
@@ -71,7 +74,7 @@ func (*SearchCodeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subc
 		return subcommands.ExitFailure
 	}
 
-	result, err := app.GitHubSearchCode(context.Background(), gh, query)
+	result, err := app.GitHubSearchCode(context.Background(), gh, query, &c.repo)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return subcommands.ExitFailure

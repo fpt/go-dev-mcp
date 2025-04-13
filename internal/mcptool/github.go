@@ -15,12 +15,21 @@ func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 	if !ok || query == "" {
 		return mcp.NewToolResultError("Missing search query"), nil
 	}
+	ownerRepo, ok := request.Params.Arguments["repo"].(string)
+	if ok && ownerRepo != "" {
+		// Validate the repo format
+		parts := strings.Split(ownerRepo, "/")
+		if len(parts) != 2 {
+			return mcp.NewToolResultError("Invalid repo format, expected 'owner/repo'"), nil
+		}
+	}
+
 	gh, err := infra.NewGitHubClient()
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Error creating GitHub client: %v", err)), nil
 	}
 
-	result, err := app.GitHubSearchCode(ctx, gh, query)
+	result, err := app.GitHubSearchCode(ctx, gh, query, &ownerRepo)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Error searching code: %v", err)), nil
 	}
