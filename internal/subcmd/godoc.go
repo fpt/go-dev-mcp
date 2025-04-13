@@ -76,8 +76,7 @@ func (c *GoDocSearchCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) s
 }
 
 // GoDocReadCmd is a subcommand for reading Go documentation.
-type GoDocReadCmd struct {
-}
+type GoDocReadCmd struct{}
 
 func (c *GoDocReadCmd) Name() string     { return "read" }
 func (c *GoDocReadCmd) Synopsis() string { return "Read Go documentation." }

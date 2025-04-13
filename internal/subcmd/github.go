@@ -31,6 +31,7 @@ func (c *GithubCmd) SetFlags(f *flag.FlagSet) {
 	cdr.Register(cdr.HelpCommand(), "help")
 	cdr.Register(&SearchCodeCmd{}, "searchcode")
 	cdr.Register(&GetContentCmd{}, "getcontent")
+	cdr.Register(&TreeRepoCmd{}, "tree")
 
 	c.cdr = cdr
 }
@@ -39,7 +40,9 @@ func (c *GithubCmd) Execute(ctx context.Context, f *flag.FlagSet, args ...any) s
 	return c.cdr.Execute(ctx, args...)
 }
 
-type SearchCodeCmd struct{}
+type SearchCodeCmd struct {
+	repo string
+}
 
 func (*SearchCodeCmd) Name() string     { return "searchcode" }
 func (*SearchCodeCmd) Synopsis() string { return "Search code on GitHub." }
@@ -49,10 +52,11 @@ func (*SearchCodeCmd) Usage() string {
 `
 }
 
-func (*SearchCodeCmd) SetFlags(f *flag.FlagSet) {
+func (c *SearchCodeCmd) SetFlags(f *flag.FlagSet) {
+	f.StringVar(&c.repo, "repo", "", "Repository to search in (owner/repo)")
 }
 
-func (*SearchCodeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
+func (c *SearchCodeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
 	if f.NArg() < 1 {
 		fmt.Println("Error: Missing search query.")
 		return subcommands.ExitUsageError
@@ -71,7 +75,7 @@ func (*SearchCodeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subc
 		return subcommands.ExitFailure
 	}
 
-	result, err := app.GitHubSearchCode(context.Background(), gh, query)
+	result, err := app.GitHubSearchCode(context.Background(), gh, query, &c.repo)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return subcommands.ExitFailure
@@ -126,5 +130,64 @@ func (*GetContentCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subc
 	}
 	fmt.Println(content)
 
+	return subcommands.ExitSuccess
+}
+
+type TreeRepoCmd struct{}
+
+func (*TreeRepoCmd) Name() string     { return "tree" }
+func (*TreeRepoCmd) Synopsis() string { return "Show a tree view of a GitHub repository path." }
+func (*TreeRepoCmd) Usage() string {
+	return `tree <owner/repo> [path]:
+  Display the directory structure of a GitHub repository path in tree format.
+  Path defaults to the repository root if not specified.
+`
+}
+
+func (*TreeRepoCmd) SetFlags(f *flag.FlagSet) {
+}
+
+func (*TreeRepoCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
+	if f.NArg() < 1 {
+		fmt.Println("Error: Missing owner/repo argument.")
+		fmt.Println("Usage: tree <owner/repo> [path]")
+		return subcommands.ExitUsageError
+	}
+
+	ownerRepo := f.Arg(0)
+	parts := strings.Split(ownerRepo, "/")
+	if len(parts) != 2 {
+		fmt.Println("Error: Invalid repo format, expected 'owner/repo'.")
+		return subcommands.ExitUsageError
+	}
+
+	owner := parts[0]
+	repo := parts[1]
+	path := ""
+
+	// Optional path argument
+	if f.NArg() >= 2 {
+		path = f.Arg(1)
+	}
+
+	gh, err := infra.NewGitHubClient()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return subcommands.ExitFailure
+	}
+
+	// Create a string builder for the tree output
+	b := strings.Builder{}
+	b.WriteString(fmt.Sprintf("%s/%s:%s\n", owner, repo, path))
+
+	// Generate the tree using our new function
+	ctx := context.Background()
+	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, path); err != nil {
+		fmt.Printf("Error generating tree: %v\n", err)
+		return subcommands.ExitFailure
+	}
+
+	// Print the resulting tree
+	fmt.Println(b.String())
 	return subcommands.ExitSuccess
 }

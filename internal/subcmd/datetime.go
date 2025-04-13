@@ -9,8 +9,7 @@ import (
 	"github.com/google/subcommands"
 )
 
-type DatetimeCmd struct {
-}
+type DatetimeCmd struct{}
 
 func (*DatetimeCmd) Name() string     { return "datetime" }
 func (*DatetimeCmd) Synopsis() string { return "List current date and time." }

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"strings"
@@ -46,7 +47,8 @@ func TestPrintTree(t *testing.T) {
 	t.Run("print directory structure", func(t *testing.T) {
 		b := &strings.Builder{}
 		walker := infra.NewDirWalker()
-		PrintTree(b, walker, tempDir, false)
+		ctx := context.Background()
+		PrintTree(ctx, b, walker, tempDir, false)
 		result := b.String()
 
 		// Verify the result contains expected paths
@@ -76,12 +78,13 @@ func TestPrintTree(t *testing.T) {
 		b := &strings.Builder{}
 		nonExistentDir := filepath.Join(tempDir, "nonexistent")
 		walker := infra.NewDirWalker()
-		PrintTree(b, walker, nonExistentDir, false)
+		ctx := context.Background()
+		PrintTree(ctx, b, walker, nonExistentDir, false)
 		result := b.String()
 
 		// Should only have the directory name itself as it doesn't exist
 		if strings.Contains(result, nonExistentDir) {
-			t.Errorf("printDirectory() result contains directory name %q", nonExistentDir)
+			t.Errorf("printTree() result contains directory name %q", nonExistentDir)
 		}
 	})
 }

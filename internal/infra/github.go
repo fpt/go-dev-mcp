@@ -39,9 +39,18 @@ func NewGitHubClient() (*GitHubClient, error) {
 // SearchCode searches for code in a GitHub repository using the GitHub API.
 // https://github.com/google/go-github/blob/b98b707876c8b20b0e1dbbdffb7898a5fcc2169d/github/search.go#L62
 // GitHub API docs: https://docs.github.com/rest/search/search#search-code
-func (c *GitHubClient) SearchCode(ctx context.Context, query string) (repository.SearchCodeResult, error) {
+func (c *GitHubClient) SearchCode(ctx context.Context, query string, opt *repository.SearchCodeOption) (repository.SearchCodeResult, error) {
 	opts := &github.SearchOptions{Sort: "indexed", TextMatch: true}
-	res, _, err := c.Client.Search.Code(ctx, fmt.Sprintf("%s language:go", query), opts)
+	query = strings.TrimSpace(query)
+	if opt != nil {
+		if opt.Language != "" {
+			query += fmt.Sprintf(" language:%s ", opt.Language)
+		}
+		if opt.Repo != nil && *opt.Repo != "" {
+			query += fmt.Sprintf(" repo:%s ", *opt.Repo)
+		}
+	}
+	res, _, err := c.Client.Search.Code(ctx, query, opts)
 	if err != nil {
 		return repository.SearchCodeResult{}, err
 	}
@@ -69,23 +78,163 @@ func (c *GitHubClient) SearchCode(ctx context.Context, query string) (repository
 	return result, nil
 }
 
-// GetContent retrieves the content of a file in a GitHub repository using the GitHub API.
+// GetContent retrieves the content of a file or directory in a GitHub repository using the GitHub API.
+// If path points to a file, it returns the file content.
+// If path points to a directory, it returns a formatted directory listing.
 func (c *GitHubClient) GetContent(ctx context.Context, owner, repo, path string) (string, error) {
-	content, _, _, err := c.Client.Repositories.GetContents(ctx, owner, repo, path, nil)
+	fileContent, directoryContent, _, err := c.Client.Repositories.GetContents(ctx, owner, repo, path, nil)
 	if err != nil {
 		return "", err
 	}
-	if content == nil {
-		return "", errors.New("no content found")
-	}
-	if content.Content == nil {
-		return "", errors.New("content is empty")
+
+	// Handle file content
+	if fileContent != nil {
+		if fileContent.Content == nil {
+			return "", errors.New("content is empty")
+		}
+
+		contentStr, err := fileContent.GetContent()
+		if err != nil {
+			return "", errors.Wrap(err, "failed to get content")
+		}
+
+		return contentStr, nil
 	}
 
-	contentStr, err := content.GetContent()
+	// Handle directory content
+	if directoryContent != nil {
+		var sb strings.Builder
+		sb.WriteString(fmt.Sprintf("Directory: %s\nContents:\n", path))
+
+		for _, item := range directoryContent {
+			itemType := *item.Type
+			itemName := *item.Name
+
+			// Add trailing slash for directories to make them easily identifiable
+			if itemType == "dir" {
+				itemName += "/"
+			}
+
+			sb.WriteString(fmt.Sprintf("- %s (%s", itemName, itemType))
+
+			// Add size information for files
+			if item.Size != nil {
+				sb.WriteString(fmt.Sprintf(", %d bytes", *item.Size))
+			}
+
+			sb.WriteString(")\n")
+		}
+
+		return sb.String(), nil
+	}
+
+	return "", errors.New("no content found (both file and directory content are nil)")
+}
+
+// WalkContentsFunc is the function called for each file or directory visited by WalkContents.
+// The path argument contains the path to the file or directory.
+// The isDir argument is true if the path is a directory and false if it is a file.
+// The depth argument indicates how deep in the tree the current item is.
+// If the function returns an error, walking is stopped.
+type WalkContentsFunc func(path string, isDir bool, depth int) error
+
+// WalkContents walks the directory tree of a GitHub repository.
+// It calls the provided WalkContentsFunc for each file or directory in the tree.
+// The function is called first with the start path, and then with each file or directory found.
+// If the start path is a file, the function is called only for that file.
+// If the start path is a directory, the function is called for that directory and all files and directories in it.
+func (c *GitHubClient) WalkContents(ctx context.Context, owner, repo, startPath string, fn WalkContentsFunc) error {
+	return c.walkContentsRecursive(ctx, owner, repo, startPath, fn, 0)
+}
+
+// walkContentsRecursive is an internal helper function for WalkContents.
+func (c *GitHubClient) walkContentsRecursive(ctx context.Context, owner, repo, path string, fn WalkContentsFunc, depth int) error {
+	fileContent, directoryContent, _, err := c.Client.Repositories.GetContents(ctx, owner, repo, path, nil)
 	if err != nil {
-		return "", errors.Wrap(err, "failed to get content")
+		return err
 	}
 
-	return contentStr, nil
+	// If it's a file, call the function with isDir = false
+	if fileContent != nil {
+		return fn(path, false, depth)
+	}
+
+	// If it's a directory, first call the function for the directory itself with isDir = true
+	if err := fn(path, true, depth); err != nil {
+		return err
+	}
+
+	// Then call the function for each item in the directory
+	for _, item := range directoryContent {
+		itemPath := *item.Path
+		isDir := *item.Type == "dir"
+
+		// Call the function for this item
+		if err := fn(itemPath, isDir, depth+1); err != nil {
+			return err
+		}
+
+		// If it's a directory, recursively walk it
+		if isDir {
+			if err := c.walkContentsRecursive(ctx, owner, repo, itemPath, fn, depth+1); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// GitHubDirWalker implements the repository.DirWalker interface for GitHub repositories
+type GitHubDirWalker struct {
+	client *GitHubClient
+	owner  string
+	repo   string
+}
+
+// NewGitHubDirWalker creates a new GitHubDirWalker instance
+func NewGitHubDirWalker(ctx context.Context, client *GitHubClient, owner, repo string) repository.DirWalker {
+	return &GitHubDirWalker{
+		client: client,
+		owner:  owner,
+		repo:   repo,
+	}
+}
+
+// Walk implements the repository.DirWalker interface for GitHub repositories
+func (w *GitHubDirWalker) Walk(ctx context.Context, function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc, prefix, path string) error {
+	// Get contents of the directory
+	_, directoryContent, _, err := w.client.Client.Repositories.GetContents(ctx, w.owner, w.repo, path, nil)
+	if err != nil {
+		return errors.Wrap(err, "failed to get directory contents")
+	}
+
+	// Process directory entries
+	for i, item := range directoryContent {
+		isLastEntry := (i == len(directoryContent)-1)
+		name := *item.Name
+		isDir := *item.Type == "dir"
+
+		// Call the function for this entry
+		if err := function(name, prefix, isLastEntry); err != nil {
+			return err
+		}
+
+		// If it's a directory, recursively walk it
+		if isDir {
+			nextPrefix := prefixFunc(prefix, isLastEntry)
+			subpath := path
+			if subpath == "" {
+				subpath = name
+			} else {
+				subpath = subpath + "/" + name
+			}
+
+			if err := w.Walk(ctx, function, prefixFunc, nextPrefix, subpath); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }

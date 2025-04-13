@@ -1,6 +1,7 @@
 package infra
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 
@@ -19,7 +20,7 @@ func NewDirWalker() repository.DirWalker {
 	return &DirWalker{}
 }
 
-func (dw *DirWalker) Walk(function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc, prefix, path string) error {
+func (dw *DirWalker) Walk(ctx context.Context, function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc, prefix, path string) error {
 	entries, err := os.ReadDir(path)
 	if err != nil {
 		return errors.Wrap(err, "failed to read directory")
@@ -45,7 +46,7 @@ func (dw *DirWalker) Walk(function repository.WalkDirFunc, prefixFunc repository
 			nextPrefix := prefixFunc(prefix, isLastEntry)
 
 			subpath := filepath.Join(path, entry.Name())
-			err := dw.Walk(function, prefixFunc, nextPrefix, subpath)
+			err := dw.Walk(ctx, function, prefixFunc, nextPrefix, subpath)
 			if err != nil {
 				return err
 			}
