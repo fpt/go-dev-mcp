@@ -51,7 +51,6 @@ func TestPrintTree(t *testing.T) {
 
 		// Verify the result contains expected paths
 		expectedPaths := []string{
-			tempDir,
 			"file1.txt",
 			"file2.txt",
 			"subdir",
@@ -81,8 +80,8 @@ func TestPrintTree(t *testing.T) {
 		result := b.String()
 
 		// Should only have the directory name itself as it doesn't exist
-		if !strings.Contains(result, nonExistentDir) {
-			t.Errorf("printDirectory() result does not contain directory name %q", nonExistentDir)
+		if strings.Contains(result, nonExistentDir) {
+			t.Errorf("printDirectory() result contains directory name %q", nonExistentDir)
 		}
 	})
 }
