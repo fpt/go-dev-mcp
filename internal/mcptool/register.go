@@ -83,5 +83,19 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, getGitHubContent)
 
+	// Add GitHub tree tool
+	tool = mcp.NewTool("tree_github_repo",
+		mcp.WithDescription("Display tree structure of a GitHub repository"),
+		mcp.WithString("repo",
+			mcp.Required(),
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
+		mcp.WithString("path",
+			mcp.DefaultString(""),
+			mcp.Description("Path in the repository (defaults to root)"),
+		),
+	)
+	s.AddTool(tool, getGitHubTree)
+
 	return nil
 }

@@ -22,7 +22,10 @@ func treeDir(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolRes
 	b := strings.Builder{}
 	b.WriteString(fmt.Sprintf("%s\n", rootDir))
 	walker := infra.NewDirWalker()
-	app.PrintTree(&b, walker, rootDir, false)
+	err := app.PrintTree(ctx, &b, walker, rootDir, false)
+	if err != nil {
+		return nil, fmt.Errorf("error printing tree: %v", err)
+	}
 
 	result := b.String()
 	if result == "" {

@@ -27,12 +27,16 @@ func (p *TreeCmd) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&p.workdir, "workdir", ".", "Working directory")
 }
 
-func (p *TreeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
+func (p *TreeCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
 	rootDir := p.workdir
 	b := strings.Builder{}
 	b.WriteString(fmt.Sprintf("%s\n", rootDir))
 	walker := infra.NewDirWalker()
-	app.PrintTree(&b, walker, rootDir, false)
+	err := app.PrintTree(ctx, &b, walker, rootDir, false)
+	if err != nil {
+		fmt.Printf("Error printing tree: %v\n", err)
+		return subcommands.ExitFailure
+	}
 
 	result := b.String()
 	fmt.Println(result)

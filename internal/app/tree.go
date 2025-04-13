@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
@@ -9,8 +10,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-func PrintTree(b *strings.Builder, walker repository.DirWalker, path string, isLast bool) error {
+func PrintTree(ctx context.Context, b *strings.Builder, walker repository.DirWalker, path string, isLast bool) error {
 	err := walker.Walk(
+		ctx,
 		func(name, prefix string, isLastEntry bool) error {
 			// Determine the current line's connector
 			connector := "|-- "
@@ -32,7 +34,6 @@ func PrintTree(b *strings.Builder, walker repository.DirWalker, path string, isL
 		},
 		"",
 		path)
-
 	if err != nil {
 		return errors.Wrap(err, "failed to walk directory")
 	}
