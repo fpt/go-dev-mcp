@@ -161,7 +161,7 @@ func processSubsection(n *html.Node) string {
 		case "p":
 			documentation += fmt.Sprintf("%s\n", htmlu.GetText(n, true))
 		case "pre":
-			documentation += fmt.Sprintf("```\n%s\n```\n", htmlu.GetText(n, true))
+			documentation += fmt.Sprintf("```\n%s\n```\n", htmlu.GetRawText(n, true))
 		case "code":
 			documentation += fmt.Sprintf("`%s`\n", htmlu.GetText(n, true))
 		case "details":
