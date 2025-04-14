@@ -112,9 +112,13 @@ func ReadGoDoc(httpcli *infra.HttpClient, packageURL string) (string, error) {
 	for n := range doc.Descendants() {
 		if n.Type == html.ElementNode && n.Data == "div" && htmlu.HasClass(n, "UnitDoc") {
 			htmlu.Walk(n, func(n *html.Node) bool {
+				if n.Type == html.ElementNode && n.Data == "h3" && htmlu.HasClass(n, "Documentation-*") {
+					documents = append(documents, fmt.Sprintf("### %s\n", htmlu.GetText(n, true)))
+					return false // Stop walking
+				}
 				if n.Type == html.ElementNode && n.Data == "section" && htmlu.HasClass(n, "Documentation-*") {
 					documents = append(documents, processSection(n))
-					return false // Stop walking after finding the first matching section
+					return false // Stop walking
 				}
 				return true
 			})
