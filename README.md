@@ -4,26 +4,27 @@
 
 GoDevMCP provides convenient tools for Go development with Model Context Protocol (MCP) integration.
 
-## Project Structure
+## Installation
 
-```
-.
-├── cmd/            # Application entry points
-│   └── main.go     # Main application entry point
-├── doc/            # Documentation files
-├── internal/       # Private application and library code
-│   ├── app/        # Application core functionality
-│   ├── infra/      # Infrastructure code
-│   └── mcptool/    # MCP tooling implementations
-├── output/         # Build artifacts
-│   └── devmcp      # Compiled binary
-├── pkg/            # Public library code
-├── Makefile        # Build automation
-├── go.mod          # Go module definition
-└── go.sum          # Go module checksum
+### Prerequisites
+
+- GitHub `gh` command is required.
+
+### Using go install
+
+You can install GoDevMCP directly using Go's install command:
+
+```bash
+go install fujlog.net/godev-mcp/godevmcp@latest
 ```
 
-## Usage
+This will download, compile, and install the binary to your `$GOPATH/bin` directory (typically `~/go/bin`). Make sure this directory is in your system's PATH.
+
+### Building from Source
+
+1. Clone the repository
+2. Run `make build` to build the application and `make install` to install.
+
 ### VSCode
 
 Add this section in your user's `settings.json`
@@ -32,7 +33,7 @@ Add this section in your user's `settings.json`
         "servers": {
             "go-dev-mcp": {
                 "type": "stdio",
-                "command": "/<path_to>/godevmcp",
+                "command": "godevmcp",
                 "args": [
                     "serve"
                 ],
@@ -83,7 +84,7 @@ read_godoc golang.org/x/net/html
 
 This will retrieve the documentation for the specified package, including descriptions, functions, types, and examples.
 
-## Getting Started
+## Instructions
 
 1. **Build the application**
    ```
@@ -106,6 +107,28 @@ This will retrieve the documentation for the specified package, including descri
 - `make help` - Display help information
 
 ## Development
+
+### Project Structure
+
+```
+.
+├── godevmcp/       # Application entry point
+│   └── main.go     # Main application entry point
+├── doc/            # Documentation files
+├── internal/       # Private application and library code
+│   ├── app/        # Application core functionality
+│   ├── infra/      # Infrastructure code
+│   ├── mcptool/    # MCP tooling implementations
+│   ├── repository/ # Repository implementations
+│   └── subcmd/     # Subcommand implementations
+├── output/         # Build artifacts
+│   └── godevmcp    # Compiled binary
+├── pkg/            # Public library code
+│   └── htmlu/      # HTML utility package
+├── Makefile        # Build automation
+├── go.mod          # Go module definition
+└── go.sum          # Go module checksum
+```
 
 ### Common Development Workflow
 

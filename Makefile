@@ -1,10 +1,12 @@
 run: ## Run the application
-	go run cmd/main.go serve
+	go run godevmcp/main.go serve
 
 build: ## Build the application
-	go build -o output/godevmcp cmd/main.go
-	cp output/godevmcp ~/bin/godevmcp
-	chmod +x ~/bin/godevmcp
+	go build -o output/godevmcp godevmcp/main.go
+
+install: ## Install the application
+	go install ./godevmcp
+	@echo "Installed to $(shell go env GOPATH)/bin/godevmcp"
 
 test: ## Run unit tests
 	go test -v ./...
@@ -16,7 +18,7 @@ lint: ## Run lint
 	golangci-lint run
 
 inspect: ## Run in MCP inspector
-	npx @modelcontextprotocol/inspector go run ./cmd/main.go serve
+	npx @modelcontextprotocol/inspector go run ./godevmcp/main.go serve
 
 help: ## Display this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \

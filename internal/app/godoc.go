@@ -189,7 +189,6 @@ func processList(n *html.Node, level int) string {
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		if c.Type == html.ElementNode && (c.Data == "li" || c.Data == "dt") {
 			listNodes := htmlu.SelectChildNodes(c, "ul", "ol")
-			fmt.Printf("listNodes: %+v\n", listNodes)
 			if len(listNodes) > 0 {
 				for _, list := range listNodes {
 					documentation += processList(list, level+1)
