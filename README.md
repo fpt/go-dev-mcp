@@ -120,4 +120,5 @@ This will retrieve the documentation for the specified package, including descri
 - Follow instructions in CONTRIBUTING.md
 - Use `run_make` and `tree_dir` tools rather than using shell commands.
 - Use `search_godoc` and `read_godoc` tools to understand how to use depending packages.
+- Use `tree_github_repo`, `search_github_code`,  `get_github_content` to inspect github repository.
 - Remember to update README.md when making significant changes

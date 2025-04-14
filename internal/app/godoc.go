@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 
 	"fujlog.net/godev-mcp/internal/infra"
@@ -13,7 +14,7 @@ import (
 var ErrNotFound = errors.New("not found")
 
 func SearchGoDoc(httpcli *infra.HttpClient, query string) (string, error) {
-	url := fmt.Sprintf("https://pkg.go.dev/search?q=%s", query)
+	url := fmt.Sprintf("https://pkg.go.dev/search?q=%s", url.QueryEscape(query))
 	bodyrdr, err := httpcli.HttpGet(url)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to make HTTP request")
@@ -92,7 +93,7 @@ func processSingleResult(p *html.Node) SingleResult {
 // ReadGoDoc reads Go documentation for a given package URL.
 // packageURL must be in "golang.org/x/net/html" format.
 func ReadGoDoc(httpcli *infra.HttpClient, packageURL string) (string, error) {
-	url := fmt.Sprintf("https://pkg.go.dev/%s", packageURL)
+	url := fmt.Sprintf("https://pkg.go.dev/%s", url.PathEscape(packageURL))
 	bodyrdr, err := httpcli.HttpGet(url)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to make HTTP request")
