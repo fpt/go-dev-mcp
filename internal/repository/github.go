@@ -3,7 +3,7 @@ package repository
 import "context"
 
 type SearchCodeOption struct {
-	Language string
+	Language *string
 	Repo     *string
 }
 

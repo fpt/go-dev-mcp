@@ -15,6 +15,10 @@ func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 	if !ok || query == "" {
 		return mcp.NewToolResultError("Missing search query"), nil
 	}
+	language, ok := request.Params.Arguments["language"].(string)
+	if !ok || language == "" {
+		return mcp.NewToolResultError("Missing language"), nil
+	}
 	ownerRepo, ok := request.Params.Arguments["repo"].(string)
 	if ok && ownerRepo != "" {
 		// Validate the repo format
@@ -29,7 +33,7 @@ func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 		return mcp.NewToolResultError(fmt.Sprintf("Error creating GitHub client: %v", err)), nil
 	}
 
-	result, err := app.GitHubSearchCode(ctx, gh, query, &ownerRepo)
+	result, err := app.GitHubSearchCode(ctx, gh, query, &language, &ownerRepo)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Error searching code: %v", err)), nil
 	}
