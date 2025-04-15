@@ -29,7 +29,7 @@ func (dw *DirWalker) Walk(ctx context.Context, function repository.WalkDirFunc, 
 	// Filter out .git directory
 	filteredEntries := make([]os.DirEntry, 0)
 	for _, entry := range entries {
-		if !(entry.IsDir() && entry.Name() == ".git") {
+		if !entry.IsDir() || entry.Name() != ".git" {
 			filteredEntries = append(filteredEntries, entry)
 		}
 	}

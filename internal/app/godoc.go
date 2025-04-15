@@ -91,9 +91,7 @@ func processSingleResult(p *html.Node) SingleResult {
 					url := htmlu.GetHref(a)
 					if url != "" {
 						// Remove the leading slash if it exists
-						if strings.HasPrefix(url, "/") {
-							url = url[1:]
-						}
+						url = strings.TrimPrefix(url, "/")
 						result.URL = url
 					}
 					break // Found what we need

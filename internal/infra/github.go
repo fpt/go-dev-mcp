@@ -50,7 +50,7 @@ func (c *GitHubClient) SearchCode(ctx context.Context, query string, opt *reposi
 			query += fmt.Sprintf(" repo:%s ", *opt.Repo)
 		}
 	}
-	res, _, err := c.Client.Search.Code(ctx, query, opts)
+	res, _, err := c.Search.Code(ctx, query, opts)
 	if err != nil {
 		return repository.SearchCodeResult{}, err
 	}
@@ -82,7 +82,7 @@ func (c *GitHubClient) SearchCode(ctx context.Context, query string, opt *reposi
 // If path points to a file, it returns the file content.
 // If path points to a directory, it returns a formatted directory listing.
 func (c *GitHubClient) GetContent(ctx context.Context, owner, repo, path string) (string, error) {
-	fileContent, directoryContent, _, err := c.Client.Repositories.GetContents(ctx, owner, repo, path, nil)
+	fileContent, directoryContent, _, err := c.Repositories.GetContents(ctx, owner, repo, path, nil)
 	if err != nil {
 		return "", err
 	}
@@ -149,7 +149,7 @@ func (c *GitHubClient) WalkContents(ctx context.Context, owner, repo, startPath 
 
 // walkContentsRecursive is an internal helper function for WalkContents.
 func (c *GitHubClient) walkContentsRecursive(ctx context.Context, owner, repo, path string, fn WalkContentsFunc, depth int) error {
-	fileContent, directoryContent, _, err := c.Client.Repositories.GetContents(ctx, owner, repo, path, nil)
+	fileContent, directoryContent, _, err := c.Repositories.GetContents(ctx, owner, repo, path, nil)
 	if err != nil {
 		return err
 	}
@@ -204,7 +204,7 @@ func NewGitHubDirWalker(ctx context.Context, client *GitHubClient, owner, repo s
 // Walk implements the repository.DirWalker interface for GitHub repositories
 func (w *GitHubDirWalker) Walk(ctx context.Context, function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc, prefix, path string) error {
 	// Get contents of the directory
-	_, directoryContent, _, err := w.client.Client.Repositories.GetContents(ctx, w.owner, w.repo, path, nil)
+	_, directoryContent, _, err := w.client.Repositories.GetContents(ctx, w.owner, w.repo, path, nil)
 	if err != nil {
 		return errors.Wrap(err, "failed to get directory contents")
 	}
