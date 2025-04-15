@@ -41,7 +41,8 @@ func (c *GithubCmd) Execute(ctx context.Context, f *flag.FlagSet, args ...any) s
 }
 
 type SearchCodeCmd struct {
-	repo string
+	language string
+	repo     string
 }
 
 func (*SearchCodeCmd) Name() string     { return "searchcode" }
@@ -53,6 +54,7 @@ func (*SearchCodeCmd) Usage() string {
 }
 
 func (c *SearchCodeCmd) SetFlags(f *flag.FlagSet) {
+	f.StringVar(&c.language, "language", "", "Language to filter search results")
 	f.StringVar(&c.repo, "repo", "", "Repository to search in (owner/repo)")
 }
 
@@ -75,7 +77,7 @@ func (c *SearchCodeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) su
 		return subcommands.ExitFailure
 	}
 
-	result, err := app.GitHubSearchCode(context.Background(), gh, query, &c.repo)
+	result, err := app.GitHubSearchCode(context.Background(), gh, query, &c.language, &c.repo)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return subcommands.ExitFailure

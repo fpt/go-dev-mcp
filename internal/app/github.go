@@ -10,10 +10,10 @@ import (
 	"github.com/pkg/errors"
 )
 
-func GitHubSearchCode(ctx context.Context, github repository.GitHubClient, query string, repo *string) (string, error) {
+func GitHubSearchCode(ctx context.Context, github repository.GitHubClient, query string, language, repo *string) (string, error) {
 	// Perform the search
 	opt := &repository.SearchCodeOption{
-		Language: "go",
+		Language: language,
 		Repo:     repo,
 	}
 	result, err := github.SearchCode(ctx, query, opt)

@@ -43,8 +43,8 @@ func (c *GitHubClient) SearchCode(ctx context.Context, query string, opt *reposi
 	opts := &github.SearchOptions{Sort: "indexed", TextMatch: true}
 	query = strings.TrimSpace(query)
 	if opt != nil {
-		if opt.Language != "" {
-			query += fmt.Sprintf(" language:%s ", opt.Language)
+		if opt.Language != nil && *opt.Language != "" {
+			query += fmt.Sprintf(" language:%s ", *opt.Language)
 		}
 		if opt.Repo != nil && *opt.Repo != "" {
 			query += fmt.Sprintf(" repo:%s ", *opt.Repo)

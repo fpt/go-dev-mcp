@@ -38,17 +38,17 @@ func Register(s *server.MCPServer, workdir string) error {
 
 	// Add GoDoc search tool
 	tool = mcp.NewTool("search_godoc",
-		mcp.WithDescription("Search Go documentation in pkg.go.dev"),
+		mcp.WithDescription("Search for Go package in pkg.go.dev"),
 		mcp.WithString("query",
 			mcp.Required(),
-			mcp.Description("Search query"),
+			mcp.Description("Search text which occurs in the package name, package path, synopsis, or README"),
 		),
 	)
 	s.AddTool(tool, searchGoDoc)
 
 	// Add GoDoc read tool
 	tool = mcp.NewTool("read_godoc",
-		mcp.WithDescription("Read Go documentation from pkg.go.dev"),
+		mcp.WithDescription("Read Go documentation of given package from pkg.go.dev"),
 		mcp.WithString("package_url",
 			mcp.Required(),
 			mcp.Description("URL of the Go package (e.g., 'github.com/user/repo')"),
@@ -62,6 +62,12 @@ func Register(s *server.MCPServer, workdir string) error {
 		mcp.WithString("query",
 			mcp.Required(),
 			mcp.Description("Search query"),
+		),
+		mcp.WithString("language",
+			mcp.Required(), // Just for safety.
+			mcp.DefaultString("go"),
+			mcp.Enum("go", "go module", "yaml", "markdown", "makefile"),
+			mcp.Description("Programming language to filter results (Default: 'go')"),
 		),
 		mcp.WithString("repo",
 			mcp.Description("GitHub repository in 'owner/repo' format"),

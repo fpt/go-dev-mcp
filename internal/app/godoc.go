@@ -29,6 +29,16 @@ func SearchGoDoc(httpcli *infra.HttpClient, query string) (string, error) {
 		return "", errors.Wrap(err, "failed to parse HTML")
 	}
 
+	var summary string
+	// Search for search results in the document
+	htmlu.Walk(doc, func(n *html.Node) bool {
+		if n.Type == html.ElementNode && n.Data == "div" && htmlu.HasClass(n, "SearchResults-summary") {
+			summary = processSummary(n)
+			return false // Stop walking
+		}
+		return true
+	})
+
 	// find all <div class="SearchSnippet"> elements
 	var results []SingleResult
 
@@ -42,12 +52,24 @@ func SearchGoDoc(httpcli *infra.HttpClient, query string) (string, error) {
 		return true
 	})
 
-	var resultStrings []string
+	resultStrings := []string{summary}
 	for _, result := range results {
 		resultStrings = append(resultStrings, fmt.Sprintf("* %s\n\tURL: %s\n\tDescription: %s", result.Name, result.URL, result.Description))
 	}
 
 	return strings.Join(resultStrings, "\n"), nil
+}
+
+func processSummary(p *html.Node) string {
+	summary := ""
+	for c := p.FirstChild; c != nil; c = c.NextSibling {
+		if c.Type == html.TextNode {
+			summary += c.Data
+		} else if c.Type == html.ElementNode && c.Data == "strong" {
+			summary += htmlu.GetRawText(c, false)
+		}
+	}
+	return strings.TrimSpace(summary)
 }
 
 type SingleResult struct {
