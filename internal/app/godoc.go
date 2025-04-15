@@ -99,12 +99,13 @@ func processSingleResult(p *html.Node) SingleResult {
 					break // Found what we need
 				}
 			}
-			return false // Stop walking after finding the first matching element
+			return false // Stop walking
 		}
 
 		// Look for description in synopsis paragraph
 		if n.Type == html.ElementNode && n.Data == "p" && htmlu.HasClass(n, "SearchSnippet-synopsis") {
 			result.Description = htmlu.GetText(n, true)
+			return false // Stop walking
 		}
 		return true // Continue walking
 	})
