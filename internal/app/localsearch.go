@@ -3,17 +3,26 @@ package app
 import (
 	"bufio"
 	"context"
+	"io"
 	"os"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/pkg/errors"
 
 	"fujlog.net/godev-mcp/internal/repository"
 )
 
+const headerSize = 16
+
+type SearchMatch struct {
+	LineNo int
+	Text   string
+}
+
 type SearchResult struct {
 	Filename string
-	Content  string
+	Matches  []SearchMatch
 }
 
 func SearchLocalFiles(
@@ -21,12 +30,12 @@ func SearchLocalFiles(
 ) ([]SearchResult, error) {
 	var results []SearchResult
 	err := fw.Walk(ctx, func(filePath string) error {
-		content, err := searchInFile(filePath, query)
+		matches, err := searchInFile(filePath, query)
 		if err != nil {
 			return errors.Wrap(err, "failed to search in file")
 		}
-		if content != "" {
-			results = append(results, SearchResult{Filename: filePath, Content: content})
+		if len(matches) > 0 {
+			results = append(results, SearchResult{Filename: filePath, Matches: matches})
 		}
 
 		return nil
@@ -38,27 +47,45 @@ func SearchLocalFiles(
 	return results, nil
 }
 
-func searchInFile(filename, query string) (string, error) {
+func searchInFile(filename, query string) ([]SearchMatch, error) {
 	fp, err := os.Open(filename)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer fp.Close()
 
-	scanner := bufio.NewScanner(fp)
-	var content strings.Builder
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(line, query) {
-			content.WriteString(line + "\n")
-		}
+	reader := bufio.NewReader(fp)
+	if !isTextFile(reader) {
+		return nil, nil
 	}
 
+	lineNo := 1
+	var matches []SearchMatch
+	scanner := bufio.NewScanner(reader)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if searchInLine(line, query) {
+			m := SearchMatch{LineNo: lineNo, Text: line}
+			matches = append(matches, m)
+		}
+		lineNo++
+	}
 	if err := scanner.Err(); err != nil {
-		return "", err
+		return nil, err
 	}
-	if content.Len() > 0 {
-		return content.String(), nil
+
+	return matches, nil
+}
+
+func searchInLine(line, query string) bool {
+	return strings.Contains(line, query)
+}
+
+func isTextFile(reader *bufio.Reader) bool {
+	buf, err := reader.Peek(headerSize)
+	if err != nil && !errors.Is(err, io.EOF) {
+		return false
 	}
-	return "", nil
+
+	return utf8.ValidString(string(buf))
 }

@@ -35,5 +35,14 @@ func searchLocalFiles(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting local files: %v", err)), nil
 	}
 
-	return mcp.NewToolResultText(fmt.Sprintf("Local files: %v", localFiles)), nil
+	builder := strings.Builder{}
+	for _, file := range localFiles {
+		fileMatches := fmt.Sprintf("File: %s\n", file.Filename)
+		for _, match := range file.Matches {
+			fileMatches += fmt.Sprintf("- Line %d\n```\n%s\n```\n", match.LineNo, match.Text)
+		}
+		builder.WriteString(fileMatches)
+	}
+
+	return mcp.NewToolResultText(builder.String()), nil
 }

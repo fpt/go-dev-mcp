@@ -56,7 +56,12 @@ func (p *LocalSearchCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) s
 		return subcommands.ExitSuccess
 	}
 	for _, result := range results {
-		fmt.Printf("Found file: %s\nContent:\n%s\n", result.Filename, result.Content)
+		for _, match := range result.Matches {
+			fmt.Printf("Found file: %s\nMatch: %s (Line: %d)\n",
+				result.Filename, match.Text, match.LineNo,
+			)
+		}
+		fmt.Println()
 	}
 
 	return subcommands.ExitSuccess
