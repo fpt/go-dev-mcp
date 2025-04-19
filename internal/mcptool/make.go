@@ -3,6 +3,7 @@ package tool
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	"fujlog.net/godev-mcp/internal/infra"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -20,11 +21,13 @@ func runMakeTarget(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallT
 
 	// Check if the Makefile exists in the current directory
 	if !infra.IsFileExist(workdir, "Makefile") {
+		slog.ErrorContext(ctx, "runMakeTarget", "error", fmt.Errorf("Makefile not found in directory: %s", workdir))
 		return mcp.NewToolResultError(fmt.Sprintf("Makefile not found in directory: %s", workdir)), nil
 	}
 
 	stdout, stderr, exitCode, err := infra.Run(workdir, "make", target)
 	if err != nil {
+		slog.ErrorContext(ctx, "runMakeTarget", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Command failed. Exit code: %d, Error: %+v\n%s", exitCode, err, formatOutput(stdout, stderr))), nil
 	}
 

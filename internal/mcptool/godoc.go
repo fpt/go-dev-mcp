@@ -3,6 +3,7 @@ package tool
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	"fujlog.net/godev-mcp/internal/app"
 	"fujlog.net/godev-mcp/internal/infra"
@@ -18,6 +19,7 @@ func searchGoDoc(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToo
 	httpcli := infra.NewHttpClient()
 	results, err := app.SearchGoDoc(httpcli, query)
 	if err != nil {
+		slog.ErrorContext(ctx, "searchGoDoc", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error searching Go documentation: %v", err)), nil
 	}
 
@@ -37,6 +39,7 @@ func readGoDoc(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolR
 	httpcli := infra.NewHttpClient()
 	result, err := app.ReadGoDoc(httpcli, packageURL)
 	if err != nil {
+		slog.ErrorContext(ctx, "readGoDoc", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error reading Go documentation: %v", err)), nil
 	}
 
