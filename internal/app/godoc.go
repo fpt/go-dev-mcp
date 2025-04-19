@@ -3,10 +3,11 @@ package app
 import (
 	"fmt"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"fujlog.net/godev-mcp/internal/infra"
-	"fujlog.net/godev-mcp/pkg/htmlu"
+	"fujlog.net/godev-mcp/pkg/dq"
 	"github.com/pkg/errors"
 	"golang.org/x/net/html"
 )
@@ -28,89 +29,17 @@ func SearchGoDoc(httpcli *infra.HttpClient, query string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "failed to parse HTML")
 	}
-
-	var summary string
-	// Search for search results in the document
-	htmlu.Walk(doc, func(n *html.Node) bool {
-		if n.Type == html.ElementNode && n.Data == "div" && htmlu.HasClass(n, "SearchResults-summary") {
-			summary = processSummary(n)
-			return false // Stop walking
+	matched, document := parseSearchResult(doc)
+	if !matched {
+		matched, readme := parseReadme(doc)
+		if matched {
+			return readme, nil
 		}
-		return true
-	})
 
-	// find all <div class="SearchSnippet"> elements
-	var results []SingleResult
-
-	// Search for search results in the document
-	htmlu.Walk(doc, func(n *html.Node) bool {
-		if n.Type == html.ElementNode && n.Data == "div" && htmlu.HasClass(n, "SearchSnippet") {
-			r := processSingleResult(n)
-			results = append(results, r)
-			return false // Stop walking after finding the first matching element
-		}
-		return true
-	})
-
-	resultStrings := []string{summary}
-	for _, result := range results {
-		resultStrings = append(resultStrings,
-			fmt.Sprintf("* %s\n\tURL: %s\n\tDescription: %s", result.Name, result.URL, result.Description),
-		)
+		_, document = parseDocument(doc)
 	}
 
-	return strings.Join(resultStrings, "\n"), nil
-}
-
-func processSummary(p *html.Node) string {
-	summary := ""
-	for c := p.FirstChild; c != nil; c = c.NextSibling {
-		if c.Type == html.TextNode {
-			summary += c.Data
-		} else if c.Type == html.ElementNode && c.Data == "strong" {
-			summary += htmlu.GetRawText(c, false)
-		}
-	}
-	return strings.TrimSpace(summary)
-}
-
-type SingleResult struct {
-	Name        string
-	URL         string
-	Description string
-}
-
-func processSingleResult(p *html.Node) SingleResult {
-	result := SingleResult{}
-
-	// Process direct header container
-	htmlu.Walk(p, func(n *html.Node) bool {
-		if n.Type == html.ElementNode && n.Data == "div" && htmlu.HasClass(n, "SearchSnippet-headerContainer") {
-			// Look for anchor inside header container
-			for a := range n.Descendants() {
-				if a.Type == html.ElementNode && a.Data == "a" {
-					result.Name = htmlu.GetText(a, false)
-					url := htmlu.GetHref(a)
-					if url != "" {
-						// Remove the leading slash if it exists
-						url = strings.TrimPrefix(url, "/")
-						result.URL = url
-					}
-					break // Found what we need
-				}
-			}
-			return false // Stop walking
-		}
-
-		// Look for description in synopsis paragraph
-		if n.Type == html.ElementNode && n.Data == "p" && htmlu.HasClass(n, "SearchSnippet-synopsis") {
-			result.Description = htmlu.GetText(n, true)
-			return false // Stop walking
-		}
-		return true // Continue walking
-	})
-
-	return result
+	return document, nil
 }
 
 // ReadGoDoc reads Go documentation for a given package URL.
@@ -131,117 +60,198 @@ func ReadGoDoc(httpcli *infra.HttpClient, packageURL string) (string, error) {
 		return "", errors.Wrap(err, "failed to parse HTML")
 	}
 
-	var documents []string
-	for n := range doc.Descendants() {
-		if n.Type == html.ElementNode && n.Data == "div" && htmlu.HasClass(n, "UnitDoc") {
-			htmlu.Walk(n, func(n *html.Node) bool {
-				if n.Type == html.ElementNode && n.Data == "h3" && htmlu.HasClass(n, "Documentation-*") {
-					documents = append(documents, fmt.Sprintf("### %s\n", htmlu.GetText(n, true)))
-					return false // Stop walking
-				}
-				if n.Type == html.ElementNode && n.Data == "section" && htmlu.HasClass(n, "Documentation-*") {
-					documents = append(documents, processSection(n))
-					return false // Stop walking
-				}
-				return true
-			})
-			break
-		}
-	}
+	matched, document := parseDocument(doc)
 
-	document := ""
-	for _, doc := range documents {
-		document += fmt.Sprintf("%s\n", doc)
+	// If no documentation found, try to parse the README section
+	if !matched {
+		_, readme := parseReadme(doc)
+		return readme, nil
 	}
 
 	return document, nil
 }
 
-func processSection(p *html.Node) string {
-	var documentation string
-	for c := p.FirstChild; c != nil; c = c.NextSibling {
-		documentation += processSubsection(c)
-	}
-	return documentation
+func parseSearchResult(doc *html.Node) (bool, string) {
+	builder := strings.Builder{}
+
+	headerMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("h2"),
+		func(n *html.Node) {
+			builder.WriteString(fmt.Sprintf("* %s\n", dq.InnerText(n, true)))
+		},
+		dq.NewNodeMatcher(
+			dq.NewMatchFunc("span"),
+			func(n *html.Node) {
+				url := dq.InnerText(n, false)
+				url = strings.Trim(url, "()")
+				builder.WriteString(fmt.Sprintf("\tURL: %s\n", url))
+			},
+		),
+	)
+	pMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("p"),
+		func(n *html.Node) {
+			builder.WriteString(fmt.Sprintf("\tDescription: %s\n", dq.InnerText(n, true)))
+		},
+	)
+	snippetMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("div.SearchSnippet"),
+		nil,
+		headerMatcher,
+		pMatcher,
+	)
+
+	var matched bool
+	rootMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("div.SearchResults"),
+		func(n *html.Node) {
+			matched = true
+		},
+		dq.NewNodeMatcher(
+			dq.NewMatchFunc("div.SearchResults-summary"),
+			func(n *html.Node) {
+				builder.WriteString(fmt.Sprintf("Summary: %s\n", dq.InnerText(n, true)))
+			},
+		),
+		dq.NewNodeMatcher(
+			dq.NewMatchFunc("div"),
+			nil,
+			snippetMatcher,
+		),
+	)
+
+	dq.Traverse(doc, []dq.Matcher{rootMatcher})
+	return matched, builder.String()
 }
 
-func processSubsection(n *html.Node) string {
-	var documentation string
-	if n.Type == html.ElementNode {
-		switch n.Data {
-		case "h1", "h2", "h3", "h4", "h5", "h6":
-			headers := []string{"# ", "## ", "### ", "#### ", "##### ", "###### "}
-			level := strings.Index("h1h2h3h4h5h6", n.Data)
-			if level != -1 {
-				documentation += fmt.Sprintf("%s%s\n", headers[level/2], strings.TrimSpace(htmlu.GetRawText(n, true)))
-			} else {
-				documentation += fmt.Sprintf("%s\n", strings.TrimSpace(htmlu.GetRawText(n, true)))
-			}
-		case "div":
-			if htmlu.HasClass(n, "Documentation-*") {
-				documentation += processSection(n)
-			}
-		case "p":
-			documentation += fmt.Sprintf("%s\n", htmlu.GetText(n, true))
-		case "pre":
-			documentation += fmt.Sprintf("```\n%s\n```\n", htmlu.GetRawText(n, true))
-		case "code":
-			documentation += fmt.Sprintf("`%s`\n", htmlu.GetText(n, true))
-		case "details":
-			documentation += processDetails(n)
-		case "a":
-			href := htmlu.GetHref(n)
-			if href != "" {
-				documentation += fmt.Sprintf("[%s](%s)\n", htmlu.GetText(n, true), href)
-			} else {
-				documentation += fmt.Sprintf("%s\n", htmlu.GetText(n, true))
-			}
-		case "ul", "ol":
-			documentation += processList(n, 0)
-		case "dl":
-			for c := range n.Descendants() {
-				if c.Type == html.ElementNode && c.Data == "dt" {
-					documentation += fmt.Sprintf("- %s\n", htmlu.GetText(c, true))
-				} else if c.Type == html.ElementNode && c.Data == "dd" {
-					documentation += fmt.Sprintf("  %s\n", htmlu.GetText(c, true))
+func parseDocument(doc *html.Node) (bool, string) {
+	builder := strings.Builder{}
+
+	headerMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("h1,h2,h3,h4,h5,h6"),
+		func(n *html.Node) {
+			h := strings.TrimPrefix(n.Data, "h")
+			hn, _ := strconv.Atoi(h)
+			builder.WriteString(fmt.Sprintf("\n%s %s\n", strings.Repeat("#", hn), dq.InnerText(n, true)))
+		},
+	)
+	listMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("ul,ol"),
+		nil,
+		dq.NewNodeMatcher(
+			dq.NewMatchFunc("li"),
+			func(n *html.Node) {
+				if dq.HasChild(n, "a") {
+					builder.WriteString(fmt.Sprintf("- %s\n", dq.InnerText(n, true)))
 				}
-			}
-		}
-	}
-	return documentation
+			},
+			dq.NewNodeMatcher(
+				dq.NewMatchFunc("ul,ol"),
+				nil,
+				dq.NewNodeMatcher(
+					dq.NewMatchFunc("li"),
+					func(n *html.Node) {
+						builder.WriteString(fmt.Sprintf("    - %s\n", dq.InnerText(n, true)))
+					},
+				),
+			),
+		),
+	)
+	pMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("p"),
+		func(n *html.Node) {
+			builder.WriteString(fmt.Sprintf("%s\n", dq.InnerText(n, true)))
+		},
+	)
+	preMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("pre"),
+		func(n *html.Node) {
+			builder.WriteString(fmt.Sprintf("```\n%s\n```\n", dq.RawInnerText(n, true)))
+		},
+	)
+	sectionMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("section"),
+		func(n *html.Node) {
+			builder.WriteString("Found section\n")
+		},
+		headerMatcher,
+		dq.NewNodeMatcher(
+			dq.NewMatchFunc("div"),
+			nil,
+			listMatcher,
+			headerMatcher,
+			pMatcher,
+			preMatcher,
+		),
+		pMatcher,
+		preMatcher,
+	)
+
+	var matched bool
+	rootMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("div.Documentation"),
+		func(n *html.Node) {
+			matched = true
+		},
+		dq.NewNodeMatcher(
+			dq.NewMatchFunc("div"),
+			nil,
+			headerMatcher,
+			sectionMatcher,
+			listMatcher,
+		),
+	)
+
+	dq.Traverse(doc, []dq.Matcher{rootMatcher})
+	return matched, builder.String()
 }
 
-func processList(n *html.Node, level int) string {
-	var documentation string
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if c.Type == html.ElementNode && (c.Data == "li" || c.Data == "dt") {
-			listNodes := htmlu.SelectChildNodes(c, "ul", "ol")
-			if len(listNodes) > 0 {
-				for _, list := range listNodes {
-					documentation += processList(list, level+1)
-				}
-			} else {
-				documentation += fmt.Sprintf("%s- %s\n", strings.Repeat(" ", level*2), htmlu.GetText(c, true))
-			}
-		}
-	}
-	return documentation
-}
+func parseReadme(doc *html.Node) (bool, string) {
+	builder := strings.Builder{}
 
-func processDetails(n *html.Node) string {
-	var documentation string
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if c.Type == html.ElementNode && c.Data == "summary" {
-			documentation += fmt.Sprintf("** %s **\n", htmlu.GetRawText(c, true))
-		} else if c.Type == html.ElementNode && htmlu.HasClass(c, "Documentation-exampleDetailsBody") {
-			for cc := c.FirstChild; cc != nil; cc = cc.NextSibling {
-				if cc.Type == html.ElementNode && (cc.Data == "textarea") {
-					documentation += fmt.Sprintf("```\n%s\n```\n", htmlu.GetRawText(cc, true))
-				} else if cc.Type == html.ElementNode && cc.Data == "pre" {
-					documentation += fmt.Sprintf("```\n%s\n```\n", htmlu.GetRawText(cc, true))
-				}
-			}
-		}
-	}
-	return documentation
+	headerMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("h1,h2,h3,h4,h5,h6"),
+		func(n *html.Node) {
+			h := strings.TrimPrefix(n.Data, "h")
+			hn, _ := strconv.Atoi(h)
+			builder.WriteString(fmt.Sprintf("\n%s %s\n", strings.Repeat("#", hn), dq.InnerText(n, true)))
+		},
+	)
+	listMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("ul,ol"),
+		nil,
+		dq.NewNodeMatcher(
+			dq.NewMatchFunc("li"),
+			func(n *html.Node) {
+				builder.WriteString(fmt.Sprintf("- %s\n", dq.InnerText(n, true)))
+			},
+		),
+	)
+	pMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("p"),
+		func(n *html.Node) {
+			builder.WriteString(fmt.Sprintf("%s\n", dq.InnerText(n, true)))
+		},
+	)
+	preMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("pre"),
+		func(n *html.Node) {
+			builder.WriteString(fmt.Sprintf("```\n%s\n```\n", dq.RawInnerText(n, true)))
+		},
+	)
+
+	var matched bool
+	rootMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("div.Overview-readmeContent"),
+		func(n *html.Node) {
+			matched = true
+		},
+		headerMatcher,
+		listMatcher,
+		pMatcher,
+		preMatcher,
+	)
+
+	dq.Traverse(doc, []dq.Matcher{rootMatcher})
+	return matched, builder.String()
 }
