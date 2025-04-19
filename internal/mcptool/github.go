@@ -3,6 +3,7 @@ package tool
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"fujlog.net/godev-mcp/internal/app"
@@ -30,11 +31,13 @@ func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 
 	gh, err := infra.NewGitHubClient()
 	if err != nil {
+		slog.ErrorContext(ctx, "searchCodeGitHub", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error creating GitHub client: %v", err)), nil
 	}
 
 	result, err := app.GitHubSearchCode(ctx, gh, query, &language, &ownerRepo)
 	if err != nil {
+		slog.ErrorContext(ctx, "searchCodeGitHub", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error searching code: %v", err)), nil
 	}
 
@@ -61,11 +64,13 @@ func getGitHubContent(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 
 	gh, err := infra.NewGitHubClient()
 	if err != nil {
+		slog.ErrorContext(ctx, "getGitHubContent", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error creating GitHub client: %v", err)), nil
 	}
 
 	content, err := gh.GetContent(ctx, owner, repo, path)
 	if err != nil {
+		slog.ErrorContext(ctx, "getGitHubContent", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting content: %v", err)), nil
 	}
 

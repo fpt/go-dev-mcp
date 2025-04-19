@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"fujlog.net/godev-mcp/internal/infra"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPrintTree(t *testing.T) {
@@ -48,7 +49,8 @@ func TestPrintTree(t *testing.T) {
 		b := &strings.Builder{}
 		walker := infra.NewDirWalker()
 		ctx := context.Background()
-		PrintTree(ctx, b, walker, tempDir, false)
+		err := PrintTree(ctx, b, walker, tempDir, false)
+		assert.NoError(t, err, "PrintTree should not fail")
 		result := b.String()
 
 		// Verify the result contains expected paths
@@ -60,17 +62,14 @@ func TestPrintTree(t *testing.T) {
 		}
 
 		for _, path := range expectedPaths {
-			if !strings.Contains(result, path) {
-				t.Errorf("printDirectory() result does not contain %q", path)
-			}
+			assert.Contains(t, result, path, "printDirectory() result should contain %q", path)
 		}
 
 		// Check if we have the correct number of lines (at least one per entry plus possible link)
 		lines := strings.Split(strings.TrimSpace(result), "\n")
 		minExpectedLines := len(expectedPaths)
-		if len(lines) < minExpectedLines {
-			t.Errorf("printDirectory() result has %d lines, expected at least %d", len(lines), minExpectedLines)
-		}
+		assert.GreaterOrEqual(t, len(lines), minExpectedLines,
+			"printDirectory() result has %d lines, expected at least %d", len(lines), minExpectedLines)
 	})
 
 	// Test with a non-existent directory
@@ -79,12 +78,9 @@ func TestPrintTree(t *testing.T) {
 		nonExistentDir := filepath.Join(tempDir, "nonexistent")
 		walker := infra.NewDirWalker()
 		ctx := context.Background()
-		PrintTree(ctx, b, walker, nonExistentDir, false)
-		result := b.String()
-
-		// Should only have the directory name itself as it doesn't exist
-		if strings.Contains(result, nonExistentDir) {
-			t.Errorf("printTree() result contains directory name %q", nonExistentDir)
-		}
+		err := PrintTree(ctx, b, walker, nonExistentDir, false)
+		// For a non-existent directory, we expect an error
+		assert.Error(t, err, "PrintTree should fail for non-existent directory")
+		assert.Contains(t, err.Error(), "no such file or directory", "Error should indicate file not found")
 	})
 }

@@ -3,6 +3,7 @@ package tool
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"fujlog.net/godev-mcp/internal/app"
@@ -24,6 +25,7 @@ func treeDir(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolRes
 	walker := infra.NewDirWalker()
 	err := app.PrintTree(ctx, &b, walker, rootDir, false)
 	if err != nil {
+		slog.ErrorContext(ctx, "treeDir", "error", err)
 		return nil, fmt.Errorf("error printing tree: %v", err)
 	}
 

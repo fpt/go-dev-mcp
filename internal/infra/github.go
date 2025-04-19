@@ -39,7 +39,9 @@ func NewGitHubClient() (*GitHubClient, error) {
 // SearchCode searches for code in a GitHub repository using the GitHub API.
 // https://github.com/google/go-github/blob/b98b707876c8b20b0e1dbbdffb7898a5fcc2169d/github/search.go#L62
 // GitHub API docs: https://docs.github.com/rest/search/search#search-code
-func (c *GitHubClient) SearchCode(ctx context.Context, query string, opt *repository.SearchCodeOption) (repository.SearchCodeResult, error) {
+func (c *GitHubClient) SearchCode(
+	ctx context.Context, query string, opt *repository.SearchCodeOption,
+) (repository.SearchCodeResult, error) {
 	opts := &github.SearchOptions{Sort: "indexed", TextMatch: true}
 	query = strings.TrimSpace(query)
 	if opt != nil {
@@ -148,7 +150,9 @@ func (c *GitHubClient) WalkContents(ctx context.Context, owner, repo, startPath 
 }
 
 // walkContentsRecursive is an internal helper function for WalkContents.
-func (c *GitHubClient) walkContentsRecursive(ctx context.Context, owner, repo, path string, fn WalkContentsFunc, depth int) error {
+func (c *GitHubClient) walkContentsRecursive(
+	ctx context.Context, owner, repo, path string, fn WalkContentsFunc, depth int,
+) error {
 	fileContent, directoryContent, _, err := c.Repositories.GetContents(ctx, owner, repo, path, nil)
 	if err != nil {
 		return err
@@ -202,7 +206,12 @@ func NewGitHubDirWalker(ctx context.Context, client *GitHubClient, owner, repo s
 }
 
 // Walk implements the repository.DirWalker interface for GitHub repositories
-func (w *GitHubDirWalker) Walk(ctx context.Context, function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc, prefix, path string) error {
+func (w *GitHubDirWalker) Walk(
+	ctx context.Context,
+	function repository.WalkDirFunc,
+	prefixFunc repository.WalkDirNextPrefixFunc,
+	prefix, path string,
+) error {
 	// Get contents of the directory
 	_, directoryContent, _, err := w.client.Repositories.GetContents(ctx, w.owner, w.repo, path, nil)
 	if err != nil {

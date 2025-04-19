@@ -16,7 +16,9 @@ type SearchResult struct {
 	Content  string
 }
 
-func SearchLocalFiles(ctx context.Context, fw repository.FileWalker, path, extension, query string) ([]SearchResult, error) {
+func SearchLocalFiles(
+	ctx context.Context, fw repository.FileWalker, path, extension, query string,
+) ([]SearchResult, error) {
 	var results []SearchResult
 	err := fw.Walk(ctx, func(filePath string) error {
 		content, err := searchInFile(filePath, query)

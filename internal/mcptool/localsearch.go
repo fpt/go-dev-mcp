@@ -3,6 +3,7 @@ package tool
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"fujlog.net/godev-mcp/internal/app"
@@ -30,6 +31,7 @@ func searchLocalFiles(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 	fw := infra.NewFileWalker()
 	localFiles, err := app.SearchLocalFiles(ctx, fw, path, extension, query)
 	if err != nil {
+		slog.ErrorContext(ctx, "searchLocalFiles", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting local files: %v", err)), nil
 	}
 
