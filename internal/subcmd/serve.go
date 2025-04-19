@@ -49,7 +49,7 @@ func (p *ServeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcomm
 	if p.debug && p.logFile != "" {
 		f, err := os.OpenFile(p.logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 		if err != nil {
-			fmt.Printf("Error opening log file: %v\n", err)
+			slog.ErrorContext(ctx, "Error opening log file", "error", err)
 			return subcommands.ExitFailure
 		}
 		defer f.Close()
@@ -58,20 +58,27 @@ func (p *ServeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcomm
 		slog.SetDefault(slog.New(slog.NewTextHandler(os.Stdout, nil)))
 	}
 
-	tool.Register(s, p.workdir)
+	if err := tool.Register(s, p.workdir); err != nil {
+		slog.ErrorContext(ctx, "Error registering tools", "error", err)
+		return subcommands.ExitFailure
+	}
 
 	if p.sse {
 		// Start the SSE server
 		ss := server.NewSSEServer(s)
-		defer ss.Shutdown(ctx)
+		defer func() {
+			if err := ss.Shutdown(ctx); err != nil {
+				slog.ErrorContext(ctx, "Error shutting down SSE server", "error", err)
+			}
+		}()
 		fmt.Printf("Starting SSE server on %s\n", p.addr)
 		if err := ss.Start(p.addr); err != nil {
-			fmt.Printf("SSE server error: %v\n", err)
+			slog.ErrorContext(ctx, "SSE server error", "error", err)
 		}
 	} else {
 		// Start the stdio server
 		if err := server.ServeStdio(s); err != nil {
-			fmt.Printf("Server error: %v\n", err)
+			slog.ErrorContext(ctx, "Server error", "error", err)
 		}
 	}
 
