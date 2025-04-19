@@ -103,5 +103,23 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, getGitHubTree)
 
+	// Add Local search tool
+	tool = mcp.NewTool("search_local_files",
+		mcp.WithDescription("Search for files in local directory"),
+		mcp.WithString("path",
+			mcp.Required(),
+			mcp.Description("Path to search in"),
+		),
+		mcp.WithString("query",
+			mcp.Required(),
+			mcp.Description("Search query"),
+		),
+		mcp.WithString("extension",
+			mcp.DefaultString("go"),
+			mcp.Description("File extension to search for (e.g., '.txt')"),
+		),
+	)
+	s.AddTool(tool, searchLocalFiles)
+
 	return nil
 }

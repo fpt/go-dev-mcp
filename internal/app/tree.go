@@ -21,7 +21,7 @@ func PrintTree(ctx context.Context, b *strings.Builder, walker repository.DirWal
 			}
 
 			// Print the current item
-			b.WriteString(fmt.Sprintf("%s%s%s\n", prefix, connector, name))
+			fmt.Fprintf(b, "%s%s%s\n", prefix, connector, name)
 
 			return nil
 		},
