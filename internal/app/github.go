@@ -10,7 +10,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-func GitHubSearchCode(ctx context.Context, github repository.GitHubClient, query string, language, repo *string) (string, error) {
+func GitHubSearchCode(
+	ctx context.Context, github repository.GitHubClient, query string, language, repo *string,
+) (string, error) {
 	// Perform the search
 	opt := &repository.SearchCodeOption{
 		Language: language,
@@ -40,7 +42,9 @@ func GitHubSearchCode(ctx context.Context, github repository.GitHubClient, query
 
 // PrintGitHubTree prints a tree representation of a GitHub repository path
 // using the same formatting as PrintTree does for local directories.
-func PrintGitHubTree(ctx context.Context, b *strings.Builder, client *infra.GitHubClient, owner, repo, path string) error {
+func PrintGitHubTree(
+	ctx context.Context, b *strings.Builder, client *infra.GitHubClient, owner, repo, path string,
+) error {
 	// Create a GitHub-specific walker
 	walker := infra.NewGitHubDirWalker(ctx, client, owner, repo)
 

@@ -21,7 +21,10 @@ func NewDirWalker() repository.DirWalker {
 	return &DirWalker{}
 }
 
-func (dw *DirWalker) Walk(ctx context.Context, function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc, prefix, path string) error {
+func (dw *DirWalker) Walk(
+	ctx context.Context, function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc,
+	prefix, path string,
+) error {
 	entries, err := os.ReadDir(path)
 	if err != nil {
 		return errors.Wrap(err, "failed to read directory")
@@ -63,7 +66,9 @@ func NewFileWalker() repository.FileWalker {
 	return &FileWalker{}
 }
 
-func (fw *FileWalker) Walk(ctx context.Context, function repository.WalkFileFunc, path, extension string, ignoreDot bool) error {
+func (fw *FileWalker) Walk(
+	ctx context.Context, function repository.WalkFileFunc, path, extension string, ignoreDot bool,
+) error {
 	entries, err := os.ReadDir(path)
 	if err != nil {
 		return errors.Wrap(err, "failed to read directory")

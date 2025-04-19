@@ -47,7 +47,7 @@ func (p *ServeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcomm
 
 	ctx := context.Background()
 	if p.debug && p.logFile != "" {
-		f, err := os.OpenFile(p.logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		f, err := os.OpenFile(p.logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 		if err != nil {
 			fmt.Printf("Error opening log file: %v\n", err)
 			return subcommands.ExitFailure

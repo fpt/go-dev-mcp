@@ -54,7 +54,9 @@ func SearchGoDoc(httpcli *infra.HttpClient, query string) (string, error) {
 
 	resultStrings := []string{summary}
 	for _, result := range results {
-		resultStrings = append(resultStrings, fmt.Sprintf("* %s\n\tURL: %s\n\tDescription: %s", result.Name, result.URL, result.Description))
+		resultStrings = append(resultStrings,
+			fmt.Sprintf("* %s\n\tURL: %s\n\tDescription: %s", result.Name, result.URL, result.Description),
+		)
 	}
 
 	return strings.Join(resultStrings, "\n"), nil
