@@ -22,6 +22,7 @@ func TestSearchLocalFiles(t *testing.T) {
 	files := map[string]string{
 		"file1.txt": "This is a test file with some content.",
 		"file2.txt": "Another test file with different content.",
+		"file3.txt": "test",
 	}
 
 	for filename, content := range files {
@@ -42,8 +43,10 @@ func TestSearchLocalFiles(t *testing.T) {
 	}
 
 	for _, result := range results {
-		if !strings.Contains(result.Content, query) {
-			t.Errorf("Expected query '%s' in file '%s', got '%s'", query, result.Filename, result.Content)
+		for _, match := range result.Matches {
+			if !strings.Contains(match.Text, query) {
+				t.Errorf("Expected query '%s' in file '%s', got '%s'", query, result.Filename, match.Text)
+			}
 		}
 	}
 }
