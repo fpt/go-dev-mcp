@@ -29,7 +29,15 @@ func runMakeTarget(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallT
 	if err != nil {
 		slog.ErrorContext(ctx, "runMakeTarget", "error", err)
 		return mcp.NewToolResultError(
-			fmt.Sprintf("Command failed. Exit code: %d, Error: %+v\n%s", exitCode, err, formatOutput(stdout, stderr)),
+			fmt.Sprintf("Command execution failed. Error: %+v\n%s", err, formatOutput(stdout, stderr)),
+		), nil
+	}
+
+	if exitCode != 0 {
+		// Command was executed but exited with a non-zero status
+		// We return it as an error so that the caller can recognize it.
+		return mcp.NewToolResultError(
+			fmt.Sprintf("Command failed. Exit code: %d\n%s", exitCode, formatOutput(stdout, stderr)),
 		), nil
 	}
 
@@ -40,11 +48,15 @@ func runMakeTarget(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallT
 
 func formatOutput(stdout, stderr string) string {
 	result := ""
-	if stdout != "" {
-		result = result + fmt.Sprintf("stdout:\n```\n%s\n```\n", stdout)
-	}
+
+	// Append stderr first so that it is at the top
 	if stderr != "" {
 		result = result + fmt.Sprintf("stderr:\n```\n%s\n```\n", stderr)
 	}
+
+	if stdout != "" {
+		result = result + fmt.Sprintf("stdout:\n```\n%s\n```\n", stdout)
+	}
+
 	return result
 }

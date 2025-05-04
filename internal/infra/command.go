@@ -23,7 +23,10 @@ func Run(workdir, cmd string, args ...string) (string, string, int, error) {
 
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
-			return stdoutStr, stderrStr, exitError.ExitCode(), errors.Wrap(err, "command execution failed")
+			// In this case, the command was executed but exited with a non-zero status
+			// We can get the exit code from the ExitError
+			// Because it is not our error, we don't wrap it
+			return stdoutStr, stderrStr, exitError.ExitCode(), nil
 		}
 		return stdoutStr, stderrStr, 1, errors.Wrap(err, "command execution failed")
 	}
