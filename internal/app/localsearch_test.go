@@ -26,7 +26,7 @@ func TestSearchLocalFiles(t *testing.T) {
 	}
 
 	for filename, content := range files {
-		if err := os.WriteFile(filepath.Join(tempDir, filename), []byte(content), 0o644); err != nil {
+		if err := os.WriteFile(filepath.Join(tempDir, filename), []byte(content), 0o600); err != nil {
 			t.Fatalf("Failed to create test file %s: %v", filename, err)
 		}
 	}

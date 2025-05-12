@@ -10,6 +10,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+const ItemTypeDir = "dir"
+
 type GitHubClient struct {
 	*github.Client
 }
@@ -113,7 +115,7 @@ func (c *GitHubClient) GetContent(ctx context.Context, owner, repo, path string)
 			itemName := *item.Name
 
 			// Add trailing slash for directories to make them easily identifiable
-			if itemType == "dir" {
+			if itemType == ItemTypeDir {
 				itemName += "/"
 			}
 
@@ -171,7 +173,7 @@ func (c *GitHubClient) walkContentsRecursive(
 	// Then call the function for each item in the directory
 	for _, item := range directoryContent {
 		itemPath := *item.Path
-		isDir := *item.Type == "dir"
+		isDir := *item.Type == ItemTypeDir
 
 		// Call the function for this item
 		if err := fn(itemPath, isDir, depth+1); err != nil {
@@ -222,7 +224,7 @@ func (w *GitHubDirWalker) Walk(
 	for i, item := range directoryContent {
 		isLastEntry := (i == len(directoryContent)-1)
 		name := *item.Name
-		isDir := *item.Type == "dir"
+		isDir := *item.Type == ItemTypeDir
 
 		// Call the function for this entry
 		if err := function(name, prefix, isLastEntry); err != nil {

@@ -14,7 +14,11 @@ func NewHttpClient() *HttpClient {
 }
 
 func (c *HttpClient) HttpGet(url string) (io.ReadCloser, error) {
-	resp, err := http.Get(url)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := (&http.Client{}).Do(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to make HTTP request")
 	}

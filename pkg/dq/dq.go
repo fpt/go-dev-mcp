@@ -1,4 +1,4 @@
-// DOM Query - A simple HTML DOM query library
+// Document Query - A simple HTML Document query library
 package dq
 
 import (
@@ -116,6 +116,7 @@ func NewMatchFunc(pattern string) MatchFunc {
 	}
 }
 
+//nolint:nestif // TBD
 func matchSingle(n *html.Node, pattern string) bool {
 	if n.Type == html.ElementNode {
 		if strings.Contains(pattern, "[") {

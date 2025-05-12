@@ -33,7 +33,7 @@ func TestPrintTree(t *testing.T) {
 	}
 
 	for _, file := range files {
-		if err := os.WriteFile(file, []byte("test"), 0o644); err != nil {
+		if err := os.WriteFile(file, []byte("test"), 0o600); err != nil {
 			t.Fatalf("Failed to create test file %s: %v", file, err)
 		}
 	}
