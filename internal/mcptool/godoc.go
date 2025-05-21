@@ -10,14 +10,22 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
+type searchGoDocArguments struct {
+	Query string `param:"query"`
+}
+
 func searchGoDoc(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	query, ok := request.Params.Arguments["query"].(string)
-	if !ok || query == "" {
+	args, err := decodeArguments[searchGoDocArguments](request.Params.Arguments)
+	if err != nil {
+		return mcp.NewToolResultError("Invalid parameters"), nil
+	}
+
+	if args.Query == "" {
 		return mcp.NewToolResultError("Missing search query"), nil
 	}
 
 	httpcli := infra.NewHttpClient()
-	results, err := app.SearchGoDoc(httpcli, query)
+	results, err := app.SearchGoDoc(httpcli, args.Query)
 	if err != nil {
 		slog.ErrorContext(ctx, "searchGoDoc", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error searching Go documentation: %v", err)), nil
@@ -27,21 +35,29 @@ func searchGoDoc(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToo
 		return mcp.NewToolResultText("No results found"), nil
 	}
 
-	return mcp.NewToolResultText(fmt.Sprintf("Search results for '%s':\n%s", query, results)), nil
+	return mcp.NewToolResultText(fmt.Sprintf("Search results for '%s':\n%s", args.Query, results)), nil
+}
+
+type readGoDocArguments struct {
+	PackageURL string `param:"package_url"`
 }
 
 func readGoDoc(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	packageURL, ok := request.Params.Arguments["package_url"].(string)
-	if !ok || packageURL == "" {
+	args, err := decodeArguments[readGoDocArguments](request.Params.Arguments)
+	if err != nil {
+		return mcp.NewToolResultError("Invalid parameters"), nil
+	}
+
+	if args.PackageURL == "" {
 		return mcp.NewToolResultError("Missing package URL"), nil
 	}
 
 	httpcli := infra.NewHttpClient()
-	result, err := app.ReadGoDoc(httpcli, packageURL)
+	result, err := app.ReadGoDoc(httpcli, args.PackageURL)
 	if err != nil {
 		slog.ErrorContext(ctx, "readGoDoc", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error reading Go documentation: %v", err)), nil
 	}
 
-	return mcp.NewToolResultText(fmt.Sprintf("Documentation for '%s':\n%s", packageURL, result)), nil
+	return mcp.NewToolResultText(fmt.Sprintf("Documentation for '%s':\n%s", args.PackageURL, result)), nil
 }

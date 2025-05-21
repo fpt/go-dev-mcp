@@ -9,23 +9,24 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
+type makeToolArguments struct {
+	WorkDir string `param:"work_dir"`
+	Target  string `param:"target"`
+}
+
 func runMakeTarget(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	workdir, ok := request.Params.Arguments["work_dir"].(string)
-	if !ok {
-		return mcp.NewToolResultError("work_dir must be a string"), nil
-	}
-	target, ok := request.Params.Arguments["target"].(string)
-	if !ok {
-		return mcp.NewToolResultError("target must be a string"), nil
+	args, err := decodeArguments[makeToolArguments](request.Params.Arguments)
+	if err != nil {
+		return mcp.NewToolResultError("Invalid parameters"), nil
 	}
 
 	// Check if the Makefile exists in the current directory
-	if !infra.IsFileExist(workdir, "Makefile") {
-		slog.ErrorContext(ctx, "runMakeTarget", "error", fmt.Errorf("no Makefile found in directory: %s", workdir))
-		return mcp.NewToolResultError(fmt.Sprintf("no Makefile found in directory: %s", workdir)), nil
+	if !infra.IsFileExist(args.WorkDir, "Makefile") {
+		slog.ErrorContext(ctx, "runMakeTarget", "error", fmt.Errorf("no Makefile found in directory: %s", args.WorkDir))
+		return mcp.NewToolResultError(fmt.Sprintf("no Makefile found in directory: %s", args.WorkDir)), nil
 	}
 
-	stdout, stderr, exitCode, err := infra.Run(workdir, "make", target)
+	stdout, stderr, exitCode, err := infra.Run(args.WorkDir, "make", args.Target)
 	if err != nil {
 		slog.ErrorContext(ctx, "runMakeTarget", "error", err)
 		return mcp.NewToolResultError(

@@ -32,6 +32,7 @@ linters:
       - examples$
 formatters:
   enable:
+    - gofumpt
     - gofmt
     - goimports
   exclusions:

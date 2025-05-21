@@ -11,17 +11,27 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
+type searchGitHubCodeArguments struct {
+	Query    string `param:"query"`
+	Language string `param:"language"`
+	Repo     string `param:"repo"`
+}
+
 func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	query, ok := request.Params.Arguments["query"].(string)
-	if !ok || query == "" {
+	args, err := decodeArguments[searchGitHubCodeArguments](request.Params.Arguments)
+	if err != nil {
+		return mcp.NewToolResultError("Invalid parameters"), nil
+	}
+
+	if args.Query == "" {
 		return mcp.NewToolResultError("Missing search query"), nil
 	}
-	language, ok := request.Params.Arguments["language"].(string)
-	if !ok || language == "" {
+	if args.Language == "" {
 		return mcp.NewToolResultError("Missing language"), nil
 	}
-	ownerRepo, ok := request.Params.Arguments["repo"].(string)
-	if ok && ownerRepo != "" {
+
+	ownerRepo := args.Repo
+	if ownerRepo != "" {
 		// Validate the repo format
 		parts := strings.Split(ownerRepo, "/")
 		if len(parts) != 2 {
@@ -35,7 +45,7 @@ func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 		return mcp.NewToolResultError(fmt.Sprintf("Error creating GitHub client: %v", err)), nil
 	}
 
-	result, err := app.GitHubSearchCode(ctx, gh, query, &language, &ownerRepo)
+	result, err := app.GitHubSearchCode(ctx, gh, args.Query, &args.Language, &ownerRepo)
 	if err != nil {
 		slog.ErrorContext(ctx, "searchCodeGitHub", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error searching code: %v", err)), nil
@@ -44,21 +54,29 @@ func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 	return mcp.NewToolResultText(result), nil
 }
 
+type getGitHubContentArguments struct {
+	Repo string `param:"repo"`
+	Path string `param:"path"`
+}
+
 func getGitHubContent(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	ownerRepo, ok := request.Params.Arguments["repo"].(string)
-	if !ok || ownerRepo == "" {
+	args, err := decodeArguments[getGitHubContentArguments](request.Params.Arguments)
+	if err != nil {
+		return mcp.NewToolResultError("Invalid parameters"), nil
+	}
+
+	if args.Repo == "" {
 		return mcp.NewToolResultError("Missing repo"), nil
 	}
 
-	parts := strings.Split(ownerRepo, "/")
+	parts := strings.Split(args.Repo, "/")
 	if len(parts) != 2 {
 		return mcp.NewToolResultError("Invalid repo format, expected 'owner/repo'"), nil
 	}
 	owner := parts[0]
 	repo := parts[1]
 
-	path, ok := request.Params.Arguments["path"].(string)
-	if !ok || path == "" {
+	if args.Path == "" {
 		return mcp.NewToolResultError("Missing path"), nil
 	}
 
@@ -68,7 +86,7 @@ func getGitHubContent(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 		return mcp.NewToolResultError(fmt.Sprintf("Error creating GitHub client: %v", err)), nil
 	}
 
-	content, err := gh.GetContent(ctx, owner, repo, path)
+	content, err := gh.GetContent(ctx, owner, repo, args.Path)
 	if err != nil {
 		slog.ErrorContext(ctx, "getGitHubContent", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting content: %v", err)), nil
@@ -77,24 +95,30 @@ func getGitHubContent(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 	return mcp.NewToolResultText(content), nil
 }
 
+type GetGitHubTreeArguments struct {
+	Repo string `param:"repo"`
+	Path string `param:"path"`
+}
+
 func getGitHubTree(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	ownerRepo, ok := request.Params.Arguments["repo"].(string)
-	if !ok || ownerRepo == "" {
+	args, err := decodeArguments[GetGitHubTreeArguments](request.Params.Arguments)
+	if err != nil {
+		return mcp.NewToolResultError("Invalid parameters"), nil
+	}
+
+	if args.Repo == "" {
 		return mcp.NewToolResultError("Missing repo"), nil
 	}
 
-	parts := strings.Split(ownerRepo, "/")
+	parts := strings.Split(args.Repo, "/")
 	if len(parts) != 2 {
 		return mcp.NewToolResultError("Invalid repo format, expected 'owner/repo'"), nil
 	}
 	owner := parts[0]
 	repo := parts[1]
 
-	path, ok := request.Params.Arguments["path"].(string)
-	if !ok {
-		// Default to empty path (repository root)
-		path = ""
-	}
+	// Path has a default value in registration, so it should never be nil
+	path := args.Path
 
 	gh, err := infra.NewGitHubClient()
 	if err != nil {

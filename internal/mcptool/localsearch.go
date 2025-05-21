@@ -11,25 +11,32 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
+type searchLocalFilesArguments struct {
+	Path      string `param:"path"`
+	Query     string `param:"query"`
+	Extension string `param:"extension"`
+}
+
 func searchLocalFiles(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	path, ok := request.Params.Arguments["path"].(string)
-	if !ok || path == "" {
+	args, err := decodeArguments[searchLocalFilesArguments](request.Params.Arguments)
+	if err != nil {
+		return mcp.NewToolResultError("Invalid parameters"), nil
+	}
+
+	if args.Path == "" {
 		return mcp.NewToolResultError("Missing search path"), nil
 	}
-	query, ok := request.Params.Arguments["query"].(string)
-	if !ok || query == "" {
+	if args.Query == "" {
 		return mcp.NewToolResultError("Missing search query"), nil
 	}
-	extension, ok := request.Params.Arguments["extension"].(string)
-	if !ok {
-		extension = ""
-	}
+
+	extension := args.Extension
 	if extension != "" && !strings.HasPrefix(extension, ".") {
 		extension = "." + extension
 	}
 
 	fw := infra.NewFileWalker()
-	localFiles, err := app.SearchLocalFiles(ctx, fw, path, extension, query)
+	localFiles, err := app.SearchLocalFiles(ctx, fw, args.Path, extension, args.Query)
 	if err != nil {
 		slog.ErrorContext(ctx, "searchLocalFiles", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting local files: %v", err)), nil

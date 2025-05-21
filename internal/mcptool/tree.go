@@ -11,22 +11,28 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
+type treeToolArguments struct {
+	RootDir string `param:"root_dir"`
+}
+
 func treeDir(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	rootDir, ok := request.Params.Arguments["root_dir"].(string)
-	if !ok {
-		return nil, fmt.Errorf("root_dir not found or not a string")
+	args, err := decodeArguments[treeToolArguments](request.Params.Arguments)
+	if err != nil {
+		return mcp.NewToolResultError("Invalid parameters"), nil
 	}
-	if rootDir == "" {
-		return nil, fmt.Errorf("root_dir is empty")
+
+	if args.RootDir == "" {
+		slog.ErrorContext(ctx, "treeDir", "error", fmt.Errorf("root_dir is empty"))
+		return mcp.NewToolResultError("root_dir is empty"), nil
 	}
 
 	b := strings.Builder{}
-	b.WriteString(fmt.Sprintf("%s\n", rootDir))
+	b.WriteString(fmt.Sprintf("%s\n", args.RootDir))
 	walker := infra.NewDirWalker()
-	err := app.PrintTree(ctx, &b, walker, rootDir, false)
+	err = app.PrintTree(ctx, &b, walker, args.RootDir, false)
 	if err != nil {
 		slog.ErrorContext(ctx, "treeDir", "error", err)
-		return nil, fmt.Errorf("error printing tree: %v", err)
+		return mcp.NewToolResultError(fmt.Sprintf("Error printing tree: %v", err)), nil
 	}
 
 	result := b.String()
