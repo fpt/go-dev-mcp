@@ -10,9 +10,9 @@ import (
 )
 
 func runMakeTarget(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	workdir, ok := request.Params.Arguments["project_dir"].(string)
+	workdir, ok := request.Params.Arguments["work_dir"].(string)
 	if !ok {
-		return mcp.NewToolResultError("project_dir must be a string"), nil
+		return mcp.NewToolResultError("work_dir must be a string"), nil
 	}
 	target, ok := request.Params.Arguments["target"].(string)
 	if !ok {

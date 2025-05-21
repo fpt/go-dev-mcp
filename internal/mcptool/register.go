@@ -14,14 +14,14 @@ func Register(s *server.MCPServer, workdir string) error {
 
 	// Add Make target tool
 	tool = mcp.NewTool("run_make",
-		mcp.WithDescription("Run make target"),
-		mcp.WithString("project_dir",
+		mcp.WithDescription("Run make target and return exit code, stdout, and stderr."),
+		mcp.WithString("work_dir",
 			mcp.DefaultString(workdir),
-			mcp.Description("Project root directory (NOTE: must be an absolute path)"),
+			mcp.Description("Working directory which has Makefile (absolute path)"),
 		),
 		mcp.WithString("target",
 			mcp.DefaultString("help"),
-			mcp.Description("Command to execute"),
+			mcp.Description("Make target to run"),
 		),
 	)
 	s.AddTool(tool, runMakeTarget)
