@@ -10,7 +10,7 @@ func Register(s *server.MCPServer, workdir string) error {
 	tool := mcp.NewTool("get_current_datetime",
 		mcp.WithDescription("Get current date and time"),
 	)
-	s.AddTool(tool, getCurrentDateTime)
+	s.AddTool(tool, mcp.NewTypedToolHandler(getCurrentDateTime))
 
 	// Add Make target tool
 	tool = mcp.NewTool("run_make",
@@ -24,7 +24,7 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Make target to run"),
 		),
 	)
-	s.AddTool(tool, runMakeTarget)
+	s.AddTool(tool, mcp.NewTypedToolHandler(runMakeTarget))
 
 	// Add Tree Directory tool
 	tool = mcp.NewTool("tree_dir",
@@ -34,7 +34,7 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Root directory"),
 		),
 	)
-	s.AddTool(tool, treeDir)
+	s.AddTool(tool, mcp.NewTypedToolHandler(treeDir))
 
 	// Add GoDoc search tool
 	tool = mcp.NewTool("search_godoc",
@@ -44,7 +44,7 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Search text which occurs in the package name, package path, synopsis, or README"),
 		),
 	)
-	s.AddTool(tool, searchGoDoc)
+	s.AddTool(tool, mcp.NewTypedToolHandler(searchGoDoc))
 
 	// Add GoDoc read tool
 	tool = mcp.NewTool("read_godoc",
@@ -54,7 +54,7 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("URL of the Go package (e.g., 'github.com/user/repo')"),
 		),
 	)
-	s.AddTool(tool, readGoDoc)
+	s.AddTool(tool, mcp.NewTypedToolHandler(readGoDoc))
 
 	// Add GitHub search code tool
 	tool = mcp.NewTool("search_github_code",
@@ -73,7 +73,7 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("GitHub repository in 'owner/repo' format"),
 		),
 	)
-	s.AddTool(tool, searchCodeGitHub)
+	s.AddTool(tool, mcp.NewTypedToolHandler(searchCodeGitHub))
 
 	// Add GitHub get content tool
 	tool = mcp.NewTool("get_github_content",
@@ -87,7 +87,7 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Path to the file in the repository"),
 		),
 	)
-	s.AddTool(tool, getGitHubContent)
+	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubContent))
 
 	// Add GitHub tree tool
 	tool = mcp.NewTool("tree_github_repo",
@@ -101,7 +101,7 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Path in the repository (defaults to root)"),
 		),
 	)
-	s.AddTool(tool, getGitHubTree)
+	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubTree))
 
 	// Add Local search tool
 	tool = mcp.NewTool("search_local_files",
@@ -119,7 +119,7 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("File extension to search for (e.g., '.txt')"),
 		),
 	)
-	s.AddTool(tool, searchLocalFiles)
+	s.AddTool(tool, mcp.NewTypedToolHandler(searchLocalFiles))
 
 	return nil
 }

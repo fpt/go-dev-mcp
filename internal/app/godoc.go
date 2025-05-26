@@ -172,7 +172,7 @@ func parseDocument(doc *html.Node) (bool, string) {
 	sectionMatcher := dq.NewNodeMatcher(
 		dq.NewMatchFunc("section"),
 		func(n *html.Node) {
-			builder.WriteString("Found section\n")
+			// section is a container of multiple divs.
 		},
 		headerMatcher,
 		dq.NewNodeMatcher(
