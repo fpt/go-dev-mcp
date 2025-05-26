@@ -9,7 +9,10 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func getCurrentDateTime(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+// DateTimeArgs represents arguments for getting current datetime (no arguments needed)
+type DateTimeArgs struct{}
+
+func getCurrentDateTime(ctx context.Context, request mcp.CallToolRequest, args DateTimeArgs) (*mcp.CallToolResult, error) {
 	currentTime, err := app.CurrentDatetime()
 	if err != nil {
 		slog.ErrorContext(ctx, "getCurrentDateTime", "error", err)

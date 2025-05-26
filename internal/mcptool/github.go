@@ -11,19 +11,35 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	query, ok := request.Params.Arguments["query"].(string)
-	if !ok || query == "" {
+// SearchCodeGitHubArgs represents arguments for GitHub code search
+type SearchCodeGitHubArgs struct {
+	Query    string `json:"query"`
+	Language string `json:"language"`
+	Repo     string `json:"repo"`
+}
+
+// GitHubContentArgs represents arguments for GitHub content retrieval
+type GitHubContentArgs struct {
+	Repo string `json:"repo"`
+	Path string `json:"path"`
+}
+
+// GitHubTreeArgs represents arguments for GitHub tree display
+type GitHubTreeArgs struct {
+	Repo string `json:"repo"`
+	Path string `json:"path"`
+}
+
+func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest, args SearchCodeGitHubArgs) (*mcp.CallToolResult, error) {
+	if args.Query == "" {
 		return mcp.NewToolResultError("Missing search query"), nil
 	}
-	language, ok := request.Params.Arguments["language"].(string)
-	if !ok || language == "" {
+	if args.Language == "" {
 		return mcp.NewToolResultError("Missing language"), nil
 	}
-	ownerRepo, ok := request.Params.Arguments["repo"].(string)
-	if ok && ownerRepo != "" {
+	if args.Repo != "" {
 		// Validate the repo format
-		parts := strings.Split(ownerRepo, "/")
+		parts := strings.Split(args.Repo, "/")
 		if len(parts) != 2 {
 			return mcp.NewToolResultError("Invalid repo format, expected 'owner/repo'"), nil
 		}
@@ -35,7 +51,7 @@ func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 		return mcp.NewToolResultError(fmt.Sprintf("Error creating GitHub client: %v", err)), nil
 	}
 
-	result, err := app.GitHubSearchCode(ctx, gh, query, &language, &ownerRepo)
+	result, err := app.GitHubSearchCode(ctx, gh, args.Query, &args.Language, &args.Repo)
 	if err != nil {
 		slog.ErrorContext(ctx, "searchCodeGitHub", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error searching code: %v", err)), nil
@@ -44,21 +60,19 @@ func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 	return mcp.NewToolResultText(result), nil
 }
 
-func getGitHubContent(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	ownerRepo, ok := request.Params.Arguments["repo"].(string)
-	if !ok || ownerRepo == "" {
+func getGitHubContent(ctx context.Context, request mcp.CallToolRequest, args GitHubContentArgs) (*mcp.CallToolResult, error) {
+	if args.Repo == "" {
 		return mcp.NewToolResultError("Missing repo"), nil
 	}
 
-	parts := strings.Split(ownerRepo, "/")
+	parts := strings.Split(args.Repo, "/")
 	if len(parts) != 2 {
 		return mcp.NewToolResultError("Invalid repo format, expected 'owner/repo'"), nil
 	}
 	owner := parts[0]
 	repo := parts[1]
 
-	path, ok := request.Params.Arguments["path"].(string)
-	if !ok || path == "" {
+	if args.Path == "" {
 		return mcp.NewToolResultError("Missing path"), nil
 	}
 
@@ -68,7 +82,7 @@ func getGitHubContent(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 		return mcp.NewToolResultError(fmt.Sprintf("Error creating GitHub client: %v", err)), nil
 	}
 
-	content, err := gh.GetContent(ctx, owner, repo, path)
+	content, err := gh.GetContent(ctx, owner, repo, args.Path)
 	if err != nil {
 		slog.ErrorContext(ctx, "getGitHubContent", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting content: %v", err)), nil
@@ -77,24 +91,17 @@ func getGitHubContent(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 	return mcp.NewToolResultText(content), nil
 }
 
-func getGitHubTree(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	ownerRepo, ok := request.Params.Arguments["repo"].(string)
-	if !ok || ownerRepo == "" {
+func getGitHubTree(ctx context.Context, request mcp.CallToolRequest, args GitHubTreeArgs) (*mcp.CallToolResult, error) {
+	if args.Repo == "" {
 		return mcp.NewToolResultError("Missing repo"), nil
 	}
 
-	parts := strings.Split(ownerRepo, "/")
+	parts := strings.Split(args.Repo, "/")
 	if len(parts) != 2 {
 		return mcp.NewToolResultError("Invalid repo format, expected 'owner/repo'"), nil
 	}
 	owner := parts[0]
 	repo := parts[1]
-
-	path, ok := request.Params.Arguments["path"].(string)
-	if !ok {
-		// Default to empty path (repository root)
-		path = ""
-	}
 
 	gh, err := infra.NewGitHubClient()
 	if err != nil {
@@ -103,10 +110,10 @@ func getGitHubTree(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallT
 
 	// Create a string builder for the tree output
 	b := strings.Builder{}
-	b.WriteString(fmt.Sprintf("%s/%s:%s\n", owner, repo, path))
+	b.WriteString(fmt.Sprintf("%s/%s:%s\n", owner, repo, args.Path))
 
 	// Generate the tree using our PrintGitHubTree function
-	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, path); err != nil {
+	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, args.Path); err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Error generating tree: %v", err)), nil
 	}
 
