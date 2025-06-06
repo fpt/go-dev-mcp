@@ -33,6 +33,10 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Root directory"),
 		),
+		mcp.WithBoolean("ignore_dot",
+			mcp.DefaultBool(false),
+			mcp.Description("Ignore dot files and directories (except .git which is always ignored)"),
+		),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(treeDir))
 
@@ -99,6 +103,10 @@ func Register(s *server.MCPServer, workdir string) error {
 		mcp.WithString("path",
 			mcp.DefaultString(""),
 			mcp.Description("Path in the repository (defaults to root)"),
+		),
+		mcp.WithBoolean("ignore_dot",
+			mcp.DefaultBool(false),
+			mcp.Description("Ignore dot files and directories (except .git which is always ignored)"),
 		),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubTree))

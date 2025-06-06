@@ -213,6 +213,7 @@ func (w *GitHubDirWalker) Walk(
 	function repository.WalkDirFunc,
 	prefixFunc repository.WalkDirNextPrefixFunc,
 	prefix, path string,
+	ignoreDot bool,
 ) error {
 	// Get contents of the directory
 	_, directoryContent, _, err := w.client.Repositories.GetContents(ctx, w.owner, w.repo, path, nil)
@@ -220,9 +221,25 @@ func (w *GitHubDirWalker) Walk(
 		return errors.Wrap(err, "failed to get directory contents")
 	}
 
-	// Process directory entries
-	for i, item := range directoryContent {
-		isLastEntry := (i == len(directoryContent)-1)
+	// Filter directory entries first
+	filteredContent := make([]*github.RepositoryContent, 0)
+	for _, item := range directoryContent {
+		name := *item.Name
+
+		// Always filter out .git directory
+		if name == ".git" {
+			continue
+		}
+		// Optionally filter out other dot files/directories
+		if ignoreDot && strings.HasPrefix(name, ".") {
+			continue
+		}
+		filteredContent = append(filteredContent, item)
+	}
+
+	// Process filtered directory entries
+	for i, item := range filteredContent {
+		isLastEntry := (i == len(filteredContent)-1)
 		name := *item.Name
 		isDir := *item.Type == ItemTypeDir
 
@@ -241,7 +258,7 @@ func (w *GitHubDirWalker) Walk(
 				subpath = subpath + "/" + name
 			}
 
-			if err := w.Walk(ctx, function, prefixFunc, nextPrefix, subpath); err != nil {
+			if err := w.Walk(ctx, function, prefixFunc, nextPrefix, subpath, ignoreDot); err != nil {
 				return err
 			}
 		}

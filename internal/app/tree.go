@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func PrintTree(ctx context.Context, b *strings.Builder, walker repository.DirWalker, path string, isLast bool) error {
+func PrintTree(ctx context.Context, b *strings.Builder, walker repository.DirWalker, path string, ignoreDot bool) error {
 	err := walker.Walk(
 		ctx,
 		func(name, prefix string, isLastEntry bool) error {
@@ -33,7 +33,8 @@ func PrintTree(ctx context.Context, b *strings.Builder, walker repository.DirWal
 			return nextPrefix
 		},
 		"",
-		path)
+		path,
+		ignoreDot)
 	if err != nil {
 		return errors.Wrap(err, "failed to walk directory")
 	}

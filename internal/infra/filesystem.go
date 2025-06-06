@@ -23,19 +23,25 @@ func NewDirWalker() repository.DirWalker {
 
 func (dw *DirWalker) Walk(
 	ctx context.Context, function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc,
-	prefix, path string,
+	prefix, path string, ignoreDot bool,
 ) error {
 	entries, err := os.ReadDir(path)
 	if err != nil {
 		return errors.Wrap(err, "failed to read directory")
 	}
 
-	// Filter out .git directory
+	// Filter out .git directory and optionally other dot files/directories
 	filteredEntries := make([]os.DirEntry, 0)
 	for _, entry := range entries {
-		if !entry.IsDir() || entry.Name() != ".git" {
-			filteredEntries = append(filteredEntries, entry)
+		// Always filter out .git directory
+		if entry.IsDir() && entry.Name() == ".git" {
+			continue
 		}
+		// Optionally filter out other dot files/directories
+		if ignoreDot && strings.HasPrefix(entry.Name(), ".") {
+			continue
+		}
+		filteredEntries = append(filteredEntries, entry)
 	}
 
 	for i, entry := range filteredEntries {
@@ -50,7 +56,7 @@ func (dw *DirWalker) Walk(
 			nextPrefix := prefixFunc(prefix, isLastEntry)
 
 			subpath := filepath.Join(path, entry.Name())
-			err := dw.Walk(ctx, function, prefixFunc, nextPrefix, subpath)
+			err := dw.Walk(ctx, function, prefixFunc, nextPrefix, subpath, ignoreDot)
 			if err != nil {
 				return err
 			}

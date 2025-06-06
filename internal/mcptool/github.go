@@ -26,8 +26,9 @@ type GitHubContentArgs struct {
 
 // GitHubTreeArgs represents arguments for GitHub tree display
 type GitHubTreeArgs struct {
-	Repo string `json:"repo"`
-	Path string `json:"path"`
+	Repo      string `json:"repo"`
+	Path      string `json:"path"`
+	IgnoreDot bool   `json:"ignore_dot"`
 }
 
 func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest, args SearchCodeGitHubArgs) (*mcp.CallToolResult, error) {
@@ -113,7 +114,7 @@ func getGitHubTree(ctx context.Context, request mcp.CallToolRequest, args GitHub
 	b.WriteString(fmt.Sprintf("%s/%s:%s\n", owner, repo, args.Path))
 
 	// Generate the tree using our PrintGitHubTree function
-	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, args.Path); err != nil {
+	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, args.Path, args.IgnoreDot); err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Error generating tree: %v", err)), nil
 	}
 

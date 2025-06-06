@@ -44,7 +44,36 @@ func TestPrintTree(t *testing.T) {
 	// We'll ignore any error here since symlinks may not be supported on all platforms
 	_ = os.Symlink(targetPath, linkPath)
 
-	// Test the printTree function
+	// Create dot files and directories to test ignore functionality
+	dotFiles := []string{
+		filepath.Join(tempDir, ".dotfile"),
+		filepath.Join(tempDir, ".hidden"),
+	}
+	for _, file := range dotFiles {
+		if err := os.WriteFile(file, []byte("hidden"), 0o600); err != nil {
+			t.Fatalf("Failed to create dot file %s: %v", file, err)
+		}
+	}
+
+	// Create a .git directory (should always be ignored)
+	gitDir := filepath.Join(tempDir, ".git")
+	if err := os.Mkdir(gitDir, 0o755); err != nil {
+		t.Fatalf("Failed to create .git directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(gitDir, "config"), []byte("git config"), 0o600); err != nil {
+		t.Fatalf("Failed to create git config file: %v", err)
+	}
+
+	// Create a dot directory
+	dotDir := filepath.Join(tempDir, ".dotdir")
+	if err := os.Mkdir(dotDir, 0o755); err != nil {
+		t.Fatalf("Failed to create dot directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(dotDir, "hidden.txt"), []byte("hidden"), 0o600); err != nil {
+		t.Fatalf("Failed to create file in dot directory: %v", err)
+	}
+
+	// Test the printTree function (original test with ignoreDot=false)
 	t.Run("print directory structure", func(t *testing.T) {
 		b := &strings.Builder{}
 		walker := infra.NewDirWalker()
@@ -82,5 +111,67 @@ func TestPrintTree(t *testing.T) {
 		// For a non-existent directory, we expect an error
 		assert.Error(t, err, "PrintTree should fail for non-existent directory")
 		assert.Contains(t, err.Error(), "no such file or directory", "Error should indicate file not found")
+	})
+
+	// Test without ignoring dot files
+	t.Run("print directory structure without ignoring dots", func(t *testing.T) {
+		b := &strings.Builder{}
+		walker := infra.NewDirWalker()
+		ctx := context.Background()
+		err := PrintTree(ctx, b, walker, tempDir, false)
+		assert.NoError(t, err, "PrintTree should not fail")
+		result := b.String()
+
+		// Verify the result contains expected paths including dot files
+		expectedPaths := []string{
+			"file1.txt",
+			"file2.txt",
+			"subdir",
+			"subfile.txt",
+			".dotfile",
+			".hidden",
+			".dotdir",
+		}
+
+		for _, path := range expectedPaths {
+			assert.Contains(t, result, path, "printDirectory() result should contain %q", path)
+		}
+
+		// .git should always be ignored
+		assert.NotContains(t, result, ".git", "printDirectory() result should not contain .git directory")
+	})
+
+	// Test with ignoring dot files
+	t.Run("print directory structure with ignoring dots", func(t *testing.T) {
+		b := &strings.Builder{}
+		walker := infra.NewDirWalker()
+		ctx := context.Background()
+		err := PrintTree(ctx, b, walker, tempDir, true)
+		assert.NoError(t, err, "PrintTree should not fail")
+		result := b.String()
+
+		// Verify the result contains expected paths but not dot files
+		expectedPaths := []string{
+			"file1.txt",
+			"file2.txt",
+			"subdir",
+			"subfile.txt",
+		}
+
+		for _, path := range expectedPaths {
+			assert.Contains(t, result, path, "printDirectory() result should contain %q", path)
+		}
+
+		// Dot files and directories should be ignored
+		ignoredPaths := []string{
+			".dotfile",
+			".hidden",
+			".dotdir",
+			".git",
+		}
+
+		for _, path := range ignoredPaths {
+			assert.NotContains(t, result, path, "printDirectory() result should not contain %q when ignoring dots", path)
+		}
 	})
 }
