@@ -135,7 +135,9 @@ func (*GetContentCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subc
 	return subcommands.ExitSuccess
 }
 
-type TreeRepoCmd struct{}
+type TreeRepoCmd struct {
+	ignoreDot bool
+}
 
 func (*TreeRepoCmd) Name() string     { return "tree" }
 func (*TreeRepoCmd) Synopsis() string { return "Show a tree view of a GitHub repository path." }
@@ -146,10 +148,11 @@ func (*TreeRepoCmd) Usage() string {
 `
 }
 
-func (*TreeRepoCmd) SetFlags(f *flag.FlagSet) {
+func (c *TreeRepoCmd) SetFlags(f *flag.FlagSet) {
+	f.BoolVar(&c.ignoreDot, "ignore-dot", false, "Ignore dot files and directories (except .git which is always ignored)")
 }
 
-func (*TreeRepoCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
+func (c *TreeRepoCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
 	if f.NArg() < 1 {
 		fmt.Println("Error: Missing owner/repo argument.")
 		fmt.Println("Usage: tree <owner/repo> [path]")
@@ -184,7 +187,7 @@ func (*TreeRepoCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcom
 
 	// Generate the tree using our new function
 	ctx := context.Background()
-	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, path); err != nil {
+	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, path, c.ignoreDot); err != nil {
 		fmt.Printf("Error generating tree: %v\n", err)
 		return subcommands.ExitFailure
 	}

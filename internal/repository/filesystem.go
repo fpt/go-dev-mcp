@@ -9,7 +9,7 @@ type (
 )
 
 type DirWalker interface {
-	Walk(ctx context.Context, function WalkDirFunc, prefixFunc WalkDirNextPrefixFunc, prefix, path string) error
+	Walk(ctx context.Context, function WalkDirFunc, prefixFunc WalkDirNextPrefixFunc, prefix, path string, ignoreDot bool) error
 }
 
 type FileWalker interface {

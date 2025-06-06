@@ -13,7 +13,8 @@ import (
 
 // TreeDirArgs represents arguments for directory tree listing
 type TreeDirArgs struct {
-	RootDir string `json:"root_dir"`
+	RootDir   string `json:"root_dir"`
+	IgnoreDot bool   `json:"ignore_dot"`
 }
 
 func treeDir(ctx context.Context, request mcp.CallToolRequest, args TreeDirArgs) (*mcp.CallToolResult, error) {
@@ -24,7 +25,7 @@ func treeDir(ctx context.Context, request mcp.CallToolRequest, args TreeDirArgs)
 	b := strings.Builder{}
 	b.WriteString(fmt.Sprintf("%s\n", args.RootDir))
 	walker := infra.NewDirWalker()
-	err := app.PrintTree(ctx, &b, walker, args.RootDir, false)
+	err := app.PrintTree(ctx, &b, walker, args.RootDir, args.IgnoreDot)
 	if err != nil {
 		slog.ErrorContext(ctx, "treeDir", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Error printing tree: %v", err)), nil

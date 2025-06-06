@@ -12,7 +12,8 @@ import (
 )
 
 type TreeCmd struct {
-	workdir string
+	workdir   string
+	ignoreDot bool
 }
 
 func (*TreeCmd) Name() string     { return "tree" }
@@ -25,6 +26,7 @@ func (*TreeCmd) Usage() string {
 
 func (p *TreeCmd) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&p.workdir, "workdir", ".", "Working directory")
+	f.BoolVar(&p.ignoreDot, "ignore-dot", false, "Ignore dot files and directories (except .git which is always ignored)")
 }
 
 func (p *TreeCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
@@ -32,7 +34,7 @@ func (p *TreeCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subcom
 	b := strings.Builder{}
 	b.WriteString(fmt.Sprintf("%s\n", rootDir))
 	walker := infra.NewDirWalker()
-	err := app.PrintTree(ctx, &b, walker, rootDir, false)
+	err := app.PrintTree(ctx, &b, walker, rootDir, p.ignoreDot)
 	if err != nil {
 		fmt.Printf("Error printing tree: %v\n", err)
 		return subcommands.ExitFailure
