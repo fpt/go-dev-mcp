@@ -78,7 +78,7 @@ func TestPrintTree(t *testing.T) {
 		b := &strings.Builder{}
 		walker := infra.NewDirWalker()
 		ctx := context.Background()
-		err := PrintTree(ctx, b, walker, tempDir, false)
+		err := PrintTree(ctx, b, walker, tempDir, false, 10)
 		assert.NoError(t, err, "PrintTree should not fail")
 		result := b.String()
 
@@ -97,8 +97,14 @@ func TestPrintTree(t *testing.T) {
 		// Check if we have the correct number of lines (at least one per entry plus possible link)
 		lines := strings.Split(strings.TrimSpace(result), "\n")
 		minExpectedLines := len(expectedPaths)
-		assert.GreaterOrEqual(t, len(lines), minExpectedLines,
-			"printDirectory() result has %d lines, expected at least %d", len(lines), minExpectedLines)
+		assert.GreaterOrEqual(
+			t,
+			len(lines),
+			minExpectedLines,
+			"printDirectory() result has %d lines, expected at least %d",
+			len(lines),
+			minExpectedLines,
+		)
 	})
 
 	// Test with a non-existent directory
@@ -107,10 +113,15 @@ func TestPrintTree(t *testing.T) {
 		nonExistentDir := filepath.Join(tempDir, "nonexistent")
 		walker := infra.NewDirWalker()
 		ctx := context.Background()
-		err := PrintTree(ctx, b, walker, nonExistentDir, false)
+		err := PrintTree(ctx, b, walker, nonExistentDir, false, 10)
 		// For a non-existent directory, we expect an error
 		assert.Error(t, err, "PrintTree should fail for non-existent directory")
-		assert.Contains(t, err.Error(), "no such file or directory", "Error should indicate file not found")
+		assert.Contains(
+			t,
+			err.Error(),
+			"no such file or directory",
+			"Error should indicate file not found",
+		)
 	})
 
 	// Test without ignoring dot files
@@ -118,7 +129,7 @@ func TestPrintTree(t *testing.T) {
 		b := &strings.Builder{}
 		walker := infra.NewDirWalker()
 		ctx := context.Background()
-		err := PrintTree(ctx, b, walker, tempDir, false)
+		err := PrintTree(ctx, b, walker, tempDir, false, 10)
 		assert.NoError(t, err, "PrintTree should not fail")
 		result := b.String()
 
@@ -138,7 +149,12 @@ func TestPrintTree(t *testing.T) {
 		}
 
 		// .git should always be ignored
-		assert.NotContains(t, result, ".git", "printDirectory() result should not contain .git directory")
+		assert.NotContains(
+			t,
+			result,
+			".git",
+			"printDirectory() result should not contain .git directory",
+		)
 	})
 
 	// Test with ignoring dot files
@@ -146,7 +162,7 @@ func TestPrintTree(t *testing.T) {
 		b := &strings.Builder{}
 		walker := infra.NewDirWalker()
 		ctx := context.Background()
-		err := PrintTree(ctx, b, walker, tempDir, true)
+		err := PrintTree(ctx, b, walker, tempDir, true, 10)
 		assert.NoError(t, err, "PrintTree should not fail")
 		result := b.String()
 
@@ -171,7 +187,13 @@ func TestPrintTree(t *testing.T) {
 		}
 
 		for _, path := range ignoredPaths {
-			assert.NotContains(t, result, path, "printDirectory() result should not contain %q when ignoring dots", path)
+			assert.NotContains(
+				t,
+				result,
+				path,
+				"printDirectory() result should not contain %q when ignoring dots",
+				path,
+			)
 		}
 	})
 }

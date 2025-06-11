@@ -11,8 +11,11 @@ import (
 	"github.com/google/subcommands"
 )
 
+const defaultMaxMatchesPerFile = 10
+
 type LocalSearchCmd struct {
-	extension string
+	extension  string
+	maxMatches int
 }
 
 func (*LocalSearchCmd) Name() string     { return "localsearch" }
@@ -25,9 +28,19 @@ func (*LocalSearchCmd) Usage() string {
 
 func (p *LocalSearchCmd) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&p.extension, "extension", "", "File extension to search for")
+	f.IntVar(
+		&p.maxMatches,
+		"max-matches",
+		defaultMaxMatchesPerFile,
+		"Maximum number of matches per file",
+	)
 }
 
-func (p *LocalSearchCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
+func (p *LocalSearchCmd) Execute(
+	_ context.Context,
+	f *flag.FlagSet,
+	_ ...any,
+) subcommands.ExitStatus {
 	fw := infra.NewFileWalker()
 	path := f.Arg(0)
 	query := f.Arg(1)
@@ -45,7 +58,14 @@ func (p *LocalSearchCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) s
 		extension = "." + extension
 	}
 
-	results, err := app.SearchLocalFiles(context.Background(), fw, path, extension, query)
+	results, err := app.SearchLocalFiles(
+		context.Background(),
+		fw,
+		path,
+		extension,
+		query,
+		p.maxMatches,
+	)
 	if err != nil {
 		fmt.Printf("Error searching local files: %v\n", err)
 		return subcommands.ExitFailure
@@ -60,6 +80,9 @@ func (p *LocalSearchCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) s
 			fmt.Printf("Found file: %s\nMatch: %s (Line: %d)\n",
 				result.Filename, match.Text, match.LineNo,
 			)
+		}
+		if result.Truncated {
+			fmt.Println("... (additional matches truncated)")
 		}
 		fmt.Println()
 	}

@@ -201,7 +201,14 @@ func TestMatchSingle(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			node := createHTMLNode(tc.html)
 			result := matchSingle(node, tc.pattern)
-			assert.Equal(t, tc.expected, result, "Pattern: %s should match: %v", tc.pattern, tc.expected)
+			assert.Equal(
+				t,
+				tc.expected,
+				result,
+				"Pattern: %s should match: %v",
+				tc.pattern,
+				tc.expected,
+			)
 		})
 	}
 }

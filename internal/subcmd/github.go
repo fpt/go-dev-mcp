@@ -36,7 +36,11 @@ func (c *GithubCmd) SetFlags(f *flag.FlagSet) {
 	c.cdr = cdr
 }
 
-func (c *GithubCmd) Execute(ctx context.Context, f *flag.FlagSet, args ...any) subcommands.ExitStatus {
+func (c *GithubCmd) Execute(
+	ctx context.Context,
+	f *flag.FlagSet,
+	args ...any,
+) subcommands.ExitStatus {
 	return c.cdr.Execute(ctx, args...)
 }
 
@@ -58,7 +62,11 @@ func (c *SearchCodeCmd) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&c.repo, "repo", "", "Repository to search in (owner/repo)")
 }
 
-func (c *SearchCodeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
+func (c *SearchCodeCmd) Execute(
+	_ context.Context,
+	f *flag.FlagSet,
+	_ ...any,
+) subcommands.ExitStatus {
 	if f.NArg() < 1 {
 		fmt.Println("Error: Missing search query.")
 		return subcommands.ExitUsageError
@@ -137,6 +145,7 @@ func (*GetContentCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subc
 
 type TreeRepoCmd struct {
 	ignoreDot bool
+	maxDepth  int
 }
 
 func (*TreeRepoCmd) Name() string     { return "tree" }
@@ -149,7 +158,13 @@ func (*TreeRepoCmd) Usage() string {
 }
 
 func (c *TreeRepoCmd) SetFlags(f *flag.FlagSet) {
-	f.BoolVar(&c.ignoreDot, "ignore-dot", false, "Ignore dot files and directories (except .git which is always ignored)")
+	f.BoolVar(
+		&c.ignoreDot,
+		"ignore-dot",
+		false,
+		"Ignore dot files and directories (except .git which is always ignored)",
+	)
+	f.IntVar(&c.maxDepth, "max-depth", 3, "Maximum depth for directory traversal")
 }
 
 func (c *TreeRepoCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
@@ -187,7 +202,7 @@ func (c *TreeRepoCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subc
 
 	// Generate the tree using our new function
 	ctx := context.Background()
-	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, path, c.ignoreDot); err != nil {
+	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, path, c.ignoreDot, c.maxDepth); err != nil {
 		fmt.Printf("Error generating tree: %v\n", err)
 		return subcommands.ExitFailure
 	}

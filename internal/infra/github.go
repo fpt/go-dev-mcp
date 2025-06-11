@@ -147,7 +147,11 @@ type WalkContentsFunc func(path string, isDir bool, depth int) error
 // The function is called first with the start path, and then with each file or directory found.
 // If the start path is a file, the function is called only for that file.
 // If the start path is a directory, the function is called for that directory and all files and directories in it.
-func (c *GitHubClient) WalkContents(ctx context.Context, owner, repo, startPath string, fn WalkContentsFunc) error {
+func (c *GitHubClient) WalkContents(
+	ctx context.Context,
+	owner, repo, startPath string,
+	fn WalkContentsFunc,
+) error {
 	return c.walkContentsRecursive(ctx, owner, repo, startPath, fn, 0)
 }
 
@@ -199,7 +203,11 @@ type GitHubDirWalker struct {
 }
 
 // NewGitHubDirWalker creates a new GitHubDirWalker instance
-func NewGitHubDirWalker(ctx context.Context, client *GitHubClient, owner, repo string) repository.DirWalker {
+func NewGitHubDirWalker(
+	ctx context.Context,
+	client *GitHubClient,
+	owner, repo string,
+) repository.DirWalker {
 	return &GitHubDirWalker{
 		client: client,
 		owner:  owner,
@@ -214,9 +222,28 @@ func (w *GitHubDirWalker) Walk(
 	prefixFunc repository.WalkDirNextPrefixFunc,
 	prefix, path string,
 	ignoreDot bool,
+	maxDepth int,
+) error {
+	return w.walkWithDepth(ctx, function, prefixFunc, prefix, path, ignoreDot, maxDepth, 0)
+}
+
+func (w *GitHubDirWalker) walkWithDepth(
+	ctx context.Context,
+	function repository.WalkDirFunc,
+	prefixFunc repository.WalkDirNextPrefixFunc,
+	prefix, path string,
+	ignoreDot bool,
+	maxDepth int,
+	currentDepth int,
 ) error {
 	// Get contents of the directory
-	_, directoryContent, _, err := w.client.Repositories.GetContents(ctx, w.owner, w.repo, path, nil)
+	_, directoryContent, _, err := w.client.Repositories.GetContents(
+		ctx,
+		w.owner,
+		w.repo,
+		path,
+		nil,
+	)
 	if err != nil {
 		return errors.Wrap(err, "failed to get directory contents")
 	}
@@ -250,6 +277,11 @@ func (w *GitHubDirWalker) Walk(
 
 		// If it's a directory, recursively walk it
 		if isDir {
+			// Check if we've reached the max depth
+			if currentDepth >= maxDepth {
+				continue
+			}
+
 			nextPrefix := prefixFunc(prefix, isLastEntry)
 			subpath := path
 			if subpath == "" {
@@ -258,7 +290,9 @@ func (w *GitHubDirWalker) Walk(
 				subpath = subpath + "/" + name
 			}
 
-			if err := w.Walk(ctx, function, prefixFunc, nextPrefix, subpath, ignoreDot); err != nil {
+			if err := w.walkWithDepth(
+				ctx, function, prefixFunc, nextPrefix, subpath, ignoreDot, maxDepth, currentDepth+1,
+			); err != nil {
 				return err
 			}
 		}

@@ -22,8 +22,15 @@ func NewDirWalker() repository.DirWalker {
 }
 
 func (dw *DirWalker) Walk(
-	ctx context.Context, function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc,
-	prefix, path string, ignoreDot bool,
+	_ context.Context, function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc,
+	prefix, path string, ignoreDot bool, maxDepth int,
+) error {
+	return dw.walkWithDepth(function, prefixFunc, prefix, path, ignoreDot, maxDepth, 0)
+}
+
+func (dw *DirWalker) walkWithDepth(
+	function repository.WalkDirFunc, prefixFunc repository.WalkDirNextPrefixFunc,
+	prefix, path string, ignoreDot bool, maxDepth, currentDepth int,
 ) error {
 	entries, err := os.ReadDir(path)
 	if err != nil {
@@ -53,10 +60,23 @@ func (dw *DirWalker) Walk(
 		}
 
 		if entry.IsDir() {
+			// Check if we've reached the max depth
+			if currentDepth >= maxDepth {
+				continue
+			}
+
 			nextPrefix := prefixFunc(prefix, isLastEntry)
 
 			subpath := filepath.Join(path, entry.Name())
-			err := dw.Walk(ctx, function, prefixFunc, nextPrefix, subpath, ignoreDot)
+			err := dw.walkWithDepth(
+				function,
+				prefixFunc,
+				nextPrefix,
+				subpath,
+				ignoreDot,
+				maxDepth,
+				currentDepth+1,
+			)
 			if err != nil {
 				return err
 			}

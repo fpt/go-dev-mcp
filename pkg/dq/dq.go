@@ -39,7 +39,11 @@ type NodeMatcher struct {
 	subMatchers []Matcher
 }
 
-func NewNodeMatcher(matchFunc MatchFunc, handler MatchHandlerFunc, children ...Matcher) *NodeMatcher {
+func NewNodeMatcher(
+	matchFunc MatchFunc,
+	handler MatchHandlerFunc,
+	children ...Matcher,
+) *NodeMatcher {
 	return &NodeMatcher{
 		matchFunc:   matchFunc,
 		handler:     handler,
@@ -210,7 +214,8 @@ func InnerText(n *html.Node, recurse bool) string {
 			continue
 		}
 
-		if c.Type == html.ElementNode && c.Data == "span" && hasClass(c, "Documentation-sinceVersion") {
+		if c.Type == html.ElementNode && c.Data == "span" &&
+			hasClass(c, "Documentation-sinceVersion") {
 			continue
 		}
 
