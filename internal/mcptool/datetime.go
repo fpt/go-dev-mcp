@@ -12,11 +12,17 @@ import (
 // DateTimeArgs represents arguments for getting current datetime (no arguments needed)
 type DateTimeArgs struct{}
 
-func getCurrentDateTime(ctx context.Context, request mcp.CallToolRequest, args DateTimeArgs) (*mcp.CallToolResult, error) {
+func getCurrentDateTime(
+	ctx context.Context,
+	request mcp.CallToolRequest,
+	args DateTimeArgs,
+) (*mcp.CallToolResult, error) {
 	currentTime, err := app.CurrentDatetime()
 	if err != nil {
 		slog.ErrorContext(ctx, "getCurrentDateTime", "error", err)
-		return mcp.NewToolResultError(fmt.Sprintf("Error getting current date and time: %v", err)), nil
+		return mcp.NewToolResultError(
+			fmt.Sprintf("Error getting current date and time: %v", err),
+		), nil
 	}
 
 	return mcp.NewToolResultText(fmt.Sprintf("Current date and time: %s", currentTime)), nil

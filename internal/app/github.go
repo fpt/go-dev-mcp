@@ -29,11 +29,10 @@ func GitHubSearchCode(
 
 	response := fmt.Sprintf("Total: %d\n", result.Total)
 	for _, item := range result.Items {
-		response += fmt.Sprintf("Path: %s, Repository: %s\n", item.Path, item.Repository)
+		// Use compact format: repository/path
+		response += fmt.Sprintf("%s/%s\n", item.Repository, item.Path)
 		for _, fragment := range item.Fragments {
-			response += "```\n"
-			response += fmt.Sprintf("%s\n", fragment)
-			response += "```\n"
+			response += fmt.Sprintf("  %s\n", fragment)
 		}
 	}
 
@@ -43,11 +42,16 @@ func GitHubSearchCode(
 // PrintGitHubTree prints a tree representation of a GitHub repository path
 // using the same formatting as PrintTree does for local directories.
 func PrintGitHubTree(
-	ctx context.Context, b *strings.Builder, client *infra.GitHubClient, owner, repo, path string, ignoreDot bool,
+	ctx context.Context,
+	b *strings.Builder,
+	client *infra.GitHubClient,
+	owner, repo, path string,
+	ignoreDot bool,
+	maxDepth int,
 ) error {
 	// Create a GitHub-specific walker
 	walker := infra.NewGitHubDirWalker(ctx, client, owner, repo)
 
 	// Use the existing PrintTree function with our GitHub-specific walker
-	return PrintTree(ctx, b, walker, path, ignoreDot)
+	return PrintTree(ctx, b, walker, path, ignoreDot, maxDepth)
 }

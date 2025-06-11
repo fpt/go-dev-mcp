@@ -4,7 +4,6 @@ linters:
   enable:
     - dupl
     - errcheck
-    - gochecknoglobals
     - gochecknoinits
     - goconst
     - gocyclo
@@ -13,7 +12,6 @@ linters:
     - ineffassign
     - lll
     - misspell
-    - nestif
     - prealloc
     - staticcheck
     - unconvert
@@ -34,6 +32,7 @@ formatters:
   enable:
     - gofmt
     - goimports
+    - golines
   exclusions:
     generated: lax
     paths:

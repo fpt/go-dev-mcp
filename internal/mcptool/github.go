@@ -29,9 +29,14 @@ type GitHubTreeArgs struct {
 	Repo      string `json:"repo"`
 	Path      string `json:"path"`
 	IgnoreDot bool   `json:"ignore_dot"`
+	MaxDepth  int    `json:"max_depth,omitempty"`
 }
 
-func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest, args SearchCodeGitHubArgs) (*mcp.CallToolResult, error) {
+func searchCodeGitHub(
+	ctx context.Context,
+	request mcp.CallToolRequest,
+	args SearchCodeGitHubArgs,
+) (*mcp.CallToolResult, error) {
 	if args.Query == "" {
 		return mcp.NewToolResultError("Missing search query"), nil
 	}
@@ -61,7 +66,11 @@ func searchCodeGitHub(ctx context.Context, request mcp.CallToolRequest, args Sea
 	return mcp.NewToolResultText(result), nil
 }
 
-func getGitHubContent(ctx context.Context, request mcp.CallToolRequest, args GitHubContentArgs) (*mcp.CallToolResult, error) {
+func getGitHubContent(
+	ctx context.Context,
+	request mcp.CallToolRequest,
+	args GitHubContentArgs,
+) (*mcp.CallToolResult, error) {
 	if args.Repo == "" {
 		return mcp.NewToolResultError("Missing repo"), nil
 	}
@@ -92,7 +101,11 @@ func getGitHubContent(ctx context.Context, request mcp.CallToolRequest, args Git
 	return mcp.NewToolResultText(content), nil
 }
 
-func getGitHubTree(ctx context.Context, request mcp.CallToolRequest, args GitHubTreeArgs) (*mcp.CallToolResult, error) {
+func getGitHubTree(
+	ctx context.Context,
+	request mcp.CallToolRequest,
+	args GitHubTreeArgs,
+) (*mcp.CallToolResult, error) {
 	if args.Repo == "" {
 		return mcp.NewToolResultError("Missing repo"), nil
 	}
@@ -113,8 +126,14 @@ func getGitHubTree(ctx context.Context, request mcp.CallToolRequest, args GitHub
 	b := strings.Builder{}
 	b.WriteString(fmt.Sprintf("%s/%s:%s\n", owner, repo, args.Path))
 
+	// Set default max depth if not specified
+	maxDepth := args.MaxDepth
+	if maxDepth == 0 {
+		maxDepth = 3 // More conservative default for GitHub trees due to network overhead
+	}
+
 	// Generate the tree using our PrintGitHubTree function
-	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, args.Path, args.IgnoreDot); err != nil {
+	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, args.Path, args.IgnoreDot, maxDepth); err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("Error generating tree: %v", err)), nil
 	}
 

@@ -16,6 +16,7 @@ test-mcp-tool: ## Run MCP tool tests
 
 fmt: ## Run format
 	gofumpt -extra -w .
+	golangci-lint fmt
 
 lint: ## Run lint
 	golangci-lint run
