@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"fujlog.net/godev-mcp/internal/infra"
-	"fujlog.net/godev-mcp/pkg/dq"
+	"github.com/fpt/go-dev-mcp/internal/infra"
+	"github.com/fpt/go-dev-mcp/pkg/dq"
 	"github.com/patrickmn/go-cache"
 	"github.com/pkg/errors"
 	"golang.org/x/net/html"

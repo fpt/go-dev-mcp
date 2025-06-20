@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	"fujlog.net/godev-mcp/internal/app"
+	"github.com/fpt/go-dev-mcp/internal/app"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

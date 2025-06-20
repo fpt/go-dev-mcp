@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"fujlog.net/godev-mcp/internal/app"
-	"fujlog.net/godev-mcp/internal/infra"
+	"github.com/fpt/go-dev-mcp/internal/app"
+	"github.com/fpt/go-dev-mcp/internal/infra"
 	"github.com/google/subcommands"
 )
 

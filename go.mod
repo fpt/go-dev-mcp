@@ -1,4 +1,4 @@
-module fujlog.net/godev-mcp
+module github.com/fpt/go-dev-mcp
 
 go 1.24.2
 

@@ -10,7 +10,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"fujlog.net/godev-mcp/internal/repository"
+	"github.com/fpt/go-dev-mcp/internal/repository"
 )
 
 const headerSize = 16

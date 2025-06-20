@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/tools/go/ast/astutil"
 
-	"fujlog.net/godev-mcp/internal/repository"
+	"github.com/fpt/go-dev-mcp/internal/repository"
 )
 
 type FunctionExtractResult struct {

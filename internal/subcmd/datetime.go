@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	"fujlog.net/godev-mcp/internal/app"
+	"github.com/fpt/go-dev-mcp/internal/app"
 	"github.com/google/subcommands"
 )
 

@@ -7,7 +7,7 @@ import (
 	"log/slog"
 	"os"
 
-	tool "fujlog.net/godev-mcp/internal/mcptool"
+	tool "github.com/fpt/go-dev-mcp/internal/mcptool"
 	"github.com/mark3labs/mcp-go/server"
 
 	"github.com/google/subcommands"

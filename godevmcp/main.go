@@ -5,7 +5,7 @@ import (
 	"flag"
 	"os"
 
-	"fujlog.net/godev-mcp/internal/subcmd"
+	"github.com/fpt/go-dev-mcp/internal/subcmd"
 	"github.com/google/subcommands"
 )
 

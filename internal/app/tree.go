@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"fujlog.net/godev-mcp/internal/repository"
+	"github.com/fpt/go-dev-mcp/internal/repository"
 
 	"github.com/pkg/errors"
 )
