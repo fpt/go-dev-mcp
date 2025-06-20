@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"fujlog.net/godev-mcp/internal/repository"
+	"github.com/fpt/go-dev-mcp/internal/repository"
 )
 
 // MockGitHubClient implements the GitHubClient interface for testing

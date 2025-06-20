@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"fujlog.net/godev-mcp/pkg/dq"
+	"github.com/fpt/go-dev-mcp/pkg/dq"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/net/html"
 )

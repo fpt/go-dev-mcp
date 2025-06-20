@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"fujlog.net/godev-mcp/internal/infra"
+	"github.com/fpt/go-dev-mcp/internal/infra"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

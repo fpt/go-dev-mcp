@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"fujlog.net/godev-mcp/internal/infra"
+	"github.com/fpt/go-dev-mcp/internal/infra"
 )
 
 func TestSearchLocalFiles(t *testing.T) {

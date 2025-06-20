@@ -194,5 +194,33 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchLocalFiles))
 
+	// Add Extract Function Names tool
+	tool = mcp.NewTool(
+		"extract_function_names",
+		mcp.WithDescription(
+			"Extract function names from Go source files in the specified directory.",
+		),
+		mcp.WithString("directory",
+			mcp.DefaultString(""),
+			mcp.Required(),
+			mcp.Description("Directory to search for Go source files"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(extractFunctionNames))
+
+	// Add Extract Call Graph tool
+	tool = mcp.NewTool(
+		"extract_call_graph",
+		mcp.WithDescription(
+			"Extract function call graph from a single Go file."+
+				" Shows which functions call which other functions, including external package calls.",
+		),
+		mcp.WithString("file_path",
+			mcp.Required(),
+			mcp.Description("Path to the Go source file to analyze"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(extractCallGraph))
+
 	return nil
 }

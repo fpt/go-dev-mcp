@@ -84,6 +84,38 @@ read_godoc golang.org/x/net/html
 
 This will retrieve the documentation for the specified package, including descriptions, functions, types, and examples.
 
+### extract_function_names
+
+Extracts exported function names from Go source files in a directory.
+
+**Usage:**
+```
+extract_function_names directory
+```
+
+**Example:**
+```
+extract_function_names ./internal/app
+```
+
+This will recursively scan the directory for `.go` files (excluding test files) and extract all exported function names, showing both regular functions and methods with their receiver types.
+
+### extract_call_graph
+
+Analyzes function call relationships within a single Go file.
+
+**Usage:**
+```
+extract_call_graph file_path
+```
+
+**Example:**
+```
+extract_call_graph ./internal/app/github.go
+```
+
+This will show which functions call which other functions, including external package calls and local function calls. Useful for understanding code dependencies and refactoring impact analysis.
+
 ## Instructions
 
 1. **Build the application**
