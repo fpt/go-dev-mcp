@@ -100,7 +100,7 @@ func (c *GoDocReadCmd) Usage() string {
 
 func (c *GoDocReadCmd) SetFlags(f *flag.FlagSet) {
 	f.IntVar(&c.offset, "offset", 0, "Line offset to start reading from")
-	f.IntVar(&c.limit, "limit", 50, "Number of lines to read")
+	f.IntVar(&c.limit, "limit", app.DefaultLinesPerPage, "Number of lines to read")
 }
 
 func (p *GoDocReadCmd) Execute(

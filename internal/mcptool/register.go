@@ -1,6 +1,9 @@
 package tool
 
 import (
+	"fmt"
+
+	"github.com/fpt/go-dev-mcp/internal/app"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
@@ -90,11 +93,37 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Line number to start reading from (0-based)"),
 		),
 		mcp.WithNumber("limit",
-			mcp.DefaultNumber(50),
-			mcp.Description("Number of lines to read (default: 50)"),
+			mcp.DefaultNumber(app.DefaultLinesPerPage),
+			mcp.Description(fmt.Sprintf("Number of lines to read (default: %d)", app.DefaultLinesPerPage)),
 		),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(readGoDoc))
+
+	// Add GoDoc search within documentation tool
+	tool = mcp.NewTool(
+		"search_within_godoc",
+		mcp.WithDescription(
+			"Search for keywords within a specific Go package documentation."+
+				" Returns all matching lines with line numbers, similar to search_local_files.",
+		),
+		mcp.WithString(
+			"package_url",
+			mcp.Required(),
+			mcp.Description(
+				"Go package URL (e.g., 'golang.org/x/net/html', 'github.com/user/repo')",
+			),
+		),
+		mcp.WithString(
+			"keyword",
+			mcp.Required(),
+			mcp.Description("Keyword to search for within the documentation"),
+		),
+		mcp.WithNumber("max_matches",
+			mcp.DefaultNumber(10),
+			mcp.Description("Maximum number of matches to return (default: 10)"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(searchWithinGoDoc))
 
 	// Add GitHub search code tool
 	tool = mcp.NewTool(

@@ -7,12 +7,16 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fpt/go-dev-mcp/internal/contentsearch"
 	"github.com/fpt/go-dev-mcp/internal/infra"
+	"github.com/fpt/go-dev-mcp/internal/model"
 	"github.com/fpt/go-dev-mcp/pkg/dq"
 	"github.com/patrickmn/go-cache"
 	"github.com/pkg/errors"
 	"golang.org/x/net/html"
 )
+
+const DefaultLinesPerPage = 100
 
 var ErrNotFound = errors.New("not found")
 
@@ -117,237 +121,71 @@ func ReadGoDocPaged(
 	return pagedContent, totalLines, hasMore, nil
 }
 
-// ReadGoDoc reads Go documentation for a given package URL.
-// packageURL must be in "golang.org/x/net/html" format.
-// maxChars limits the output length, returning truncated=true if content was cut off.
-func ReadGoDoc(httpcli *infra.HttpClient, packageURL string, maxChars int) (string, bool, error) {
-	url := fmt.Sprintf("https://pkg.go.dev/%s", url.PathEscape(packageURL))
-	bodyrdr, err := httpcli.HttpGet(url)
-	if err != nil {
-		return "", false, errors.Wrap(err, "failed to make HTTP request")
-	}
-	if bodyrdr == nil {
-		return "", false, ErrNotFound
-	}
-	defer bodyrdr.Close()
-
-	doc, err := html.Parse(bodyrdr)
-	if err != nil {
-		return "", false, errors.Wrap(err, "failed to parse HTML")
-	}
-
-	matched, document, truncated := parseDocumentWithLimit(doc, maxChars)
-
-	// If no documentation found, try to parse the README section
-	if !matched {
-		_, readme, truncated := parseReadmeWithLimit(doc, maxChars)
-		return readme, truncated, nil
-	}
-
-	return document, truncated, nil
+type GoDocSearchResult struct {
+	PackageURL string
+	Matches    []model.SearchMatch
+	Truncated  bool
 }
 
-// limitedBuilder wraps strings.Builder with character counting and limit enforcement
-type limitedBuilder struct {
-	builder   *strings.Builder
-	maxChars  int
-	truncated bool
-}
+// SearchWithinGoDoc searches for a keyword within Go documentation and returns all matches.
+// Similar to SearchLocalFiles but for a single Go documentation page.
+func SearchWithinGoDoc(
+	httpcli *infra.HttpClient,
+	packageURL string,
+	keyword string,
+	maxMatches int,
+) (*GoDocSearchResult, error) {
+	// Create cache key
+	cacheKey := fmt.Sprintf("godoc:%s", packageURL)
 
-func newLimitedBuilder(maxChars int) *limitedBuilder {
-	return &limitedBuilder{
-		builder:  &strings.Builder{},
-		maxChars: maxChars,
-	}
-}
+	var document string
 
-func (lb *limitedBuilder) WriteString(s string) {
-	if lb.truncated {
-		return // Already hit limit, ignore further writes
-	}
-
-	if lb.builder.Len()+len(s) > lb.maxChars {
-		// Writing this would exceed limit
-		remaining := lb.maxChars - lb.builder.Len()
-		if remaining > 0 {
-			lb.builder.WriteString(s[:remaining])
+	// Check cache first
+	if cached, found := docCache.Get(cacheKey); found {
+		document = cached.(string)
+	} else {
+		// Cache miss - fetch and parse the document
+		url := fmt.Sprintf("https://pkg.go.dev/%s", url.PathEscape(packageURL))
+		bodyrdr, err := httpcli.HttpGet(url)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to make HTTP request")
 		}
-		lb.truncated = true
-		return
+		if bodyrdr == nil {
+			return nil, ErrNotFound
+		}
+		defer bodyrdr.Close()
+
+		doc, err := html.Parse(bodyrdr)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to parse HTML")
+		}
+
+		// Get the full document first
+		matched, parsedDoc := parseDocument(doc)
+
+		// If no documentation found, try to parse the README section
+		if !matched {
+			_, parsedDoc = parseReadme(doc)
+		}
+
+		document = parsedDoc
+
+		// Cache the parsed document for future requests
+		docCache.Set(cacheKey, document, cache.DefaultExpiration)
 	}
 
-	lb.builder.WriteString(s)
-}
+	// Search through the document using the shared contentsearch package
+	reader := strings.NewReader(document)
+	matches, truncated, err := contentsearch.SearchInContent(reader, keyword, maxMatches)
+	if err != nil {
+		return nil, err
+	}
 
-func (lb *limitedBuilder) String() string {
-	return lb.builder.String()
-}
-
-func (lb *limitedBuilder) IsTruncated() bool {
-	return lb.truncated
-}
-
-func parseDocumentWithLimit(doc *html.Node, maxChars int) (bool, string, bool) {
-	builder := newLimitedBuilder(maxChars)
-
-	headerMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("h1,h2,h3,h4,h5,h6"),
-		func(n *html.Node) {
-			if builder.IsTruncated() {
-				return
-			}
-			h := strings.TrimPrefix(n.Data, "h")
-			hn, _ := strconv.Atoi(h)
-			builder.WriteString(
-				fmt.Sprintf("\n%s %s\n", strings.Repeat("#", hn), dq.InnerText(n, true)),
-			)
-		},
-	)
-	listMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("ul,ol"),
-		nil,
-		dq.NewNodeMatcher(
-			dq.NewMatchFunc("li"),
-			func(n *html.Node) {
-				if builder.IsTruncated() {
-					return
-				}
-				if dq.HasChild(n, "a") {
-					builder.WriteString(fmt.Sprintf("- %s\n", dq.InnerText(n, true)))
-				}
-			},
-			dq.NewNodeMatcher(
-				dq.NewMatchFunc("ul,ol"),
-				nil,
-				dq.NewNodeMatcher(
-					dq.NewMatchFunc("li"),
-					func(n *html.Node) {
-						if builder.IsTruncated() {
-							return
-						}
-						builder.WriteString(fmt.Sprintf("    - %s\n", dq.InnerText(n, true)))
-					},
-				),
-			),
-		),
-	)
-	pMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("p"),
-		func(n *html.Node) {
-			if builder.IsTruncated() {
-				return
-			}
-			builder.WriteString(fmt.Sprintf("%s\n", dq.InnerText(n, true)))
-		},
-	)
-	preMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("pre"),
-		func(n *html.Node) {
-			if builder.IsTruncated() {
-				return
-			}
-			builder.WriteString(fmt.Sprintf("```\n%s\n```\n", dq.RawInnerText(n, true)))
-		},
-	)
-	sectionMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("section"),
-		func(n *html.Node) {
-			// section is a container of multiple divs.
-		},
-		headerMatcher,
-		dq.NewNodeMatcher(
-			dq.NewMatchFunc("div"),
-			nil,
-			listMatcher,
-			headerMatcher,
-			pMatcher,
-			preMatcher,
-		),
-		pMatcher,
-		preMatcher,
-	)
-
-	var matched bool
-	rootMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("div.Documentation"),
-		func(n *html.Node) {
-			matched = true
-		},
-		dq.NewNodeMatcher(
-			dq.NewMatchFunc("div"),
-			nil,
-			headerMatcher,
-			sectionMatcher,
-			listMatcher,
-		),
-	)
-
-	dq.Traverse(doc, []dq.Matcher{rootMatcher})
-	return matched, builder.String(), builder.IsTruncated()
-}
-
-func parseReadmeWithLimit(doc *html.Node, maxChars int) (bool, string, bool) {
-	builder := newLimitedBuilder(maxChars)
-
-	headerMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("h1,h2,h3,h4,h5,h6"),
-		func(n *html.Node) {
-			if builder.IsTruncated() {
-				return
-			}
-			h := strings.TrimPrefix(n.Data, "h")
-			hn, _ := strconv.Atoi(h)
-			builder.WriteString(
-				fmt.Sprintf("\n%s %s\n", strings.Repeat("#", hn), dq.InnerText(n, true)),
-			)
-		},
-	)
-	listMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("ul,ol"),
-		nil,
-		dq.NewNodeMatcher(
-			dq.NewMatchFunc("li"),
-			func(n *html.Node) {
-				if builder.IsTruncated() {
-					return
-				}
-				builder.WriteString(fmt.Sprintf("- %s\n", dq.InnerText(n, true)))
-			},
-		),
-	)
-	pMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("p"),
-		func(n *html.Node) {
-			if builder.IsTruncated() {
-				return
-			}
-			builder.WriteString(fmt.Sprintf("%s\n", dq.InnerText(n, true)))
-		},
-	)
-	preMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("pre"),
-		func(n *html.Node) {
-			if builder.IsTruncated() {
-				return
-			}
-			builder.WriteString(fmt.Sprintf("```\n%s\n```\n", dq.RawInnerText(n, true)))
-		},
-	)
-
-	var matched bool
-	rootMatcher := dq.NewNodeMatcher(
-		dq.NewMatchFunc("div.Overview-readmeContent"),
-		func(n *html.Node) {
-			matched = true
-		},
-		headerMatcher,
-		listMatcher,
-		pMatcher,
-		preMatcher,
-	)
-
-	dq.Traverse(doc, []dq.Matcher{rootMatcher})
-	return matched, builder.String(), builder.IsTruncated()
+	return &GoDocSearchResult{
+		PackageURL: packageURL,
+		Matches:    matches,
+		Truncated:  truncated,
+	}, nil
 }
 
 func parseSearchResult(doc *html.Node) (bool, string) {
