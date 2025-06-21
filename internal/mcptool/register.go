@@ -1,6 +1,9 @@
 package tool
 
 import (
+	"fmt"
+
+	"github.com/fpt/go-dev-mcp/internal/app"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
@@ -90,8 +93,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Line number to start reading from (0-based)"),
 		),
 		mcp.WithNumber("limit",
-			mcp.DefaultNumber(50),
-			mcp.Description("Number of lines to read (default: 50)"),
+			mcp.DefaultNumber(app.DefaultLinesPerPage),
+			mcp.Description(fmt.Sprintf("Number of lines to read (default: %d)", app.DefaultLinesPerPage)),
 		),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(readGoDoc))

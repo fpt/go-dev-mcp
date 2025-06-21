@@ -11,8 +11,6 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-const defaultLinesPerPage = 50
-
 // SearchGoDocArgs represents arguments for Go documentation search
 type SearchGoDocArgs struct {
 	Query string `json:"query"`
@@ -69,7 +67,7 @@ func readGoDoc(
 	// Set default limit if not specified
 	limit := args.Limit
 	if limit == 0 {
-		limit = defaultLinesPerPage
+		limit = app.DefaultLinesPerPage
 	}
 
 	httpcli := infra.NewHttpClient()
