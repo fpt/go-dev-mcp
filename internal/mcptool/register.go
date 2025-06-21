@@ -96,6 +96,32 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(readGoDoc))
 
+	// Add GoDoc search within documentation tool
+	tool = mcp.NewTool(
+		"search_within_godoc",
+		mcp.WithDescription(
+			"Search for keywords within a specific Go package documentation."+
+				" Returns all matching lines with line numbers, similar to search_local_files.",
+		),
+		mcp.WithString(
+			"package_url",
+			mcp.Required(),
+			mcp.Description(
+				"Go package URL (e.g., 'golang.org/x/net/html', 'github.com/user/repo')",
+			),
+		),
+		mcp.WithString(
+			"keyword",
+			mcp.Required(),
+			mcp.Description("Keyword to search for within the documentation"),
+		),
+		mcp.WithNumber("max_matches",
+			mcp.DefaultNumber(10),
+			mcp.Description("Maximum number of matches to return (default: 10)"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(searchWithinGoDoc))
+
 	// Add GitHub search code tool
 	tool = mcp.NewTool(
 		"search_github_code",

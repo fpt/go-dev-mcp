@@ -7,7 +7,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fpt/go-dev-mcp/internal/contentsearch"
 	"github.com/fpt/go-dev-mcp/internal/infra"
+	"github.com/fpt/go-dev-mcp/internal/model"
 	"github.com/fpt/go-dev-mcp/pkg/dq"
 	"github.com/patrickmn/go-cache"
 	"github.com/pkg/errors"
@@ -115,6 +117,73 @@ func ReadGoDocPaged(
 	pagedContent := strings.Join(lines[startIdx:endIdx], "\n")
 
 	return pagedContent, totalLines, hasMore, nil
+}
+
+type GoDocSearchResult struct {
+	PackageURL string
+	Matches    []model.SearchMatch
+	Truncated  bool
+}
+
+// SearchWithinGoDoc searches for a keyword within Go documentation and returns all matches.
+// Similar to SearchLocalFiles but for a single Go documentation page.
+func SearchWithinGoDoc(
+	httpcli *infra.HttpClient,
+	packageURL string,
+	keyword string,
+	maxMatches int,
+) (*GoDocSearchResult, error) {
+	// Create cache key
+	cacheKey := fmt.Sprintf("godoc:%s", packageURL)
+
+	var document string
+
+	// Check cache first
+	if cached, found := docCache.Get(cacheKey); found {
+		document = cached.(string)
+	} else {
+		// Cache miss - fetch and parse the document
+		url := fmt.Sprintf("https://pkg.go.dev/%s", url.PathEscape(packageURL))
+		bodyrdr, err := httpcli.HttpGet(url)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to make HTTP request")
+		}
+		if bodyrdr == nil {
+			return nil, ErrNotFound
+		}
+		defer bodyrdr.Close()
+
+		doc, err := html.Parse(bodyrdr)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to parse HTML")
+		}
+
+		// Get the full document first
+		matched, parsedDoc := parseDocument(doc)
+
+		// If no documentation found, try to parse the README section
+		if !matched {
+			_, parsedDoc = parseReadme(doc)
+		}
+
+		document = parsedDoc
+
+		// Cache the parsed document for future requests
+		docCache.Set(cacheKey, document, cache.DefaultExpiration)
+	}
+
+	// Search through the document using the shared contentsearch package
+	reader := strings.NewReader(document)
+	matches, truncated, err := contentsearch.SearchInContent(reader, keyword, maxMatches)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GoDocSearchResult{
+		PackageURL: packageURL,
+		Matches:    matches,
+		Truncated:  truncated,
+	}, nil
 }
 
 // ReadGoDoc reads Go documentation for a given package URL.
