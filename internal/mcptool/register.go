@@ -92,9 +92,12 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(0),
 			mcp.Description("Line number to start reading from (0-based)"),
 		),
-		mcp.WithNumber("limit",
+		mcp.WithNumber(
+			"limit",
 			mcp.DefaultNumber(app.DefaultLinesPerPage),
-			mcp.Description(fmt.Sprintf("Number of lines to read (default: %d)", app.DefaultLinesPerPage)),
+			mcp.Description(
+				fmt.Sprintf("Number of lines to read (default: %d)", app.DefaultLinesPerPage),
+			),
 		),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(readGoDoc))
@@ -223,11 +226,12 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchLocalFiles))
 
-	// Add Extract Function Names tool
+	// Add Extract Declarations tool
 	tool = mcp.NewTool(
-		"extract_function_names",
+		"extract_declarations",
 		mcp.WithDescription(
-			"Extract function names from Go source files in the specified directory.",
+			"Extract all exported declarations (functions, types, interfaces, structs, constants, variables) "+
+				"from Go source files in the specified directory.",
 		),
 		mcp.WithString("directory",
 			mcp.DefaultString(""),
@@ -235,7 +239,7 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Directory to search for Go source files"),
 		),
 	)
-	s.AddTool(tool, mcp.NewTypedToolHandler(extractFunctionNames))
+	s.AddTool(tool, mcp.NewTypedToolHandler(extractDeclarations))
 
 	// Add Extract Call Graph tool
 	tool = mcp.NewTool(

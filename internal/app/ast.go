@@ -2,19 +2,24 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"strings"
 
-	"golang.org/x/tools/go/ast/astutil"
-
 	"github.com/fpt/go-dev-mcp/internal/repository"
 )
 
-type FunctionExtractResult struct {
-	Filename  string
-	Functions []string
+type Declaration struct {
+	Name string
+	Type string // "function", "type", "interface", "struct", "const", "var"
+	Info string // Additional info like receiver type for methods, struct fields count, etc.
+}
+
+type DeclarationExtractResult struct {
+	Filename     string
+	Declarations []Declaration
 }
 
 type FunctionCall struct {
@@ -32,17 +37,17 @@ type CallGraphResult struct {
 	CallGraph []CallGraphEntry // Call relationships
 }
 
-// ExtractFunctionNames extracts function names from Go source files in the specified directory.
-func ExtractFunctionNames(
+// ExtractDeclarations extracts all exported declarations from Go source files in the specified directory.
+func ExtractDeclarations(
 	ctx context.Context, fw repository.FileWalker, path string,
-) ([]FunctionExtractResult, error) {
-	var results []FunctionExtractResult
+) ([]DeclarationExtractResult, error) {
+	var results []DeclarationExtractResult
 	err := fw.Walk(ctx, func(filePath string) error {
-		functions := extractFunctionsFromFile(filePath)
-		if len(functions) > 0 {
-			results = append(results, FunctionExtractResult{
-				Filename:  filePath,
-				Functions: functions,
+		declarations := extractDeclarationsFromFile(filePath)
+		if len(declarations) > 0 {
+			results = append(results, DeclarationExtractResult{
+				Filename:     filePath,
+				Declarations: declarations,
 			})
 		}
 
@@ -55,7 +60,37 @@ func ExtractFunctionNames(
 	return results, nil
 }
 
-func extractFunctionsFromFile(filePath string) []string {
+// ExtractFunctionNames extracts function names from Go source files in the specified directory.
+// This is kept for backward compatibility with existing MCP tools.
+func ExtractFunctionNames(
+	ctx context.Context, fw repository.FileWalker, path string,
+) ([]DeclarationExtractResult, error) {
+	results, err := ExtractDeclarations(ctx, fw, path)
+	if err != nil {
+		return nil, err
+	}
+
+	// Filter to only include function declarations for backward compatibility
+	var functionResults []DeclarationExtractResult
+	for _, result := range results {
+		var functionDeclarations []Declaration
+		for _, decl := range result.Declarations {
+			if decl.Type == "function" {
+				functionDeclarations = append(functionDeclarations, decl)
+			}
+		}
+		if len(functionDeclarations) > 0 {
+			functionResults = append(functionResults, DeclarationExtractResult{
+				Filename:     result.Filename,
+				Declarations: functionDeclarations,
+			})
+		}
+	}
+
+	return functionResults, nil
+}
+
+func extractDeclarationsFromFile(filePath string) []Declaration {
 	// Skip test files
 	if strings.HasSuffix(filePath, "_test.go") {
 		return nil
@@ -68,27 +103,66 @@ func extractFunctionsFromFile(filePath string) []string {
 		return nil
 	}
 
-	var functionNames []string
-	astutil.Apply(node, nil, func(c *astutil.Cursor) bool {
-		n := c.Node()
-		switch x := n.(type) {
-		case *ast.FuncDecl:
-			if x.Name != nil && x.Name.IsExported() {
-				// Extract both regular functions and methods
-				if x.Recv != nil {
-					// Method: include receiver type for clarity
-					receiverType := getReceiverType(x.Recv)
-					functionNames = append(functionNames, receiverType+"."+x.Name.Name)
-				} else {
-					// Regular function
-					functionNames = append(functionNames, x.Name.Name)
+	var declarations []Declaration
+
+	// Walk through all declarations in the file
+	for _, decl := range node.Decls {
+		switch d := decl.(type) {
+		case *ast.GenDecl:
+			// Handle type, const, var declarations
+			for _, spec := range d.Specs {
+				switch s := spec.(type) {
+				case *ast.TypeSpec:
+					if s.Name.IsExported() {
+						decl := Declaration{
+							Name: s.Name.Name,
+							Type: getTypeSpecType(s),
+							Info: getTypeSpecInfo(s),
+						}
+						declarations = append(declarations, decl)
+					}
+				case *ast.ValueSpec:
+					// Handle const and var declarations
+					declType := "var"
+					if d.Tok == token.CONST {
+						declType = "const"
+					}
+					for _, name := range s.Names {
+						if name.IsExported() {
+							decl := Declaration{
+								Name: name.Name,
+								Type: declType,
+								Info: getValueSpecInfo(s),
+							}
+							declarations = append(declarations, decl)
+						}
+					}
 				}
 			}
+		case *ast.FuncDecl:
+			// Handle function declarations
+			if d.Name != nil && d.Name.IsExported() {
+				name := d.Name.Name
+				info := ""
+				if d.Recv != nil {
+					// Method: include receiver type for clarity
+					receiverType := getReceiverType(d.Recv)
+					name = receiverType + "." + d.Name.Name
+					info = "method on " + receiverType
+				} else {
+					info = "function"
+				}
+				decl := Declaration{
+					Name: name,
+					Type: "function",
+					Info: info,
+				}
+				declarations = append(declarations, decl)
+			}
 		}
-		return true
-	})
+	}
 
-	return functionNames
+	return declarations
 }
 
 // getReceiverType extracts the receiver type name from a method receiver
@@ -108,6 +182,84 @@ func getReceiverType(recv *ast.FieldList) string {
 	}
 
 	return "Unknown"
+}
+
+// getTypeSpecType determines the specific type of a TypeSpec (struct, interface, type alias, etc.)
+func getTypeSpecType(spec *ast.TypeSpec) string {
+	switch spec.Type.(type) {
+	case *ast.StructType:
+		return "struct"
+	case *ast.InterfaceType:
+		return "interface"
+	default:
+		return "type"
+	}
+}
+
+// getTypeSpecInfo provides additional information about a TypeSpec
+func getTypeSpecInfo(spec *ast.TypeSpec) string {
+	switch t := spec.Type.(type) {
+	case *ast.StructType:
+		fieldCount := len(t.Fields.List)
+		if fieldCount == 1 {
+			return "1 field"
+		}
+		return fmt.Sprintf("%d fields", fieldCount)
+	case *ast.InterfaceType:
+		methodCount := len(t.Methods.List)
+		if methodCount == 1 {
+			return "1 method"
+		}
+		return fmt.Sprintf("%d methods", methodCount)
+	case *ast.Ident:
+		return "alias to " + t.Name
+	case *ast.ArrayType:
+		return "array type"
+	case *ast.MapType:
+		return "map type"
+	case *ast.ChanType:
+		return "channel type"
+	case *ast.FuncType:
+		return "function type"
+	default:
+		return "custom type"
+	}
+}
+
+// getValueSpecInfo provides additional information about a ValueSpec (const/var)
+func getValueSpecInfo(spec *ast.ValueSpec) string {
+	if spec.Type != nil {
+		// Has explicit type
+		return getTypeName(spec.Type)
+	}
+	if len(spec.Values) > 0 {
+		// Infer from value
+		return "inferred type"
+	}
+	return "no type info"
+}
+
+// getTypeName extracts a readable type name from an ast.Expr
+func getTypeName(expr ast.Expr) string {
+	switch t := expr.(type) {
+	case *ast.Ident:
+		return t.Name
+	case *ast.SelectorExpr:
+		if pkg, ok := t.X.(*ast.Ident); ok {
+			return pkg.Name + "." + t.Sel.Name
+		}
+		return "qualified type"
+	case *ast.ArrayType:
+		return "[]" + getTypeName(t.Elt)
+	case *ast.MapType:
+		return "map[" + getTypeName(t.Key) + "]" + getTypeName(t.Value)
+	case *ast.StarExpr:
+		return "*" + getTypeName(t.X)
+	case *ast.ChanType:
+		return "chan " + getTypeName(t.Value)
+	default:
+		return "complex type"
+	}
 }
 
 // ExtractCallGraph extracts function call relationships from a single Go file.

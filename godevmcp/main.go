@@ -19,6 +19,8 @@ func main() {
 	subcommands.Register(&subcmd.GoDocCmd{}, "")
 	subcommands.Register(&subcmd.GithubCmd{}, "")
 	subcommands.Register(&subcmd.LocalSearchCmd{}, "")
+	subcommands.Register(&subcmd.ExtractDeclarationsCmd{}, "")
+	subcommands.Register(&subcmd.ExtractCallGraphCmd{}, "")
 
 	flag.Parse()
 	ctx := context.Background()
