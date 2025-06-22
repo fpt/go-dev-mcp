@@ -15,6 +15,7 @@ type Declaration struct {
 	Name string
 	Type string // "function", "type", "interface", "struct", "const", "var"
 	Info string // Additional info like receiver type for methods, struct fields count, etc.
+	Line int    // Line number in the file where the declaration starts
 }
 
 type DeclarationExtractResult struct {
@@ -118,6 +119,7 @@ func extractDeclarationsFromFile(filePath string) []Declaration {
 							Name: s.Name.Name,
 							Type: getTypeSpecType(s),
 							Info: getTypeSpecInfo(s),
+							Line: fset.Position(s.Pos()).Line,
 						}
 						declarations = append(declarations, decl)
 					}
@@ -133,6 +135,7 @@ func extractDeclarationsFromFile(filePath string) []Declaration {
 								Name: name.Name,
 								Type: declType,
 								Info: getValueSpecInfo(s),
+								Line: fset.Position(name.Pos()).Line,
 							}
 							declarations = append(declarations, decl)
 						}
@@ -156,6 +159,7 @@ func extractDeclarationsFromFile(filePath string) []Declaration {
 					Name: name,
 					Type: "function",
 					Info: info,
+					Line: fset.Position(d.Pos()).Line,
 				}
 				declarations = append(declarations, decl)
 			}

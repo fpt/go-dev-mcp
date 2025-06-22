@@ -56,9 +56,9 @@ func (p *ExtractDeclarationsCmd) Execute(
 		fmt.Printf("File: %s\n", result.Filename)
 		for _, decl := range result.Declarations {
 			if decl.Info != "" {
-				fmt.Printf("  %s: %s (%s)\n", decl.Type, decl.Name, decl.Info)
+				fmt.Printf("  %s: %s (%s) [line %d]\n", decl.Type, decl.Name, decl.Info, decl.Line)
 			} else {
-				fmt.Printf("  %s: %s\n", decl.Type, decl.Name)
+				fmt.Printf("  %s: %s [line %d]\n", decl.Type, decl.Name, decl.Line)
 			}
 		}
 		fmt.Println()

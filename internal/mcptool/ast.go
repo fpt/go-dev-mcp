@@ -44,9 +44,12 @@ func extractDeclarations(
 		fileInfo := fmt.Sprintf("File: %s\n", result.Filename)
 		for _, decl := range result.Declarations {
 			if decl.Info != "" {
-				fileInfo += fmt.Sprintf("- %s: %s (%s)\n", decl.Type, decl.Name, decl.Info)
+				fileInfo += fmt.Sprintf(
+					"- %s: %s (%s) [line %d]\n",
+					decl.Type, decl.Name, decl.Info, decl.Line,
+				)
 			} else {
-				fileInfo += fmt.Sprintf("- %s: %s\n", decl.Type, decl.Name)
+				fileInfo += fmt.Sprintf("- %s: %s [line %d]\n", decl.Type, decl.Name, decl.Line)
 			}
 		}
 		builder.WriteString(fileInfo)
