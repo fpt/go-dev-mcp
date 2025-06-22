@@ -11,8 +11,8 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-// ExtractFunctionNamesArgs represents arguments for extracting function names
-type ExtractFunctionNamesArgs struct {
+// ExtractDeclarationsArgs represents arguments for extracting declarations
+type ExtractDeclarationsArgs struct {
 	Directory string `json:"directory"`
 }
 
@@ -21,35 +21,42 @@ type ExtractCallGraphArgs struct {
 	FilePath string `json:"file_path"`
 }
 
-func extractFunctionNames(
+func extractDeclarations(
 	ctx context.Context,
 	request mcp.CallToolRequest,
-	args ExtractFunctionNamesArgs,
+	args ExtractDeclarationsArgs,
 ) (*mcp.CallToolResult, error) {
 	if args.Directory == "" {
 		return mcp.NewToolResultError("Missing directory path"), nil
 	}
 
 	fw := infra.NewFileWalker()
-	results, err := app.ExtractFunctionNames(ctx, fw, args.Directory)
+	results, err := app.ExtractDeclarations(ctx, fw, args.Directory)
 	if err != nil {
 		slog.ErrorContext(ctx, "extractFunctionNames", "error", err)
 		return mcp.NewToolResultError(
-			fmt.Sprintf("Error extracting function names: %v", err),
+			fmt.Sprintf("Error extracting declarations: %v", err),
 		), nil
 	}
 
 	builder := strings.Builder{}
 	for _, result := range results {
 		fileInfo := fmt.Sprintf("File: %s\n", result.Filename)
-		for _, function := range result.Functions {
-			fileInfo += fmt.Sprintf("- %s\n", function)
+		for _, decl := range result.Declarations {
+			if decl.Info != "" {
+				fileInfo += fmt.Sprintf(
+					"- %s: %s (%s) [line %d]\n",
+					decl.Type, decl.Name, decl.Info, decl.Line,
+				)
+			} else {
+				fileInfo += fmt.Sprintf("- %s: %s [line %d]\n", decl.Type, decl.Name, decl.Line)
+			}
 		}
 		builder.WriteString(fileInfo)
 	}
 
 	if builder.Len() == 0 {
-		return mcp.NewToolResultText("No Go functions found in the specified directory."), nil
+		return mcp.NewToolResultText("No Go declarations found in the specified directory."), nil
 	}
 
 	return mcp.NewToolResultText(builder.String()), nil
