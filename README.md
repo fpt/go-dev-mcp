@@ -246,6 +246,63 @@ This tool requires no parameters and returns the current timestamp.
 └── go.sum          # Go module checksum
 ```
 
+### Package Dependencies
+
+The following Mermaid graph shows the internal package dependencies within the project:
+
+```mermaid
+graph TD
+    %% Entry point
+    main[godevmcp/main] --> subcmd[internal/subcmd]
+    
+    %% Core application layer
+    subcmd --> app[internal/app]
+    subcmd --> mcptool[internal/mcptool]
+    mcptool --> app
+    
+    %% Application modules
+    app --> repository[internal/repository]
+    app --> infra[internal/infra]
+    app --> contentsearch[internal/contentsearch]
+    app --> model[internal/model]
+    app --> dq[pkg/dq]
+    
+    %% MCP layer
+    mcptool --> infra
+    
+    %% Infrastructure dependencies
+    infra --> repository
+    contentsearch --> model
+    
+    %% External dependencies (key ones)
+    subcmd -.-> subcommands[google/subcommands]
+    mcptool -.-> mcp[mark3labs/mcp-go]
+    infra -.-> github[google/go-github]
+    app -.-> errors[pkg/errors]
+    app -.-> goldmark[yuin/goldmark]
+    app -.-> cache[patrickmn/go-cache]
+    
+    %% Styling
+    classDef entryPoint fill:#e1f5fe
+    classDef coreLayer fill:#f3e5f5
+    classDef appLayer fill:#e8f5e8
+    classDef infraLayer fill:#fff3e0
+    classDef external fill:#fce4ec,stroke-dasharray: 5 5
+    
+    class main entryPoint
+    class subcmd,mcptool coreLayer
+    class app,repository,infra,contentsearch,model appLayer
+    class dq infraLayer
+    class subcommands,mcp,github,errors,goldmark,cache external
+```
+
+This graph illustrates:
+- **Entry Point**: `main` package coordinates subcommands
+- **Core Layer**: `subcmd` (CLI) and `mcptool` (MCP server) provide user interfaces
+- **Application Layer**: `app` contains business logic, supported by infrastructure packages
+- **Infrastructure Layer**: Shared utilities and external integrations
+- **External Dependencies**: Key third-party packages (shown with dashed lines)
+
 ### Common Development Workflow
 
 1. Make changes to the code

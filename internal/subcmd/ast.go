@@ -130,3 +130,46 @@ func (p *ExtractCallGraphCmd) Execute(
 
 	return subcommands.ExitSuccess
 }
+
+type ExtractPackageDependenciesCmd struct {
+	directory string
+}
+
+func (*ExtractPackageDependenciesCmd) Name() string { return "extract-package-dependencies" }
+
+func (*ExtractPackageDependenciesCmd) Synopsis() string {
+	return "Extract package-level import dependencies from Go files"
+}
+
+func (*ExtractPackageDependenciesCmd) Usage() string {
+	return `extract-package-dependencies [flags] <directory>:
+  Extract package-level import dependencies from Go source files in a directory.
+  Analyzes imports and categorizes them as local, external, or standard library dependencies.
+`
+}
+
+func (p *ExtractPackageDependenciesCmd) SetFlags(f *flag.FlagSet) {
+	f.StringVar(&p.directory, "dir", ".", "Directory to analyze for package dependencies")
+}
+
+func (p *ExtractPackageDependenciesCmd) Execute(
+	ctx context.Context,
+	f *flag.FlagSet,
+	_ ...any,
+) subcommands.ExitStatus {
+	directory := p.directory
+	if f.NArg() > 0 {
+		directory = f.Arg(0)
+	}
+
+	fw := infra.NewFileWalker()
+	result, err := app.ExtractPackageDependencies(ctx, fw, directory)
+	if err != nil {
+		fmt.Printf("Error extracting package dependencies: %v\n", err)
+		return subcommands.ExitFailure
+	}
+
+	output := app.FormatDependencyGraph(result)
+	fmt.Print(output)
+	return subcommands.ExitSuccess
+}

@@ -21,6 +21,11 @@ type ExtractCallGraphArgs struct {
 	FilePath string `json:"file_path"`
 }
 
+// ExtractPackageDependenciesArgs represents arguments for extracting package dependencies
+type ExtractPackageDependenciesArgs struct {
+	Directory string `json:"directory"`
+}
+
 func extractDeclarations(
 	ctx context.Context,
 	request mcp.CallToolRequest,
@@ -103,4 +108,26 @@ func extractCallGraph(
 	}
 
 	return mcp.NewToolResultText(builder.String()), nil
+}
+
+func extractPackageDependencies(
+	ctx context.Context,
+	request mcp.CallToolRequest,
+	args ExtractPackageDependenciesArgs,
+) (*mcp.CallToolResult, error) {
+	if args.Directory == "" {
+		return mcp.NewToolResultError("Missing directory path"), nil
+	}
+
+	fw := infra.NewFileWalker()
+	result, err := app.ExtractPackageDependencies(ctx, fw, args.Directory)
+	if err != nil {
+		slog.ErrorContext(ctx, "extractPackageDependencies", "error", err)
+		return mcp.NewToolResultError(
+			fmt.Sprintf("Error extracting package dependencies: %v", err),
+		), nil
+	}
+
+	output := app.FormatDependencyGraph(result)
+	return mcp.NewToolResultText(output), nil
 }
