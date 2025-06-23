@@ -255,6 +255,21 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(extractCallGraph))
 
+	// Add Extract Package Dependencies tool
+	tool = mcp.NewTool(
+		"extract_package_dependencies",
+		mcp.WithDescription(
+			"Extract package-level import dependencies from Go source files in a directory. "+
+				"Analyzes imports and categorizes them as local, external, or standard library dependencies.",
+		),
+		mcp.WithString("directory",
+			mcp.DefaultString(""),
+			mcp.Required(),
+			mcp.Description("Directory to analyze for package dependencies"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(extractPackageDependencies))
+
 	// Add Scan Markdown tool
 	tool = mcp.NewTool(
 		"scan_markdown",

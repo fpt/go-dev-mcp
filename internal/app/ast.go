@@ -6,6 +6,8 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/fpt/go-dev-mcp/internal/repository"
@@ -36,6 +38,29 @@ type CallGraphEntry struct {
 type CallGraphResult struct {
 	Filename  string           // Source file path
 	CallGraph []CallGraphEntry // Call relationships
+}
+
+// PackageImport represents an import statement in a Go file
+type PackageImport struct {
+	Path     string // Import path (e.g., "fmt", "github.com/user/repo/pkg")
+	Alias    string // Import alias if any (e.g., "f" in `import f "fmt"`)
+	Line     int    // Line number where import appears
+	IsStdlib bool   // Whether this is a standard library import
+	IsLocal  bool   // Whether this is a local project import
+}
+
+// PackageDependency represents a Go file's package and its imports
+type PackageDependency struct {
+	FilePath    string          // Absolute path to the Go file
+	PackageName string          // Package name declared in the file
+	Imports     []PackageImport // All imports in the file
+}
+
+// DependencyGraphResult represents the package dependency analysis for a directory
+type DependencyGraphResult struct {
+	ProjectPath  string              // Root project path
+	ModuleName   string              // Module name from go.mod
+	Dependencies []PackageDependency // Package dependencies for each file
 }
 
 // ExtractDeclarations extracts all exported declarations from Go source files in the specified directory.
@@ -356,4 +381,208 @@ func analyzeFunctionCall(callExpr *ast.CallExpr) FunctionCall {
 	}
 
 	return FunctionCall{}
+}
+
+// ExtractPackageDependencies analyzes Go files in a directory and extracts package-level import dependencies
+func ExtractPackageDependencies(
+	ctx context.Context,
+	fw repository.FileWalker,
+	projectPath string,
+) (*DependencyGraphResult, error) {
+	result := &DependencyGraphResult{
+		ProjectPath:  projectPath,
+		Dependencies: []PackageDependency{},
+	}
+
+	// Try to find module name from go.mod
+	moduleName, err := findModuleName(projectPath)
+	if err != nil {
+		// If no go.mod found, use directory name as fallback
+		moduleName = filepath.Base(projectPath)
+	}
+	result.ModuleName = moduleName
+
+	// Walk through all Go files and extract dependencies
+	err = fw.Walk(ctx, func(filePath string) error {
+		dep, err := extractPackageDependencyFromFile(filePath, moduleName)
+		if err != nil {
+			// Skip files that can't be parsed instead of failing
+			return nil
+		}
+
+		if dep != nil {
+			result.Dependencies = append(result.Dependencies, *dep)
+		}
+
+		return nil
+	}, projectPath, ".go", true)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+// findModuleName reads the module name from go.mod file
+func findModuleName(projectPath string) (string, error) {
+	goModPath := filepath.Join(projectPath, "go.mod")
+	content, err := os.ReadFile(goModPath)
+	if err != nil {
+		return "", err
+	}
+
+	lines := strings.Split(string(content), "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "module ") {
+			return strings.TrimSpace(strings.TrimPrefix(line, "module")), nil
+		}
+	}
+
+	return "", fmt.Errorf("module declaration not found in go.mod")
+}
+
+// extractPackageDependencyFromFile extracts package info and imports from a single Go file
+func extractPackageDependencyFromFile(filePath, moduleName string) (*PackageDependency, error) {
+	// Skip test files
+	if strings.HasSuffix(filePath, "_test.go") {
+		return nil, nil
+	}
+
+	fset := token.NewFileSet()
+	node, err := parser.ParseFile(fset, filePath, nil, parser.ParseComments)
+	if err != nil {
+		return nil, err
+	}
+
+	absFilePath, err := filepath.Abs(filePath)
+	if err != nil {
+		absFilePath = filePath
+	}
+
+	dep := &PackageDependency{
+		FilePath:    absFilePath,
+		PackageName: node.Name.Name,
+		Imports:     []PackageImport{},
+	}
+
+	// Extract import declarations
+	for _, imp := range node.Imports {
+		importPath := strings.Trim(imp.Path.Value, `"`)
+
+		var alias string
+		if imp.Name != nil {
+			alias = imp.Name.Name
+		}
+
+		line := fset.Position(imp.Pos()).Line
+
+		packageImport := PackageImport{
+			Path:     importPath,
+			Alias:    alias,
+			Line:     line,
+			IsStdlib: isStandardLibrary(importPath),
+			IsLocal:  isLocalImport(importPath, moduleName),
+		}
+
+		dep.Imports = append(dep.Imports, packageImport)
+	}
+
+	return dep, nil
+}
+
+// isStandardLibrary checks if an import path is from Go's standard library
+func isStandardLibrary(importPath string) bool {
+	// Standard library packages don't contain dots or are well-known exceptions
+	if !strings.Contains(importPath, ".") {
+		return true
+	}
+
+	// Known standard library packages with dots
+	stdlibWithDots := []string{
+		"golang.org/x/",
+		"vendor/golang.org/x/",
+	}
+
+	for _, prefix := range stdlibWithDots {
+		if strings.HasPrefix(importPath, prefix) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// isLocalImport checks if an import path is from the local project
+func isLocalImport(importPath, moduleName string) bool {
+	return strings.HasPrefix(importPath, moduleName)
+}
+
+// FormatDependencyGraph formats the dependency graph results as a readable string
+func FormatDependencyGraph(result *DependencyGraphResult) string {
+	if len(result.Dependencies) == 0 {
+		return "No Go files with imports found."
+	}
+
+	var output strings.Builder
+	output.WriteString(fmt.Sprintf("Package Dependencies for module: %s\n", result.ModuleName))
+	output.WriteString(fmt.Sprintf("Project path: %s\n\n", result.ProjectPath))
+
+	for _, dep := range result.Dependencies {
+		if len(dep.Imports) == 0 {
+			continue // Skip files with no imports
+		}
+
+		output.WriteString(fmt.Sprintf("%s (package %s)\n", dep.FilePath, dep.PackageName))
+
+		// Group imports by type
+		var localImports, stdlibImports, externalImports []PackageImport
+		for _, imp := range dep.Imports {
+			if imp.IsLocal {
+				localImports = append(localImports, imp)
+			} else if imp.IsStdlib {
+				stdlibImports = append(stdlibImports, imp)
+			} else {
+				externalImports = append(externalImports, imp)
+			}
+		}
+
+		// Display local imports first
+		if len(localImports) > 0 {
+			output.WriteString("  Local imports:\n")
+			for _, imp := range localImports {
+				output.WriteString(fmt.Sprintf("    %s (line %d)\n", imp.Path, imp.Line))
+				if imp.Alias != "" && imp.Alias != "." && imp.Alias != "_" {
+					output.WriteString(fmt.Sprintf("      alias: %s\n", imp.Alias))
+				}
+			}
+		}
+
+		// Display external imports
+		if len(externalImports) > 0 {
+			output.WriteString("  External imports:\n")
+			for _, imp := range externalImports {
+				output.WriteString(fmt.Sprintf("    %s (line %d)\n", imp.Path, imp.Line))
+				if imp.Alias != "" && imp.Alias != "." && imp.Alias != "_" {
+					output.WriteString(fmt.Sprintf("      alias: %s\n", imp.Alias))
+				}
+			}
+		}
+
+		// Display stdlib imports
+		if len(stdlibImports) > 0 {
+			output.WriteString("  Standard library imports:\n")
+			for _, imp := range stdlibImports {
+				output.WriteString(fmt.Sprintf("    %s (line %d)\n", imp.Path, imp.Line))
+				if imp.Alias != "" && imp.Alias != "." && imp.Alias != "_" {
+					output.WriteString(fmt.Sprintf("      alias: %s\n", imp.Alias))
+				}
+			}
+		}
+
+		output.WriteString("\n")
+	}
+
+	return output.String()
 }
