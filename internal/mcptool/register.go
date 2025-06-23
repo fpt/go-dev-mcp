@@ -255,5 +255,22 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(extractCallGraph))
 
+	// Add Scan Markdown tool
+	tool = mcp.NewTool(
+		"scan_markdown",
+		mcp.WithDescription(
+			"Scan markdown files in a directory or analyze a single markdown file to extract headings with line numbers. "+
+				"Uses goldmark parser to accurately extract heading hierarchy and positions.",
+		),
+		mcp.WithString(
+			"path",
+			mcp.Required(),
+			mcp.Description(
+				"Directory path to scan for markdown files or path to a single markdown file (absolute path)",
+			),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(scanMarkdown))
+
 	return nil
 }

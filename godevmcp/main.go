@@ -21,6 +21,7 @@ func main() {
 	subcommands.Register(&subcmd.LocalSearchCmd{}, "")
 	subcommands.Register(&subcmd.ExtractDeclarationsCmd{}, "")
 	subcommands.Register(&subcmd.ExtractCallGraphCmd{}, "")
+	subcommands.Register(&subcmd.MarkdownCmd{}, "")
 
 	flag.Parse()
 	ctx := context.Background()
