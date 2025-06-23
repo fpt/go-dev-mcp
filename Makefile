@@ -21,6 +21,9 @@ fmt: ## Run format
 lint: ## Run lint
 	golangci-lint run
 
+fix: ## Run fix
+	golangci-lint run --fix
+
 inspect: ## Run in MCP inspector
 	npx @modelcontextprotocol/inspector go run ./godevmcp/main.go serve
 
