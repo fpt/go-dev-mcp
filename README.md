@@ -143,19 +143,32 @@ This will search for the text "SearchLocalFiles" in all `.go` files within the `
 
 ### get_github_content
 
-Retrieves the content of a specific file from a GitHub repository.
+Retrieves the content of a specific file from a GitHub repository with optional line-based paging for large files.
 
 **Usage:**
 ```
-get_github_content repo path
+get_github_content repo path [offset] [limit]
 ```
 
-**Example:**
+**Parameters:**
+- `repo`: GitHub repository in 'owner/repo' format
+- `path`: Path to the file in the repository
+- `offset`: Line number to start reading from (0-based, default: 0)
+- `limit`: Number of lines to read (default: 100, 0 for all lines)
+
+**Examples:**
 ```
+# Get entire file
 get_github_content owner/repo-name README.md
+
+# Get first 20 lines
+get_github_content owner/repo-name src/main.go 0 20
+
+# Get lines 50-70 (20 lines starting from line 50)
+get_github_content owner/repo-name src/main.go 50 20
 ```
 
-This will fetch and display the content of the README.md file from the specified GitHub repository.
+This fetches content from GitHub files with optional pagination for large files, similar to the `read_godoc` tool.
 
 ### tree_github_repo
 

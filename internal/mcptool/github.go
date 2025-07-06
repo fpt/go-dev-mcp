@@ -20,8 +20,10 @@ type SearchCodeGitHubArgs struct {
 
 // GitHubContentArgs represents arguments for GitHub content retrieval
 type GitHubContentArgs struct {
-	Repo string `json:"repo"`
-	Path string `json:"path"`
+	Repo   string `json:"repo"`
+	Path   string `json:"path"`
+	Offset int    `json:"offset,omitempty"`
+	Limit  int    `json:"limit,omitempty"`
 }
 
 // GitHubTreeArgs represents arguments for GitHub tree display
@@ -98,6 +100,11 @@ func getGitHubContent(
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting content: %v", err)), nil
 	}
 
+	// Apply offset/limit if specified
+	if args.Offset > 0 || args.Limit > 0 {
+		content = paginateContent(content, args.Offset, args.Limit)
+	}
+
 	return mcp.NewToolResultText(content), nil
 }
 
@@ -138,4 +145,28 @@ func getGitHubTree(
 	}
 
 	return mcp.NewToolResultText(b.String()), nil
+}
+
+// paginateContent applies offset/limit to content by lines, similar to how read_godoc works
+func paginateContent(content string, offset, limit int) string {
+	lines := strings.Split(content, "\n")
+	totalLines := len(lines)
+
+	// Apply offset
+	if offset >= totalLines {
+		return fmt.Sprintf("(offset %d exceeds file length of %d lines)", offset, totalLines)
+	}
+	if offset > 0 {
+		lines = lines[offset:]
+	}
+
+	// Apply limit (0 means no limit)
+	if limit > 0 && limit < len(lines) {
+		lines = lines[:limit]
+		// Add truncation indicator
+		lines = append(lines, fmt.Sprintf("... (showing lines %d-%d of %d total lines)",
+			offset+1, offset+limit, totalLines))
+	}
+
+	return strings.Join(lines, "\n")
 }
