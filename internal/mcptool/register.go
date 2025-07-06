@@ -154,7 +154,7 @@ func Register(s *server.MCPServer, workdir string) error {
 
 	// Add GitHub get content tool
 	tool = mcp.NewTool("get_github_content",
-		mcp.WithDescription("Get content from GitHub"),
+		mcp.WithDescription("Get content from GitHub with line-based paging for large files"),
 		mcp.WithString("repo",
 			mcp.Required(),
 			mcp.Description("GitHub repository in 'owner/repo' format"),
@@ -162,6 +162,14 @@ func Register(s *server.MCPServer, workdir string) error {
 		mcp.WithString("path",
 			mcp.Required(),
 			mcp.Description("Path to the file in the repository"),
+		),
+		mcp.WithNumber("offset",
+			mcp.DefaultNumber(0),
+			mcp.Description("Line number to start reading from (0-based)"),
+		),
+		mcp.WithNumber("limit",
+			mcp.DefaultNumber(100),
+			mcp.Description("Number of lines to read (default: 100, 0 for all lines)"),
 		),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubContent))
