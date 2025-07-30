@@ -212,3 +212,207 @@ func TestMatchSingle(t *testing.T) {
 		})
 	}
 }
+
+func TestRecursiveNodeMatcher(t *testing.T) {
+	// Test case 1: Simple nested structure ul > li
+	t.Run("simple nested ul > li", func(t *testing.T) {
+		htmlSrc := `
+<html>
+<body>
+	<ul>
+		<li>Item 1</li>
+		<li>Item 2</li>
+	</ul>
+</body>
+</html>`
+
+		doc, err := html.Parse(strings.NewReader(htmlSrc))
+		if err != nil {
+			t.Fatalf("failed to parse HTML: %v", err)
+		}
+
+		var matchedItems []string
+		matcher := dq.NewRecursiveNodeMatcher(
+			"ul > li",
+			func(n *html.Node) {
+				text := dq.InnerText(n, true)
+				matchedItems = append(matchedItems, text)
+			},
+			false, // not recursive
+		)
+
+		dq.Traverse(doc, []dq.Matcher{matcher})
+
+		expected := []string{"Item 1", "Item 2"}
+		assert.Equal(t, expected, matchedItems, "Should match both li elements")
+	})
+
+	// Test case 2: Nested lists with recursion ul > li > ul > li
+	t.Run("recursive nested lists", func(t *testing.T) {
+		htmlSrc := `
+<html>
+<body>
+	<ul>
+		<li>Item 1
+			<ul>
+				<li>Nested 1</li>
+				<li>Nested 2</li>
+			</ul>
+		</li>
+		<li>Item 2</li>
+	</ul>
+</body>
+</html>`
+
+		doc, err := html.Parse(strings.NewReader(htmlSrc))
+		if err != nil {
+			t.Fatalf("failed to parse HTML: %v", err)
+		}
+
+		var matchedItems []string
+		matcher := dq.NewRecursiveNodeMatcher(
+			"ul > li",
+			func(n *html.Node) {
+				text := strings.TrimSpace(dq.InnerText(n, false)) // Only direct text, not nested
+				if text != "" {
+					matchedItems = append(matchedItems, text)
+				}
+			},
+			true, // recursive - should find nested ul > li patterns
+		)
+
+		dq.Traverse(doc, []dq.Matcher{matcher})
+
+		// Should match: "Item 1", "Item 2" from outer ul, and "Nested 1", "Nested 2" from inner ul
+		assert.Contains(t, matchedItems, "Item 2", "Should match outer li")
+		assert.Contains(t, matchedItems, "Nested 1", "Should match nested li")
+		assert.Contains(t, matchedItems, "Nested 2", "Should match nested li")
+	})
+
+	// Test case 3: Complex pattern ul > li > ol > li
+	t.Run("complex nested pattern ul > li > ol > li", func(t *testing.T) {
+		htmlSrc := `
+<html>
+<body>
+	<ul>
+		<li>List item
+			<ol>
+				<li>Ordered 1</li>
+				<li>Ordered 2</li>
+			</ol>
+		</li>
+	</ul>
+</body>
+</html>`
+
+		doc, err := html.Parse(strings.NewReader(htmlSrc))
+		if err != nil {
+			t.Fatalf("failed to parse HTML: %v", err)
+		}
+
+		var matchedItems []string
+		matcher := dq.NewRecursiveNodeMatcher(
+			"ul > li > ol > li",
+			func(n *html.Node) {
+				text := dq.InnerText(n, true)
+				matchedItems = append(matchedItems, text)
+			},
+			false, // not recursive
+		)
+
+		dq.Traverse(doc, []dq.Matcher{matcher})
+
+		expected := []string{"Ordered 1", "Ordered 2"}
+		assert.Equal(t, expected, matchedItems, "Should match ol > li elements inside ul > li")
+	})
+
+	// Test case 4: Pattern with classes and IDs
+	t.Run("pattern with classes", func(t *testing.T) {
+		htmlSrc := `
+<html>
+<body>
+	<div class="container">
+		<ul class="menu">
+			<li class="item">Menu Item 1</li>
+			<li class="item">Menu Item 2</li>
+		</ul>
+	</div>
+</body>
+</html>`
+
+		doc, err := html.Parse(strings.NewReader(htmlSrc))
+		if err != nil {
+			t.Fatalf("failed to parse HTML: %v", err)
+		}
+
+		var matchedItems []string
+		matcher := dq.NewRecursiveNodeMatcher(
+			"div.container > ul.menu > li.item",
+			func(n *html.Node) {
+				text := dq.InnerText(n, true)
+				matchedItems = append(matchedItems, text)
+			},
+			false,
+		)
+
+		dq.Traverse(doc, []dq.Matcher{matcher})
+
+		expected := []string{"Menu Item 1", "Menu Item 2"}
+		assert.Equal(
+			t,
+			expected,
+			matchedItems,
+			"Should match li.item elements with full class path",
+		)
+	})
+
+	// Test case 5: Recursive with sub-matchers
+	t.Run("recursive with sub-matchers", func(t *testing.T) {
+		htmlSrc := `
+<html>
+<body>
+	<ul>
+		<li>
+			<span>Item 1</span>
+			<ul>
+				<li><span>Nested 1</span></li>
+			</ul>
+		</li>
+	</ul>
+</body>
+</html>`
+
+		doc, err := html.Parse(strings.NewReader(htmlSrc))
+		if err != nil {
+			t.Fatalf("failed to parse HTML: %v", err)
+		}
+
+		var liItems []string
+		var spanItems []string
+
+		spanMatcher := dq.NewNodeMatcher(
+			dq.NewMatchFunc("span"),
+			func(n *html.Node) {
+				text := dq.InnerText(n, true)
+				spanItems = append(spanItems, text)
+			},
+		)
+
+		matcher := dq.NewRecursiveNodeMatcher(
+			"ul > li",
+			func(n *html.Node) {
+				// This handler won't get direct text since we have sub-matchers
+				liItems = append(liItems, "li-matched")
+			},
+			true,        // recursive
+			spanMatcher, // sub-matcher for spans
+		)
+
+		dq.Traverse(doc, []dq.Matcher{matcher})
+
+		// The key thing is that we get both span items, even if li is matched more times
+		assert.Contains(t, spanItems, "Item 1", "Should match span in outer li")
+		assert.Contains(t, spanItems, "Nested 1", "Should match span in nested li")
+		assert.Len(t, spanItems, 2, "Should match exactly 2 span elements")
+	})
+}

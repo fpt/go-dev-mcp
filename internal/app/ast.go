@@ -416,7 +416,6 @@ func ExtractPackageDependencies(
 
 		return nil
 	}, projectPath, ".go", true)
-
 	if err != nil {
 		return nil, err
 	}
