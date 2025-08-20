@@ -15,7 +15,6 @@ func main() {
 	subcommands.Register(subcommands.CommandsCommand(), "")
 	subcommands.Register(&subcmd.ServeCmd{}, "")
 	subcommands.Register(&subcmd.TreeCmd{}, "")
-	subcommands.Register(&subcmd.DatetimeCmd{}, "")
 	subcommands.Register(&subcmd.GoDocCmd{}, "")
 	subcommands.Register(&subcmd.GithubCmd{}, "")
 	subcommands.Register(&subcmd.LocalSearchCmd{}, "")
