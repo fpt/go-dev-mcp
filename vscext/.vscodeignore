@@ -5,3 +5,6 @@ server/**
 !server/godevmcp-darwin-arm64
 !server/godevmcp-linux-x86
 !server/godevmcp-linux-amd64
+assets/**
+!assets/icon.png
+!README.md
