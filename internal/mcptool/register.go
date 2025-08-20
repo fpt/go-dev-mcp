@@ -270,5 +270,20 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(scanMarkdown))
 
+	// Add Go Code Validation tool
+	tool = mcp.NewTool(
+		"validate_go_code",
+		mcp.WithDescription(
+			"Validate Go code using multiple static analysis tools including go vet, build checks, "+
+				"formatting validation, and module tidiness. Provides comprehensive code quality assessment.",
+		),
+		mcp.WithString(
+			"directory",
+			mcp.Required(),
+			mcp.Description("Directory containing Go code to validate (absolute path)"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(validateGoCode))
+
 	return nil
 }
