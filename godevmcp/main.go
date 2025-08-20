@@ -22,6 +22,7 @@ func main() {
 	subcommands.Register(&subcmd.ExtractCallGraphCmd{}, "")
 	subcommands.Register(&subcmd.ExtractPackageDependenciesCmd{}, "")
 	subcommands.Register(&subcmd.MarkdownCmd{}, "")
+	subcommands.Register(&subcmd.ValidateCmd{}, "")
 
 	flag.Parse()
 	ctx := context.Background()

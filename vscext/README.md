@@ -20,7 +20,8 @@ This extension provides an MCP server with the following tools:
 - **Local File Search** - Search through local Go files by content
 - **Directory Tree** - Display project directory structure
 
-### Code Analysis
+### Code Analysis & Validation
+- **Go Code Validation** - Comprehensive static analysis using go vet, build checks, formatting validation, and module tidiness
 - **AST Analysis** - Extract Go AST information and call graphs
 - **Package Dependencies** - Analyze import dependencies in Go projects
 - **Markdown Scanning** - Extract headings and structure from markdown files
