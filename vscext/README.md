@@ -19,7 +19,6 @@ This extension provides an MCP server with the following tools:
 ### Local Development
 - **Local File Search** - Search through local Go files by content
 - **Directory Tree** - Display project directory structure
-- **Make Target Execution** - Run Makefile targets with intelligent output filtering
 
 ### Code Analysis
 - **AST Analysis** - Extract Go AST information and call graphs

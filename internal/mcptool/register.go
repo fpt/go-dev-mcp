@@ -9,27 +9,8 @@ import (
 )
 
 func Register(s *server.MCPServer, workdir string) error {
-	// Add Make target tool
-	tool := mcp.NewTool(
-		"run_make",
-		mcp.WithDescription(
-			"Run make targets with intelligent output filtering"+
-				" that highlights errors/warnings and reduces token usage by 85-95%."+
-				" Automatically detects build failures, compilation errors, and test results.",
-		),
-		mcp.WithString("work_dir",
-			mcp.DefaultString(workdir),
-			mcp.Description("Working directory containing Makefile (absolute path)"),
-		),
-		mcp.WithString("target",
-			mcp.DefaultString("help"),
-			mcp.Description("Make target to run (e.g., 'build', 'test', 'clean', 'help')"),
-		),
-	)
-	s.AddTool(tool, mcp.NewTypedToolHandler(runMakeTarget))
-
 	// Add Tree Directory tool
-	tool = mcp.NewTool(
+	tool := mcp.NewTool(
 		"tree_dir",
 		mcp.WithDescription(
 			"Display directory tree structure with depth limiting"+
