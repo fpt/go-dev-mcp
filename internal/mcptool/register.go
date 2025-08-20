@@ -9,14 +9,8 @@ import (
 )
 
 func Register(s *server.MCPServer, workdir string) error {
-	// Add datetime tool
-	tool := mcp.NewTool("get_current_datetime",
-		mcp.WithDescription("Get current date and time"),
-	)
-	s.AddTool(tool, mcp.NewTypedToolHandler(getCurrentDateTime))
-
 	// Add Make target tool
-	tool = mcp.NewTool(
+	tool := mcp.NewTool(
 		"run_make",
 		mcp.WithDescription(
 			"Run make targets with intelligent output filtering"+

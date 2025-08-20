@@ -21,9 +21,10 @@ This extension provides an MCP server with the following tools:
 - **Directory Tree** - Display project directory structure
 - **Make Target Execution** - Run Makefile targets with intelligent output filtering
 
-### Utilities
-- **Current Date/Time** - Get current timestamp for development tasks
+### Code Analysis
 - **AST Analysis** - Extract Go AST information and call graphs
+- **Package Dependencies** - Analyze import dependencies in Go projects
+- **Markdown Scanning** - Extract headings and structure from markdown files
 
 ## How to Use
 
