@@ -27,6 +27,23 @@ fix: ## Run fix
 inspect: ## Run in MCP inspector
 	npx @modelcontextprotocol/inspector go run ./godevmcp/main.go serve
 
+vscode-build: ## Build binaries for VSCode extension
+	mkdir -p vscext/server
+	GOOS=windows GOARCH=amd64 go build -o vscext/server/godevmcp-win64.exe godevmcp/main.go
+	GOOS=windows GOARCH=arm64 go build -o vscext/server/godevmcp-win-arm64.exe godevmcp/main.go
+	GOOS=darwin GOARCH=arm64 go build -o vscext/server/godevmcp-darwin-arm64 godevmcp/main.go
+	GOOS=linux GOARCH=386 go build -o vscext/server/godevmcp-linux-x86 godevmcp/main.go
+	GOOS=linux GOARCH=amd64 go build -o vscext/server/godevmcp-linux-amd64 godevmcp/main.go
+
+vscode-check: ## Check TypeScript code for extension
+	cd vscext && npm run compile
+
+vscode-package: vscode-build vscode-check ## Build and package VSCode extension
+	cd vscext && vsce package
+
+vscode-publish: vscode-build vscode-check ## Build and publish VSCode extension
+	cd vscext && vsce publish
+
 help: ## Display this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "%-20s %s\n", $$1, $$2}'

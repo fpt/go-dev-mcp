@@ -26,3 +26,9 @@ output/
 
 # Ignore log files
 *.log
+
+# VSCode extension dependencies and build artifacts
+vscext/node_modules/
+vscext/out/
+vscext/server/
+*.vsix
