@@ -2,7 +2,10 @@
   "name": "go-dev-mcp",
   "displayName": "Go Development MCP Server",
   "description": "Model Context Protocol server providing Go development tools including package documentation, GitHub integration, and local file search.",
-  "version": "0.1.3",
+  "version": "0.1.4",
+  "categories": [
+    "Programming Languages"
+  ],
   "icon": "assets/icon.png",
   "license": "MIT",
   "publisher": "fat",
