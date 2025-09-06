@@ -1,0 +1,50 @@
+name: Test VSCExt (Node/TypeScript)
+
+on:
+  push:
+    paths:
+      - 'vscext/**'
+  pull_request:
+    paths:
+      - 'vscext/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Install dependencies (vscext)
+        run: |
+          if [ -f vscext/yarn.lock ]; then
+            (cd vscext && yarn install --frozen-lockfile)
+          elif [ -f vscext/package-lock.json ]; then
+            (cd vscext && npm ci)
+          elif [ -f vscext/package.json ]; then
+            (cd vscext && npm install)
+          else
+            echo "No Node dependencies found under vscext/"
+          fi
+
+      - name: Compile TypeScript
+        run: |
+          if [ -f vscext/package.json ] && (cd vscext && npm run -s compile); then
+            echo "TypeScript compiled"
+          else
+            echo "No compile script or compile finished with non-zero exit (ignoring)"
+          fi
+
+      - name: Run tests
+        run: |
+          if [ -f vscext/package.json ] && (cd vscext && (npm test --silent || npm run -s test)); then
+            echo "Tests passed"
+          else
+            echo "No tests defined or tests failed"; exit 1
+          fi

@@ -1,0 +1,72 @@
+name: Build and publish VSIX
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: 'stable'
+
+      - name: Install dependencies (vscext)
+        run: |
+          if [ -f vscext/yarn.lock ]; then
+            (cd vscext && yarn install --frozen-lockfile)
+          elif [ -f vscext/package-lock.json ]; then
+            (cd vscext && npm ci)
+          elif [ -f vscext/package.json ]; then
+            (cd vscext && npm install)
+          else
+            echo "No Node dependencies found under vscext/"
+          fi
+
+      - name: Install vsce
+        run: |
+          npm install -g vsce
+
+      - name: Build Go binaries and package VSIX
+        id: package
+        env:
+          VSCE_LOGIN: ${{ vars.VSCE_LOGIN }}
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          # Build cross-platform Go binaries and package the extension using the Makefile
+          make vscode-build vscode-check
+          # Install deps and package extension. vsce will read VSCE_LOGIN/VSCE_PAT from env
+          (cd vscext && npm install && vsce package)
+          # Find produced .vsix in vscext/
+          VSIX_PATH=$(ls -1 vscext/*.vsix 2>/dev/null | head -n1 || true)
+          if [ -z "$VSIX_PATH" ]; then
+            echo "No .vsix found in vscext/" >&2
+            exit 1
+          fi
+          VSIX_NAME=$(basename "$VSIX_PATH")
+          echo "VSIX_NAME=$VSIX_NAME" >> $GITHUB_OUTPUT
+          echo "VSIX_PATH=$VSIX_PATH" >> $GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vsix
+          path: ${{ steps.package.outputs.VSIX_NAME }}
+
+      - name: Attach to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ steps.package.outputs.VSIX_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
