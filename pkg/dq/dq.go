@@ -22,6 +22,11 @@ import (
 // #: match id e.g. "div#id"
 // .: match class e.g. "div.class"
 // >: match direct child e.g. ">span"
+//
+// RecursiveNodeMatcher extends the basic matching with:
+// - Multi-step patterns: "ul > li > ol > li" - matches nested sequences
+// - Recursive matching: can restart pattern after completion for deeply nested structures
+// - Sibling matching: continues to match additional siblings at each level
 
 type Matcher interface {
 	Match(n *html.Node) bool
@@ -244,4 +249,123 @@ func RawInnerText(n *html.Node, recurse bool) string {
 		text += RawInnerText(c, recurse)
 	}
 	return text
+}
+
+// RecursiveNodeMatcher handles recursive pattern matching for nested structures
+// like "ul > li > ol > li" where the pattern can repeat at different nesting levels
+type RecursiveNodeMatcher struct {
+	patterns    []string         // Sequence of patterns to match (e.g., ["ul", "li", "ol", "li"])
+	currentStep int              // Current step in the pattern sequence
+	handler     MatchHandlerFunc // Handler to call when pattern completes
+	recursive   bool             // Whether to restart pattern after completion
+	subMatchers []Matcher        // Additional sub-matchers to apply after pattern completion
+	isRoot      bool             // Whether this is the root matcher (for sibling matching)
+}
+
+// NewRecursiveNodeMatcher creates a new recursive matcher
+// pattern: space-separated pattern like "ul > li > ol > li" or "ul li ol li"
+// handler: function to call when the full pattern matches
+// recursive: if true, pattern restarts after completion for nested structures
+// children: additional matchers to apply after pattern completion
+func NewRecursiveNodeMatcher(
+	pattern string,
+	handler MatchHandlerFunc,
+	recursive bool,
+	children ...Matcher,
+) *RecursiveNodeMatcher {
+	// Parse pattern - handle both ">" and space-separated formats
+	pattern = strings.ReplaceAll(pattern, ">", " ")
+	patterns := strings.Fields(pattern)
+
+	return &RecursiveNodeMatcher{
+		patterns:    patterns,
+		currentStep: 0,
+		handler:     handler,
+		recursive:   recursive,
+		subMatchers: children,
+		isRoot:      true,
+	}
+}
+
+func (m *RecursiveNodeMatcher) Match(n *html.Node) bool {
+	if m.currentStep >= len(m.patterns) {
+		return false
+	}
+
+	currentPattern := strings.TrimSpace(m.patterns[m.currentStep])
+	matcher := NewMatchFunc(currentPattern)
+	result := matcher(n)
+	return result
+}
+
+func (m *RecursiveNodeMatcher) Handler(n *html.Node) {
+	// If we've completed the pattern, call the handler
+	if m.currentStep+1 >= len(m.patterns) {
+		if m.handler != nil {
+			m.handler(n)
+		}
+	}
+}
+
+func (m *RecursiveNodeMatcher) SubMatchers() []Matcher {
+	var matchers []Matcher
+
+	// If we haven't completed the pattern, continue with next step
+	if m.currentStep+1 < len(m.patterns) {
+		// Create a new matcher for the next step
+		nextMatcher := &RecursiveNodeMatcher{
+			patterns:    m.patterns,
+			currentStep: m.currentStep + 1,
+			handler:     m.handler,
+			recursive:   m.recursive,
+			subMatchers: m.subMatchers,
+			isRoot:      false, // Child matchers are not root
+		}
+		matchers = append(matchers, nextMatcher)
+
+		// If this is the root matcher, also include itself for sibling matching
+		if m.isRoot {
+			rootMatcher := &RecursiveNodeMatcher{
+				patterns:    m.patterns,
+				currentStep: 0,
+				handler:     m.handler,
+				recursive:   m.recursive,
+				subMatchers: m.subMatchers,
+				isRoot:      true,
+			}
+			matchers = append(matchers, rootMatcher)
+		}
+	} else {
+		// Pattern completed - add sub-matchers
+		matchers = append(matchers, m.subMatchers...)
+
+		// If recursive, restart the pattern
+		if m.recursive {
+			newMatcher := &RecursiveNodeMatcher{
+				patterns:    m.patterns,
+				currentStep: 0,
+				handler:     m.handler,
+				recursive:   m.recursive,
+				subMatchers: m.subMatchers,
+				isRoot:      false, // Recursive restarts are not root
+			}
+			matchers = append(matchers, newMatcher)
+		}
+
+		// If this is the root matcher, include itself for more sibling matching
+		// but only if we're not recursive (to avoid double matching)
+		if m.isRoot && !m.recursive {
+			rootMatcher := &RecursiveNodeMatcher{
+				patterns:    m.patterns,
+				currentStep: 0,
+				handler:     m.handler,
+				recursive:   m.recursive,
+				subMatchers: m.subMatchers,
+				isRoot:      true,
+			}
+			matchers = append(matchers, rootMatcher)
+		}
+	}
+
+	return matchers
 }
