@@ -32,3 +32,6 @@ vscext/node_modules/
 vscext/out/
 vscext/server/
 *.vsix
+
+.DS_Store
+
