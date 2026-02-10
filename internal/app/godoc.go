@@ -24,6 +24,19 @@ var ErrNotFound = errors.New("not found")
 // TTL: 30 minutes, cleanup interval: 10 minutes
 var docCache = cache.New(30*time.Minute, 10*time.Minute)
 
+// godocNodeFilter extends the default filter to also skip
+// pkg.go.dev version badge spans (e.g. "added in go1.21").
+func godocNodeFilter(n *html.Node) bool {
+	if !dq.DefaultNodeFilter(n) {
+		return false
+	}
+	if n.Type == html.ElementNode && n.Data == "span" &&
+		dq.GetAttr(n, "class") == "Documentation-sinceVersion" {
+		return false
+	}
+	return true
+}
+
 func SearchGoDoc(httpcli *infra.HttpClient, query string) (string, error) {
 	url := fmt.Sprintf("https://pkg.go.dev/search?q=%s", url.QueryEscape(query))
 	bodyrdr, err := httpcli.HttpGet(url)
@@ -211,10 +224,19 @@ func parseSearchResult(doc *html.Node) (bool, string) {
 			builder.WriteString(fmt.Sprintf("\tDescription: %s\n", dq.InnerText(n, true)))
 		},
 	)
+	infoMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("div.SearchSnippet-infoLabel"),
+		func(n *html.Node) {
+			if v := findVersionInNode(n); v != "" {
+				builder.WriteString(fmt.Sprintf("\tVersion: %s\n", v))
+			}
+		},
+	)
 	snippetMatcher := dq.NewNodeMatcher(
 		dq.NewMatchFunc("div.SearchSnippet"),
 		nil,
 		headerMatcher,
+		infoMatcher,
 		pMatcher,
 	)
 
@@ -241,8 +263,23 @@ func parseSearchResult(doc *html.Node) (bool, string) {
 	return matched, builder.String()
 }
 
+// findVersionInNode walks the DOM tree under n looking for the first <strong>
+// element whose text starts with "v" (the version number in pkg.go.dev search results).
+func findVersionInNode(n *html.Node) string {
+	for _, strong := range dq.FindAll(n, "strong") {
+		text := strings.TrimSpace(dq.InnerText(strong, false))
+		if strings.HasPrefix(text, "v") {
+			return text
+		}
+	}
+	return ""
+}
+
 func parseDocument(doc *html.Node) (bool, string) {
 	builder := strings.Builder{}
+	innerText := func(n *html.Node) string {
+		return dq.InnerTextWithFilter(n, true, godocNodeFilter)
+	}
 
 	headerMatcher := dq.NewNodeMatcher(
 		dq.NewMatchFunc("h1,h2,h3,h4,h5,h6"),
@@ -250,7 +287,7 @@ func parseDocument(doc *html.Node) (bool, string) {
 			h := strings.TrimPrefix(n.Data, "h")
 			hn, _ := strconv.Atoi(h)
 			builder.WriteString(
-				fmt.Sprintf("\n%s %s\n", strings.Repeat("#", hn), dq.InnerText(n, true)),
+				fmt.Sprintf("\n%s %s\n", strings.Repeat("#", hn), innerText(n)),
 			)
 		},
 	)
@@ -261,7 +298,7 @@ func parseDocument(doc *html.Node) (bool, string) {
 			dq.NewMatchFunc("li"),
 			func(n *html.Node) {
 				if dq.HasChild(n, "a") {
-					builder.WriteString(fmt.Sprintf("- %s\n", dq.InnerText(n, true)))
+					builder.WriteString(fmt.Sprintf("- %s\n", innerText(n)))
 				}
 			},
 			dq.NewNodeMatcher(
@@ -270,7 +307,7 @@ func parseDocument(doc *html.Node) (bool, string) {
 				dq.NewNodeMatcher(
 					dq.NewMatchFunc("li"),
 					func(n *html.Node) {
-						builder.WriteString(fmt.Sprintf("    - %s\n", dq.InnerText(n, true)))
+						builder.WriteString(fmt.Sprintf("    - %s\n", innerText(n)))
 					},
 				),
 			),
@@ -279,7 +316,7 @@ func parseDocument(doc *html.Node) (bool, string) {
 	pMatcher := dq.NewNodeMatcher(
 		dq.NewMatchFunc("p"),
 		func(n *html.Node) {
-			builder.WriteString(fmt.Sprintf("%s\n", dq.InnerText(n, true)))
+			builder.WriteString(fmt.Sprintf("%s\n", innerText(n)))
 		},
 	)
 	preMatcher := dq.NewNodeMatcher(
@@ -327,6 +364,9 @@ func parseDocument(doc *html.Node) (bool, string) {
 
 func parseReadme(doc *html.Node) (bool, string) {
 	builder := strings.Builder{}
+	innerText := func(n *html.Node) string {
+		return dq.InnerTextWithFilter(n, true, godocNodeFilter)
+	}
 
 	headerMatcher := dq.NewNodeMatcher(
 		dq.NewMatchFunc("h1,h2,h3,h4,h5,h6"),
@@ -334,7 +374,7 @@ func parseReadme(doc *html.Node) (bool, string) {
 			h := strings.TrimPrefix(n.Data, "h")
 			hn, _ := strconv.Atoi(h)
 			builder.WriteString(
-				fmt.Sprintf("\n%s %s\n", strings.Repeat("#", hn), dq.InnerText(n, true)),
+				fmt.Sprintf("\n%s %s\n", strings.Repeat("#", hn), innerText(n)),
 			)
 		},
 	)
@@ -344,14 +384,14 @@ func parseReadme(doc *html.Node) (bool, string) {
 		dq.NewNodeMatcher(
 			dq.NewMatchFunc("li"),
 			func(n *html.Node) {
-				builder.WriteString(fmt.Sprintf("- %s\n", dq.InnerText(n, true)))
+				builder.WriteString(fmt.Sprintf("- %s\n", innerText(n)))
 			},
 		),
 	)
 	pMatcher := dq.NewNodeMatcher(
 		dq.NewMatchFunc("p"),
 		func(n *html.Node) {
-			builder.WriteString(fmt.Sprintf("%s\n", dq.InnerText(n, true)))
+			builder.WriteString(fmt.Sprintf("%s\n", innerText(n)))
 		},
 	)
 	preMatcher := dq.NewNodeMatcher(

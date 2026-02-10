@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Serde"><title>serde - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="/-/rustdoc.static/${f}">`).join(""))</script><link rel="stylesheet" href="/-/rustdoc.static/normalize-9960930a.css"><link rel="stylesheet" href="/-/static/vendored.css?0-0-0-3600254d-2026-02-10" media="all" /><link rel="stylesheet" href="/-/rustdoc.static/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="/-/rustdoc.static/" data-current-crate="serde" data-themes="" data-resource-suffix="-20250926-1.92.0-nightly-54a8a1db6" data-rustdoc-version="1.92.0-nightly (54a8a1db6 2025-09-26)" data-channel="nightly" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-061df703.js" data-settings-js="settings-c38705f0.js" ><script src="/-/rustdoc.static/storage-e2aeef58.js"></script><script defer src="../crates-20250926-1.92.0-nightly-54a8a1db6.js"></script><script defer src="/-/rustdoc.static/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="/-/rustdoc.static/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="/-/rustdoc.static/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="/-/rustdoc.static/favicon-044be391.svg"><link rel="stylesheet" href="/-/static/rustdoc-2025-08-20.css?0-0-0-3600254d-2026-02-10" media="all" /><link rel="stylesheet" href="/-/static/font-awesome.css?0-0-0-3600254d-2026-02-10" media="all" />
+
+<link rel="search" href="/-/static/opensearch.xml" type="application/opensearchdescription+xml" title="Docs.rs" />
+
+<script type="text/javascript">(function() {
+    function applyTheme(theme) {
+        if (theme) {
+            document.documentElement.dataset.docsRsTheme = theme;
+        }
+    }
+
+    window.addEventListener("storage", ev => {
+        if (ev.key === "rustdoc-theme") {
+            applyTheme(ev.newValue);
+        }
+    });
+
+    // see ./storage-change-detection.html for details
+    window.addEventListener("message", ev => {
+        if (ev.data && ev.data.storage && ev.data.storage.key === "rustdoc-theme") {
+            applyTheme(ev.data.storage.value);
+        }
+    });
+
+    applyTheme(window.localStorage.getItem("rustdoc-theme"));
+})();</script></head><body class="rustdoc-page">
+<div class="nav-container">
+    <div class="container">
+        <div class="pure-menu pure-menu-horizontal" role="navigation" aria-label="Main navigation">
+            <form action="/releases/search"
+                  method="GET"
+                  id="nav-search-form"
+                  class="landing-search-form-nav  ">
+
+                
+                <a href="/" class="pure-menu-heading pure-menu-link docsrs-logo" aria-label="Docs.rs">
+                    <span title="Docs.rs"><span class="fa fa-solid fa-cubes " aria-hidden="true"></span></span>
+                    <span class="title">Docs.rs</span>
+                </a><ul class="pure-menu-list">
+    <script id="crate-metadata" type="application/json">
+        
+        {
+            "name": "serde",
+            "version": "1.0.228"
+        }
+    </script><li class="pure-menu-item pure-menu-has-children">
+            <a href="#" class="pure-menu-link crate-name" title="A generic serialization/deserialization framework">
+                <span class="fa fa-solid fa-cube " aria-hidden="true"></span>
+                <span class="title">serde-1.0.228</span>
+            </a><div class="pure-menu-children package-details-menu">
+                
+                <ul class="pure-menu-list menu-item-divided">
+                    <li class="pure-menu-heading" id="crate-title">
+                        serde 1.0.228
+                        <span id="clipboard" class="svg-clipboard" title="Copy crate name and version information"></span>
+                    </li><li class="pure-menu-item">
+                        <a href="/serde/1.0.228/serde/" class="pure-menu-link description" id="permalink" title="Get a link to this specific version"><span class="fa fa-solid fa-link " aria-hidden="true"></span> Permalink
+                        </a>
+                    </li><li class="pure-menu-item">
+                        <a href="/crate/serde/latest" class="pure-menu-link description" title="See serde in docs.rs">
+                            <span class="fa fa-solid fa-cube " aria-hidden="true"></span> Docs.rs crate page
+                        </a>
+                    </li><li class="pure-menu-item">
+                            <span class="pure-menu-link description"><span class="fa fa-solid fa-scale-unbalanced-flip " aria-hidden="true"></span>
+                            <a href="https://spdx.org/licenses/MIT" class="pure-menu-sublink">MIT</a> OR <a href="https://spdx.org/licenses/Apache-2.0" class="pure-menu-sublink">Apache-2.0</a></span>
+                        </li></ul>
+
+                <div class="pure-g menu-item-divided">
+                    <div class="pure-u-1-2 right-border">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-heading">Links</li>
+
+                            <li class="pure-menu-item">
+                                    <a href="https://serde.rs" class="pure-menu-link">
+                                        <span class="fa fa-solid fa-house " aria-hidden="true"></span> Homepage
+                                    </a>
+                                </li><li class="pure-menu-item">
+                                    <a href="https://github.com/serde-rs/serde" class="pure-menu-link">
+                                        <span class="fa fa-solid fa-code-branch " aria-hidden="true"></span> Repository
+                                    </a>
+                                </li><li class="pure-menu-item">
+                                <a href="https://crates.io/crates/serde" class="pure-menu-link" title="See serde in crates.io">
+                                    <span class="fa fa-solid fa-cube " aria-hidden="true"></span> crates.io
+                                </a>
+                            </li>
+
+                            
+                            <li class="pure-menu-item">
+                                <a href="/crate/serde/latest/source/" title="Browse source of serde-1.0.228" class="pure-menu-link">
+                                    <span class="fa fa-solid fa-folder-open " aria-hidden="true"></span> Source
+                                </a>
+                            </li>
+                        </ul>
+                    </div><div class="pure-u-1-2">
+                        <ul class="pure-menu-list" id="topbar-owners">
+                            <li class="pure-menu-heading">Owners</li><li class="pure-menu-item">
+                                    <a href="https://crates.io/users/dtolnay" class="pure-menu-link">
+                                        <span class="fa fa-solid fa-user " aria-hidden="true"></span> dtolnay
+                                    </a>
+                                </li><li class="pure-menu-item">
+                                    <a href="https://crates.io/teams/github:serde-rs:publish" class="pure-menu-link">
+                                        <span class="fa fa-solid fa-user " aria-hidden="true"></span> github:serde-rs:publish
+                                    </a>
+                                </li></ul>
+                    </div>
+                </div>
+
+                <div class="pure-g menu-item-divided">
+                    <div class="pure-u-1-2 right-border">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-heading">Dependencies</li>
+
+                            
+                            <li class="pure-menu-item">
+                                <div class="pure-menu pure-menu-scrollable sub-menu" tabindex="-1">
+                                    <ul class="pure-menu-list">
+                                        <li class="pure-menu-item"><a href="/serde_core/=1.0.228/" class="pure-menu-link">
+                serde_core =1.0.228
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/serde_derive/^1/" class="pure-menu-link">
+                serde_derive ^1
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                        <i>optional</i>
+                    
+                
+            </a>
+        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-heading">Versions</li>
+
+                            <li class="pure-menu-item">
+                                <div class="pure-menu pure-menu-scrollable sub-menu" id="releases-list" tabindex="-1" data-url="/crate/serde/latest/menus/releases/serde/">
+                                    <span class="rotate"><span class="fa fa-solid fa-spinner " aria-hidden="true"></span></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                    
+                    
+                    <div class="pure-g">
+                        <div class="pure-u-1">
+                            <ul class="pure-menu-list">
+                                <li>
+                                    <a href="/crate/serde/latest" class="pure-menu-link">
+                                        <b>100%</b>
+                                        of the crate is documented
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div></div>
+        </li><li class="pure-menu-item pure-menu-has-children">
+                <a href="#" class="pure-menu-link" aria-label="Platform">
+                    <span class="fa fa-solid fa-gears " aria-hidden="true"></span>
+                    <span class="title">Platform</span>
+                </a>
+
+                
+                <ul class="pure-menu-children" id="platforms" data-url="/crate/serde/latest/menus/platforms/serde/"><li class="pure-menu-item">
+            <a href="/crate/serde/latest/target-redirect/serde/" class="pure-menu-link" data-fragment="retain" rel="nofollow">x86_64-unknown-linux-gnu</a>
+        </li></ul>
+            </li><li class="pure-menu-item">
+                <a href="/crate/serde/latest/features" title="Browse available feature flags of serde-1.0.228" class="pure-menu-link">
+                    <span class="fa fa-solid fa-flag " aria-hidden="true"></span>
+                    <span class="title">Feature flags</span>
+                </a>
+            </li>
+        
+    
+</ul><div class="spacer"></div>
+                
+                
+
+<ul class="pure-menu-list">
+                    <li class="pure-menu-item pure-menu-has-children">
+                        <a href="#" class="pure-menu-link" aria-label="docs.rs">docs.rs</a>
+                        <ul class="pure-menu-children aligned-icons"><li class="pure-menu-item"><a class="pure-menu-link" href="/about"><span class="fa fa-solid fa-circle-info " aria-hidden="true"></span> About docs.rs</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/badges"><span class="fa fa-brands fa-fonticons " aria-hidden="true"></span> Badges</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/builds"><span class="fa fa-solid fa-gears " aria-hidden="true"></span> Builds</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/metadata"><span class="fa fa-solid fa-table " aria-hidden="true"></span> Metadata</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/redirections"><span class="fa fa-solid fa-road " aria-hidden="true"></span> Shorthand URLs</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/download"><span class="fa fa-solid fa-download " aria-hidden="true"></span> Download</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/rustdoc-json"><span class="fa fa-solid fa-file-code " aria-hidden="true"></span> Rustdoc JSON</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/releases/queue"><span class="fa fa-solid fa-gears " aria-hidden="true"></span> Build queue</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="https://foundation.rust-lang.org/policies/privacy-policy/#docs.rs" target="_blank"><span class="fa fa-solid fa-shield-halved " aria-hidden="true"></span> Privacy policy</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="pure-menu-list"><li class="pure-menu-item pure-menu-has-children">
+                        <a href="#" class="pure-menu-link" aria-label="Rust">Rust</a>
+                        <ul class="pure-menu-children">
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://www.rust-lang.org/" target="_blank">Rust website</a></li>
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/book/" target="_blank">The Book</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/std/" target="_blank">Standard Library API Reference</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/rust-by-example/" target="_blank">Rust by Example</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/cargo/guide/" target="_blank">The Cargo Guide</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/nightly/clippy" target="_blank">Clippy Documentation</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div id="search-input-nav">
+                    <label for="nav-search">
+                        <span class="fa fa-solid fa-magnifying-glass " aria-hidden="true"></span>
+                    </label>
+
+                    
+                    
+                    <input id="nav-search" name="query" type="text" aria-label="Find crate by search query" tabindex="-1"
+                        placeholder="Find crate"
+                        >
+                </div>
+            </form>
+        </div>
+    </div>
+</div><div class="rustdoc mod crate container-rustdoc" id="rustdoc_body_wrapper" tabindex="-1"><script async src="/-/static/menu.js?0-0-0-3600254d-2026-02-10"></script>
+<script async src="/-/static/index.js?0-0-0-3600254d-2026-02-10"></script>
+
+<iframe src="/-/storage-change-detection.html" width="0" height="0" style="display: none"></iframe><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Crate serde</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../serde/index.html">serde</a><span class="version">1.0.228</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#serde" title="Serde">Serde</a><ul><li><a href="#design" title="Design">Design</a></li><li><a href="#data-formats" title="Data formats">Data formats</a></li></ul></li></ul><h3><a href="#modules">Crate Items</a></h3><ul class="block"><li><a href="#modules" title="Modules">Modules</a></li><li><a href="#macros" title="Macros">Macros</a></li><li><a href="#traits" title="Traits">Traits</a></li><li><a href="#derives" title="Derive Macros">Derive Macros</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>serde</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/serde/lib.rs.html#1-285">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="serde"><a class="doc-anchor" href="#serde">§</a>Serde</h2>
+<p>Serde is a framework for <em><strong>ser</strong></em>ializing and <em><strong>de</strong></em>serializing Rust data
+structures efficiently and generically.</p>
+<p>The Serde ecosystem consists of data structures that know how to serialize
+and deserialize themselves along with data formats that know how to
+serialize and deserialize other things. Serde provides the layer by which
+these two groups interact with each other, allowing any supported data
+structure to be serialized and deserialized using any supported data format.</p>
+<p>See the Serde website <a href="https://serde.rs">https://serde.rs</a> for additional documentation and
+usage examples.</p>
+<h3 id="design"><a class="doc-anchor" href="#design">§</a>Design</h3>
+<p>Where many other languages rely on runtime reflection for serializing data,
+Serde is instead built on Rust’s powerful trait system. A data structure
+that knows how to serialize and deserialize itself is one that implements
+Serde’s <code>Serialize</code> and <code>Deserialize</code> traits (or uses Serde’s derive
+attribute to automatically generate implementations at compile time). This
+avoids any overhead of reflection or runtime type information. In fact in
+many situations the interaction between data structure and data format can
+be completely optimized away by the Rust compiler, leaving Serde
+serialization to perform the same speed as a handwritten serializer for the
+specific selection of data structure and data format.</p>
+<h3 id="data-formats"><a class="doc-anchor" href="#data-formats">§</a>Data formats</h3>
+<p>The following is a partial list of data formats that have been implemented
+for Serde by the community.</p>
+<ul>
+<li><a href="https://github.com/serde-rs/json">JSON</a>, the ubiquitous JavaScript Object Notation used by many HTTP APIs.</li>
+<li><a href="https://github.com/jamesmunns/postcard">Postcard</a>, a no_std and embedded-systems friendly compact binary format.</li>
+<li><a href="https://github.com/enarx/ciborium">CBOR</a>, a Concise Binary Object Representation designed for small message
+size without the need for version negotiation.</li>
+<li><a href="https://github.com/dtolnay/serde-yaml">YAML</a>, a self-proclaimed human-friendly configuration language that ain’t
+markup language.</li>
+<li><a href="https://github.com/3Hren/msgpack-rust">MessagePack</a>, an efficient binary format that resembles a compact JSON.</li>
+<li><a href="https://docs.rs/toml">TOML</a>, a minimal configuration format used by <a href="https://doc.rust-lang.org/cargo/reference/manifest.html">Cargo</a>.</li>
+<li><a href="https://github.com/birkenfeld/serde-pickle">Pickle</a>, a format common in the Python world.</li>
+<li><a href="https://github.com/ron-rs/ron">RON</a>, a Rusty Object Notation.</li>
+<li><a href="https://github.com/mongodb/bson-rust">BSON</a>, the data storage and network transfer format used by MongoDB.</li>
+<li><a href="https://docs.rs/apache-avro">Avro</a>, a binary format used within Apache Hadoop, with support for schema
+definition.</li>
+<li><a href="https://github.com/callum-oakley/json5-rs">JSON5</a>, a superset of JSON including some productions from ES5.</li>
+<li><a href="https://docs.rs/serde_qs">URL</a> query strings, in the x-www-form-urlencoded format.</li>
+<li><a href="https://github.com/dtolnay/serde-starlark">Starlark</a>, the format used for describing build targets by the Bazel and
+Buck build systems. <em>(serialization only)</em></li>
+<li><a href="https://github.com/softprops/envy">Envy</a>, a way to deserialize environment variables into Rust structs.
+<em>(deserialization only)</em></li>
+<li><a href="https://github.com/softprops/envy-store">Envy Store</a>, a way to deserialize <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html">AWS Parameter Store</a> parameters into
+Rust structs. <em>(deserialization only)</em></li>
+<li><a href="https://github.com/rotty/lexpr-rs">S-expressions</a>, the textual representation of code and data used by the
+Lisp language family.</li>
+<li><a href="https://docs.rs/zvariant">D-Bus</a>’s binary wire format.</li>
+<li><a href="https://github.com/google/flatbuffers/tree/master/rust/flexbuffers">FlexBuffers</a>, the schemaless cousin of Google’s FlatBuffers zero-copy
+serialization format.</li>
+<li><a href="https://github.com/P3KI/bendy">Bencode</a>, a simple binary format used in the BitTorrent protocol.</li>
+<li><a href="https://github.com/oxidecomputer/serde_tokenstream">Token streams</a>, for processing Rust procedural macro input.
+<em>(deserialization only)</em></li>
+<li><a href="https://docs.rs/serde_dynamo">DynamoDB Items</a>, the format used by <a href="https://docs.rs/rusoto_dynamodb">rusoto_dynamodb</a> to transfer data to
+and from DynamoDB.</li>
+<li><a href="https://github.com/Canop/deser-hjson">Hjson</a>, a syntax extension to JSON designed around human reading and
+editing. <em>(deserialization only)</em></li>
+<li><a href="https://docs.rs/csv">CSV</a>, Comma-separated values is a tabular text file format.</li>
+</ul>
+</div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><dl class="item-table"><dt><a class="mod" href="de/index.html" title="mod serde::de">de</a></dt><dd>Generic data structure deserialization framework.</dd><dt><a class="mod" href="ser/index.html" title="mod serde::ser">ser</a></dt><dd>Generic data structure serialization framework.</dd></dl><h2 id="macros" class="section-header">Macros<a href="#macros" class="anchor">§</a></h2><dl class="item-table"><dt><a class="macro" href="macro.forward_to_deserialize_any.html" title="macro serde::forward_to_deserialize_any">forward_<wbr>to_<wbr>deserialize_<wbr>any</a></dt><dd>Helper macro when implementing the <code>Deserializer</code> part of a new data format
+for Serde.</dd></dl><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><dl class="item-table"><dt><a class="trait" href="trait.Deserialize.html" title="trait serde::Deserialize">Deserialize</a></dt><dd>A <strong>data structure</strong> that can be deserialized from any data format supported
+by Serde.</dd><dt><a class="trait" href="trait.Deserializer.html" title="trait serde::Deserializer">Deserializer</a></dt><dd>A <strong>data format</strong> that can deserialize any data structure supported by
+Serde.</dd><dt><a class="trait" href="trait.Serialize.html" title="trait serde::Serialize">Serialize</a></dt><dd>A <strong>data structure</strong> that can be serialized into any data format supported
+by Serde.</dd><dt><a class="trait" href="trait.Serializer.html" title="trait serde::Serializer">Serializer</a></dt><dd>A <strong>data format</strong> that can serialize any data structure supported by Serde.</dd></dl><h2 id="derives" class="section-header">Derive Macros<a href="#derives" class="anchor">§</a></h2><dl class="item-table"><dt><a class="derive" href="derive.Deserialize.html" title="derive serde::Deserialize">Deserialize</a><wbr><span class="stab portability" title="Available on crate feature `derive` only"><code>derive</code></span></dt><dd>Derive macro available if serde is built with <code>features = ["derive"]</code>.</dd><dt><a class="derive" href="derive.Serialize.html" title="derive serde::Serialize">Serialize</a><wbr><span class="stab portability" title="Available on crate feature `derive` only"><code>derive</code></span></dt><dd>Derive macro available if serde is built with <code>features = ["derive"]</code>.</dd></dl></section></div></main></div></body></html>

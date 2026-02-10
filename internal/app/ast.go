@@ -416,7 +416,6 @@ func ExtractPackageDependencies(
 
 		return nil
 	}, projectPath, ".go", true)
-
 	if err != nil {
 		return nil, err
 	}
@@ -517,6 +516,232 @@ func isStandardLibrary(importPath string) bool {
 // isLocalImport checks if an import path is from the local project
 func isLocalImport(importPath, moduleName string) bool {
 	return strings.HasPrefix(importPath, moduleName)
+}
+
+// OutlineGoPackageOptions controls which sections are included in the outline.
+type OutlineGoPackageOptions struct {
+	SkipDependencies  bool
+	SkipDeclarations  bool
+	SkipCallGraph     bool
+}
+
+// OutlineGoPackage produces a comprehensive outline of a Go package:
+// dependencies, exported declarations, and call graph.
+// Individual sections can be disabled via opts to reduce output size.
+func OutlineGoPackage(
+	ctx context.Context, fw repository.FileWalker, directory string, opts OutlineGoPackageOptions,
+) (string, error) {
+	var sb strings.Builder
+
+	// Always extract dependencies for the module name header
+	depResult, err := ExtractPackageDependencies(ctx, fw, directory)
+	if err != nil {
+		return "", fmt.Errorf("extracting dependencies: %w", err)
+	}
+
+	sb.WriteString(fmt.Sprintf("Package outline for: %s\n", directory))
+	sb.WriteString(fmt.Sprintf("Module: %s\n\n", depResult.ModuleName))
+
+	if !opts.SkipDependencies {
+		sb.WriteString("== Dependencies ==\n")
+		formatDepsRelative(&sb, depResult)
+	}
+
+	if !opts.SkipDeclarations {
+		declResults, err := ExtractDeclarations(ctx, fw, directory)
+		if err != nil {
+			return "", fmt.Errorf("extracting declarations: %w", err)
+		}
+
+		sb.WriteString("== Declarations ==\n")
+		if len(declResults) == 0 {
+			sb.WriteString("No exported declarations found.\n")
+		} else {
+			for _, result := range declResults {
+				sb.WriteString(fmt.Sprintf("File: %s\n", result.Filename))
+				for _, decl := range result.Declarations {
+					if decl.Info != "" {
+						sb.WriteString(fmt.Sprintf(
+							"- %s: %s (%s) [line %d]\n",
+							decl.Type, decl.Name, decl.Info, decl.Line,
+						))
+					} else {
+						sb.WriteString(fmt.Sprintf("- %s: %s [line %d]\n", decl.Type, decl.Name, decl.Line))
+					}
+				}
+			}
+		}
+		sb.WriteString("\n")
+	}
+
+	if !opts.SkipCallGraph {
+		sb.WriteString("== Call Graph ==\n")
+		callGraphCount := 0
+
+		err = fw.Walk(ctx, func(filePath string) error {
+			if strings.HasSuffix(filePath, "_test.go") {
+				return nil
+			}
+
+			result, cgErr := ExtractCallGraph(filePath)
+			if cgErr != nil {
+				return nil // skip unparseable files
+			}
+
+			if len(result.CallGraph) == 0 {
+				return nil
+			}
+
+			callGraphCount++
+			sb.WriteString(fmt.Sprintf("File: %s\n", result.Filename))
+
+			for _, entry := range result.CallGraph {
+				calls := filterCallGraphNoise(entry.Calls)
+				if len(calls) == 0 {
+					continue
+				}
+
+				sb.WriteString(fmt.Sprintf("  %s\n", entry.Function))
+
+				for _, call := range calls {
+					if call.Package != "" {
+						sb.WriteString(fmt.Sprintf("    -> %s.%s\n", call.Package, call.Name))
+					} else {
+						sb.WriteString(fmt.Sprintf("    -> %s\n", call.Name))
+					}
+				}
+			}
+
+			return nil
+		}, directory, ".go", true)
+		if err != nil {
+			return "", fmt.Errorf("walking for call graph: %w", err)
+		}
+
+		if callGraphCount == 0 {
+			sb.WriteString("No exported function calls found.\n")
+		}
+	}
+
+	return sb.String(), nil
+}
+
+// formatDepsRelative writes dependency info using relative file paths.
+func formatDepsRelative(sb *strings.Builder, result *DependencyGraphResult) {
+	if len(result.Dependencies) == 0 {
+		sb.WriteString("No Go files with imports found.\n")
+		return
+	}
+
+	cwd, _ := os.Getwd()
+
+	for _, dep := range result.Dependencies {
+		if len(dep.Imports) == 0 {
+			continue
+		}
+
+		relPath := dep.FilePath
+		if cwd != "" {
+			if r, err := filepath.Rel(cwd, dep.FilePath); err == nil {
+				relPath = r
+			}
+		}
+
+		sb.WriteString(fmt.Sprintf("%s (package %s)\n", relPath, dep.PackageName))
+
+		var localImports, stdlibImports, externalImports []PackageImport
+		for _, imp := range dep.Imports {
+			if imp.IsLocal {
+				localImports = append(localImports, imp)
+			} else if imp.IsStdlib {
+				stdlibImports = append(stdlibImports, imp)
+			} else {
+				externalImports = append(externalImports, imp)
+			}
+		}
+
+		if len(localImports) > 0 {
+			sb.WriteString("  Local: ")
+			for i, imp := range localImports {
+				if i > 0 {
+					sb.WriteString(", ")
+				}
+				sb.WriteString(imp.Path)
+			}
+			sb.WriteString("\n")
+		}
+
+		if len(externalImports) > 0 {
+			sb.WriteString("  External: ")
+			for i, imp := range externalImports {
+				if i > 0 {
+					sb.WriteString(", ")
+				}
+				sb.WriteString(imp.Path)
+			}
+			sb.WriteString("\n")
+		}
+
+		if len(stdlibImports) > 0 {
+			sb.WriteString("  Stdlib: ")
+			for i, imp := range stdlibImports {
+				if i > 0 {
+					sb.WriteString(", ")
+				}
+				sb.WriteString(imp.Path)
+			}
+			sb.WriteString("\n")
+		}
+	}
+
+	sb.WriteString("\n")
+}
+
+// callGraphNoisePackages contains stdlib packages whose calls are too common to be useful.
+var callGraphNoisePackages = map[string]bool{
+	"fmt": true, "strings": true, "strconv": true, "bytes": true,
+	"sort": true, "slices": true, "maps": true,
+	"log": true, "slog": true,
+}
+
+// callGraphNoiseBuiltins contains built-in functions that add no insight.
+var callGraphNoiseBuiltins = map[string]bool{
+	"len": true, "cap": true, "make": true, "new": true,
+	"append": true, "copy": true, "delete": true, "close": true,
+	"panic": true, "recover": true, "print": true, "println": true,
+	"error": true,
+}
+
+// filterCallGraphNoise removes trivial calls (builtins, common stdlib,
+// unexported locals, method calls on local variables) to keep the call graph
+// focused on meaningful relationships.
+func filterCallGraphNoise(calls []FunctionCall) []FunctionCall {
+	var filtered []FunctionCall
+	for _, c := range calls {
+		// Skip builtins
+		if c.Package == "" && callGraphNoiseBuiltins[c.Name] {
+			continue
+		}
+		// Skip noisy stdlib packages
+		if callGraphNoisePackages[c.Package] {
+			continue
+		}
+		// Skip method calls on local variables (e.g., m.Match, sb.WriteString)
+		// — the AST parser reports these as Package="m", Name="Match";
+		// real package names are always lowercase but local vars are too,
+		// so we distinguish by checking if the "package" looks like a variable
+		// (no dots, not in the import list). A good heuristic: real Go package
+		// identifiers are multi-char and conventionally not single letters.
+		if c.Package != "" && len(c.Package) <= 2 {
+			continue
+		}
+		// Skip unexported local function calls
+		if c.Package == "" && len(c.Name) > 0 && c.Name[0] >= 'a' && c.Name[0] <= 'z' {
+			continue
+		}
+		filtered = append(filtered, c)
+	}
+	return filtered
 }
 
 // FormatDependencyGraph formats the dependency graph results as a readable string

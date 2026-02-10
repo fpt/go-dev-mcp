@@ -1,0 +1,2766 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-layout="responsive" data-local="">
+  <head>
+    
+    <script>
+      window.addEventListener('error', window.__err=function f(e){f.p=f.p||[];f.p.push(e)});
+    </script>
+    <script>
+      (function() {
+        const theme = document.cookie.match(/prefers-color-scheme=(light|dark|auto)/)?.[1]
+        if (theme) {
+          document.querySelector('html').setAttribute('data-theme', theme);
+        }
+      }())
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Description" content="Package fs defines basic interfaces to a file system.">
+    
+    <meta class="js-gtmID" data-gtmid="GTM-W8MVQXG">
+    <link rel="shortcut icon" href="/static/shared/icon/favicon.ico">
+    
+  
+    <link rel="canonical" href="https://pkg.go.dev/io/fs">
+  
+
+    <link href="/static/frontend/frontend.min.css?version=prod-frontend-00140-lzv" rel="stylesheet">
+    
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Go Packages">
+    
+    
+  <title>fs package - io/fs - Go Packages</title>
+
+    
+  <link href="/static/frontend/unit/unit.min.css?version=prod-frontend-00140-lzv" rel="stylesheet">
+  
+  <link href="/static/frontend/unit/main/main.min.css?version=prod-frontend-00140-lzv" rel="stylesheet">
+
+
+  </head>
+  <body>
+    
+    <script>
+      function loadScript(src, mod = true) {
+        let s = document.createElement('script');
+        s.src = src;
+        if (mod) {
+          s.type = 'module';
+          s.async = true;
+          s.defer = true
+        }
+        document.head.appendChild(s);
+      }
+      loadScript("/third_party/dialog-polyfill/dialog-polyfill.js", false)
+      loadScript("/static/frontend/frontend.js");
+    </script>
+    
+  <header class="go-Header go-Header--full js-siteHeader">
+    <div class="go-Header-inner go-Header-inner--dark">
+      <nav class="go-Header-nav">
+        <a href="https://go.dev/" class="js-headerLogo" data-gtmc="nav link"
+            data-test-id="go-header-logo-link" role="heading" aria-level="1">
+          <img class="go-Header-logo" src="/static/shared/logo/go-white.svg" alt="Go">
+        </a>
+         <div class="skip-navigation-wrapper">
+            <a class="skip-to-content-link" aria-label="Skip to main content" href="#main-content"> Skip to Main Content </a>
+          </div>
+        <div class="go-Header-rightContent">
+          
+<div class="go-SearchForm js-searchForm">
+  <form
+    class="go-InputGroup go-ShortcutKey go-SearchForm-form"
+    action="/search"
+    data-shortcut="/"
+    data-shortcut-alt="search"
+    data-gtmc="search form"
+    aria-label="Search for a package"
+    role="search"
+  >
+    <input name="q" class="go-Input js-searchFocus" aria-label="Search for a package" type="search"
+        autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"
+        placeholder="Search packages or symbols"
+        value="" />
+    <input name="m" value="" hidden>
+    <button class="go-Button go-Button--inverted" aria-label="Submit search">
+      <img
+        class="go-Icon"
+        height="24"
+        width="24"
+        src="/static/shared/icon/search_gm_grey_24dp.svg"
+        alt=""
+      />
+    </button>
+  </form>
+  <button class="go-SearchForm-expandSearch js-expandSearch" data-gtmc="nav button"
+      aria-label="Open search" data-test-id="expand-search">
+    <img class="go-Icon go-Icon--inverted" height="24" width="24"
+        src="/static/shared/icon/search_gm_grey_24dp.svg" alt="">
+
+  </button>
+</div>
+
+          <ul class="go-Header-menu">
+            <li class="go-Header-menuItem">
+              <a class="js-desktop-menu-hover" href="#" data-gtmc="nav link">
+                Why Go
+                <img class="go-Icon" height="24" width="24" src="/static/shared/icon/arrow_drop_down_gm_grey_24dp.svg" alt="submenu dropdown icon">
+              </a>
+              <ul class="go-Header-submenu go-Header-submenu--why js-desktop-submenu-hover" aria-label="submenu">
+                  <li class="go-Header-submenuItem">
+                    <div>
+                      <a href="https://go.dev/solutions#case-studies">
+                        <span>Case Studies</span>
+                      </a>
+                    </div>
+                    <p>Common problems companies solve with Go</p>
+                  </li>
+                  <li class="go-Header-submenuItem">
+                    <div>
+                      <a href="https://go.dev/solutions#use-cases">
+                        <span>Use Cases</span>
+                      </a>
+                    </div>
+                    <p>Stories about how and why companies use Go</p>
+                  </li>
+                  <li class="go-Header-submenuItem">
+                    <div>
+                      <a href="https://go.dev/security/">
+                        <span>Security</span>
+                      </a>
+                    </div>
+                    <p>How Go can help keep you secure by default</p>
+                  </li>
+              </ul>
+            </li>
+            <li class="go-Header-menuItem">
+              <a href="https://go.dev/learn/" data-gtmc="nav link">Learn</a>
+            </li>
+            <li class="go-Header-menuItem">
+              <a class="js-desktop-menu-hover" href="#" data-gtmc="nav link">
+                Docs
+                <img class="go-Icon" height="24" width="24" src="/static/shared/icon/arrow_drop_down_gm_grey_24dp.svg" alt="submenu dropdown icon">
+              </a>
+              <ul class="go-Header-submenu go-Header-submenu--docs js-desktop-submenu-hover" aria-label="submenu">
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/doc/effective_go">
+                      <span>Effective Go</span>
+                    </a>
+                  </div>
+                  <p>Tips for writing clear, performant, and idiomatic Go code</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/doc/">
+                      <span>Go User Manual</span>
+                    </a>
+                  </div>
+                  <p>A complete introduction to building software with Go</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://pkg.go.dev/std">
+                      <span>Standard library</span>
+                    </a>
+                  </div>
+                  <p>Reference documentation for Go's standard library</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/doc/devel/release">
+                      <span>Release Notes</span>
+                    </a>
+                  </div>
+                  <p>Learn what's new in each Go release</p>
+                </li>
+              </ul>
+            </li>
+            <li class="go-Header-menuItem go-Header-menuItem--active">
+              <a href="/" data-gtmc="nav link">Packages</a>
+            </li>
+            <li class="go-Header-menuItem">
+              <a class="js-desktop-menu-hover" href="#" data-gtmc="nav link">
+                Community
+                <img class="go-Icon" height="24" width="24" src="/static/shared/icon/arrow_drop_down_gm_grey_24dp.svg" alt="submenu dropdown icon">
+              </a>
+              <ul class="go-Header-submenu go-Header-submenu--community js-desktop-submenu-hover" aria-label="submenu">
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/talks/">
+                      <span>Recorded Talks</span>
+                    </a>
+                  </div>
+                  <p>Videos from prior events</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://www.meetup.com/pro/go">
+                      <span>Meetups</span>
+                      <i class="material-icons">
+                        <img class="go-Icon" height="24" width="24"
+                            src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </div>
+                  <p>Meet other local Go developers</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://github.com/golang/go/wiki/Conferences">
+                      <span>Conferences</span>
+                      <i class="material-icons">
+                        <img class="go-Icon" height="24" width="24"
+                            src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </div>
+                  <p>Learn and network with Go developers from around the world</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/blog">
+                      <span>Go blog</span>
+                    </a>
+                  </div>
+                  <p>The Go project's official blog.</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/help">
+                      <span>Go project</span>
+                    </a>
+                  </div>
+                  <p>Get help and stay informed from Go</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    Get connected
+                  </div>
+                  <p></p>
+                  <div class="go-Header-socialIcons">
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with google-groups (Opens in new window)"
+                        title="Get connected with google-groups (Opens in new window)"
+                        href="https://groups.google.com/g/golang-nuts">
+                        <img src="/static/shared/logo/social/google-groups.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with github (Opens in new window)"
+                        title="Get connected with github (Opens in new window)"
+                        href="https://github.com/golang">
+                        <img src="/static/shared/logo/social/github.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with twitter (Opens in new window)"
+                        title="Get connected with twitter (Opens in new window)"
+                        href="https://twitter.com/golang">
+                        <img src="/static/shared/logo/social/twitter.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with reddit (Opens in new window)"
+                        title="Get connected with reddit (Opens in new window)"
+                        href="https://www.reddit.com/r/golang/">
+                        <img src="/static/shared/logo/social/reddit.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with slack (Opens in new window)"
+                        title="Get connected with slack (Opens in new window)"
+                        href="https://invite.slack.golangbridge.org/">
+                        <img src="/static/shared/logo/social/slack.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with stack-overflow (Opens in new window)"
+                        title=""
+                        href="https://stackoverflow.com/collectives/go">
+                        <img src="/static/shared/logo/social/stack-overflow.svg" />
+                      </a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <button class="go-Header-navOpen js-headerMenuButton go-Header-navOpen--white" data-gtmc="nav button" aria-label="Open navigation">
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <aside class="go-NavigationDrawer js-header">
+    <nav class="go-NavigationDrawer-nav">
+      <div class="go-NavigationDrawer-header">
+        <a href="https://go.dev/">
+          <img class="go-NavigationDrawer-logo" src="/static/shared/logo/go-blue.svg" alt="Go.">
+        </a>
+      </div>
+      <ul class="go-NavigationDrawer-list">
+          <li class="go-NavigationDrawer-listItem js-mobile-subnav-trigger go-NavigationDrawer-hasSubnav">
+            <a href="#">
+              <span>Why Go</span>
+              <i class="material-icons">
+                <img class="go-Icon" height="24" width="24"
+                  src="/static/shared/icon/navigate_next_gm_grey_24dp.svg" alt="">
+              </i>
+            </a>
+
+            <div class="go-NavigationDrawer go-NavigationDrawer-submenuItem">
+              <div class="go-NavigationDrawer-nav">
+                <div class="go-NavigationDrawer-header">
+                  <a href="#">
+                    <i class="material-icons">
+                      <img class="go-Icon" height="24" width="24"
+                        src="/static/shared/icon/navigate_before_gm_grey_24dp.svg" alt="">
+                      </i>
+                      Why Go
+                  </a>
+                </div>
+                <ul class="go-NavigationDrawer-list">
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/solutions#case-studies">
+                      Case Studies
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/solutions#use-cases">
+                      Use Cases
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/security/">
+                      Security
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="go-NavigationDrawer-listItem">
+            <a href="https://go.dev/learn/">Learn</a>
+          </li>
+          <li class="go-NavigationDrawer-listItem js-mobile-subnav-trigger go-NavigationDrawer-hasSubnav">
+            <a href="#">
+              <span>Docs</span>
+              <i class="material-icons">
+                <img class="go-Icon" height="24" width="24"
+                  src="/static/shared/icon/navigate_next_gm_grey_24dp.svg" alt="">
+              </i>
+            </a>
+
+            <div class="go-NavigationDrawer go-NavigationDrawer-submenuItem">
+              <div class="go-NavigationDrawer-nav">
+                <div class="go-NavigationDrawer-header">
+                  <a href="#"><i class="material-icons">
+                    <img class="go-Icon" height="24" width="24"
+                      src="/static/shared/icon/navigate_before_gm_grey_24dp.svg" alt="">
+                    </i>
+                    Docs
+                  </a>
+                </div>
+                <ul class="go-NavigationDrawer-list">
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/doc/effective_go">
+                      Effective Go
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/doc/">
+                      Go User Manual
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://pkg.go.dev/std">
+                      Standard library
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/doc/devel/release">
+                      Release Notes
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="go-NavigationDrawer-listItem go-NavigationDrawer-listItem--active">
+            <a href="/">Packages</a>
+          </li>
+          <li class="go-NavigationDrawer-listItem js-mobile-subnav-trigger go-NavigationDrawer-hasSubnav">
+            <a href="#">
+              <span>Community</span>
+              <i class="material-icons">
+                <img class="go-Icon" height="24" width="24"
+                  src="/static/shared/icon/navigate_next_gm_grey_24dp.svg" alt="">
+              </i>
+            </a>
+            <div class="go-NavigationDrawer go-NavigationDrawer-submenuItem">
+              <div class="go-NavigationDrawer-nav">
+                <div class="go-NavigationDrawer-header">
+                  <a href="#">
+                    <i class="material-icons">
+                      <img class="go-Icon" height="24" width="24"
+                        src="/static/shared/icon/navigate_before_gm_grey_24dp.svg" alt="">
+                    </i>
+                    Community
+                  </a>
+                </div>
+                <ul class="go-NavigationDrawer-list">
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/talks/">
+                      Recorded Talks
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://www.meetup.com/pro/go">
+                      Meetups
+                      <i class="material-icons">
+                      <img class="go-Icon" height="24" width="24"
+                          src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://github.com/golang/go/wiki/Conferences">
+                      Conferences
+                      <i class="material-icons">
+                        <img class="go-Icon" height="24" width="24" src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/blog">
+                      Go blog
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/help">
+                      Go project
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <div>Get connected</div>
+                    <div class="go-Header-socialIcons">
+                        <a class="go-Header-socialIcon" href="https://groups.google.com/g/golang-nuts"><img src="/static/shared/logo/social/google-groups.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://github.com/golang"><img src="/static/shared/logo/social/github.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://twitter.com/golang"><img src="/static/shared/logo/social/twitter.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://www.reddit.com/r/golang/"><img src="/static/shared/logo/social/reddit.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://invite.slack.golangbridge.org/"><img src="/static/shared/logo/social/slack.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://stackoverflow.com/collectives/go"><img src="/static/shared/logo/social/stack-overflow.svg" /></a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+      </ul>
+    </nav>
+  </aside>
+  <div class="go-NavigationDrawer-scrim js-scrim" role="presentation"></div>
+
+    
+  <main class="go-Main" id="main-content">
+    <div class="go-Main-banner" role="alert"></div>
+    <header class="go-Main-header js-mainHeader">
+  
+  
+  <nav class="go-Main-headerBreadcrumb go-Breadcrumb" aria-label="Breadcrumb" data-test-id="UnitHeader-breadcrumb">
+    <ol>
+      
+        
+          <li data-test-id="UnitHeader-breadcrumbItem">
+            <a href="/" data-gtmc="breadcrumb link">Discover Packages</a>
+          </li>
+        
+          <li data-test-id="UnitHeader-breadcrumbItem">
+            <a href="/std" data-gtmc="breadcrumb link">Standard library</a>
+          </li>
+        
+          <li data-test-id="UnitHeader-breadcrumbItem">
+            <a href="/io" data-gtmc="breadcrumb link">io</a>
+          </li>
+        
+        <li>
+          <a href="/io/fs@go1.25.7" data-gtmc="breadcrumb link" aria-current="location"
+              data-test-id="UnitHeader-breadcrumbCurrent">
+            fs
+          </a>
+          
+            <button
+              class="go-Button go-Button--inline go-Clipboard js-clipboard"
+              title="Copy path to clipboard.&#10;&#10;io/fs"
+              aria-label="Copy Path to Clipboard"
+              data-to-copy="io/fs"
+              data-gtmc="breadcrumbs button"
+            >
+              <img
+                class="go-Icon go-Icon--accented"
+                height="24"
+                width="24"
+                src="/static/shared/icon/content_copy_gm_grey_24dp.svg"
+                alt=""
+              >
+            </button>
+          
+        
+      </li>
+    </ol>
+  </nav>
+
+  <div class="go-Main-headerContent">
+    
+  <div class="go-Main-headerTitle js-stickyHeader">
+    <a class="go-Main-headerLogo" href="https://go.dev/" aria-hidden="true" tabindex="-1" data-gtmc="header link" aria-label="Link to Go Homepage">
+      <img height="78" width="207" src="/static/shared/logo/go-blue.svg" alt="Go">
+    </a>
+    <h1 class="UnitHeader-titleHeading" data-test-id="UnitHeader-title">fs</h1>
+    
+      <span class="go-Chip go-Chip--inverted">package</span>
+    
+      <span class="go-Chip go-Chip--inverted">standard library</span>
+    
+    
+      
+        <button
+          class="go-Button go-Button--inline go-Clipboard js-clipboard"
+          title="Copy path to clipboard.&#10;&#10;io/fs"
+          aria-label="Copy Path to Clipboard"
+          data-to-copy="io/fs"
+          data-gtmc="title button"
+          tabindex="-1"
+        >
+          <img
+            class="go-Icon go-Icon--accented"
+            height="24"
+            width="24"
+            src="/static/shared/icon/content_copy_gm_grey_24dp.svg"
+            alt=""
+          />
+        </button>
+      
+    
+  </div>
+
+    
+      
+  <div class="go-Main-headerDetails">
+    
+      
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-version">
+    <a href="?tab=versions" aria-label="Version: go1.25.7" 
+    data-gtmc="header link" aria-describedby="version-description">
+      <span class="go-textSubtle" aria-hidden="true">Version: </span>
+        go1.25.7
+    </a>
+    <div class="screen-reader-only" id="version-description" hidden>
+      Opens a new window with list of versions in this module.
+    </div>
+    
+    <span class="DetailsHeader-badge--latest" data-test-id="UnitHeader-minorVersionBanner">
+      <span class="go-Chip DetailsHeader-span--latest">Latest</span>
+      <span class="go-Chip DetailsHeader-span--notAtLatest">
+        Latest
+        
+  <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+    <summary>
+      <img class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/alert_gm_grey_24dp.svg" alt="Warning">
+    </summary>
+    <p>This package is not in the latest version of its module.</p>
+  </details>
+
+      </span>
+      <a href="/io/fs" aria-label="Go to Latest Version" data-gtmc="header link">
+        <span class="go-Chip go-Chip--alert DetailsHeader-span--goToLatest">Go to latest</span>
+      </a>
+    </span>
+  </span>
+
+      
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-commitTime">
+    Published: Feb  4, 2026
+  </span>
+
+      
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-licenses">
+    License: <a href="/io/fs?tab=licenses" data-test-id="UnitHeader-license" 
+        data-gtmc="header link" aria-describedby="license-description">BSD-3-Clause</a>
+      
+    
+  </span>
+  <div class="screen-reader-only" id="license-description" hidden>
+    Opens a new window with license information.
+  </div>
+
+      
+        
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-imports">
+    <a href="/io/fs?tab=imports" aria-label="Imports: 8"
+        data-gtmc="header link" aria-describedby="imports-description">
+      <span class="go-textSubtle">Imports: </span>8
+    </a>
+  </span>
+  <div class="screen-reader-only" id="imports-description" hidden>
+    Opens a new window with list of imports.
+  </div>
+
+        
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-importedby">
+    <a href="/io/fs?tab=importedby" aria-label="Imported By: 41,598"
+        data-gtmc="header link" aria-describedby="importedby-description">
+       <span class="go-textSubtle">Imported by: </span>41,598
+    </a>
+  </span>
+  <div class="screen-reader-only" id="importedby-description" hidden>
+    Opens a new window with list of known importers.
+  </div>
+
+      
+    
+  </div>
+  
+  <div class="UnitHeader-overflowContainer">
+    <svg class="UnitHeader-overflowImage" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+    </svg>
+    <select class="UnitHeader-overflowSelect js-selectNav" tabindex="-1">
+      <option value="/">Main</option>
+      <option value="/io/fs?tab=versions">
+        Versions
+      </option>
+      <option value="/io/fs?tab=licenses">
+        Licenses
+      </option>
+      
+        <option value="/io/fs?tab=imports">
+          Imports
+        </option>
+        <option value="/io/fs?tab=importedby">
+          Imported By
+        </option>
+      
+    </select>
+  </div>
+
+
+    
+  </div>
+
+</header>
+    
+      <aside class="go-Main-aside  js-mainAside">
+  
+  <div class="UnitMeta">
+    <h2 class="go-textLabel">Details</h2>
+    
+  <ul class="UnitMeta-details">
+    <li>
+      <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+        <summary class="go-textSubtle">
+          
+  <img class="go-Icon go-Icon--accented"
+    tabindex="0"
+    role="button"src="/static/shared/icon/check_circle_gm_grey_24dp.svg" alt="checked" aria-label="Valid file, toggle tooltip"height="24" width="24">
+
+          Valid <a href="https://cs.opensource.google/go/go/+/go1.25.7:src/go.mod" target="_blank" rel="noopener">go.mod</a> file
+          <img class="go-Icon" role="button" tabindex="0" src="/static/shared/icon/help_gm_grey_24dp.svg" alt="" aria-label="Toggle go.mod validity tooltip" height="24" width="24">
+        </summary>
+        <p aria-live="polite" role="tooltip">
+          The Go module system was introduced in Go 1.11 and is the official dependency management
+          solution for Go.
+        </p>
+      </details>
+    </li>
+    <li>
+      <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+        <summary class="go-textSubtle">
+          
+  <img class="go-Icon go-Icon--accented"
+    tabindex="0"
+    role="button"src="/static/shared/icon/check_circle_gm_grey_24dp.svg" alt="checked" aria-label="Valid file, toggle tooltip"height="24" width="24">
+
+          Redistributable license
+          <img class="go-Icon" role="button" tabindex="0" src="/static/shared/icon/help_gm_grey_24dp.svg" alt="" aria-label="Toggle redistributable help tooltip" height="24" width="24">
+        </summary>
+        <p aria-live="polite" role="tooltip">
+          Redistributable licenses place minimal restrictions on how software can be used,
+          modified, and redistributed.
+        </p>
+      </details>
+    </li>
+    <li>
+      <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+        <summary class="go-textSubtle">
+          
+  <img class="go-Icon go-Icon--accented"
+    tabindex="0"
+    role="button"src="/static/shared/icon/check_circle_gm_grey_24dp.svg" alt="checked" aria-label="Valid file, toggle tooltip"height="24" width="24">
+
+          Tagged version
+          <img class="go-Icon" role="button" tabindex="0" src="/static/shared/icon/help_gm_grey_24dp.svg" alt="" aria-label="Toggle tagged version tooltip" height="24" width="24">
+        </summary>
+        <p aria-live="polite" role="tooltip">Modules with tagged versions give importers more predictable builds.</p>
+      </details>
+    </li>
+    <li>
+      <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+        <summary class="go-textSubtle">
+          
+  <img class="go-Icon go-Icon--accented"
+    tabindex="0"
+    role="button"src="/static/shared/icon/check_circle_gm_grey_24dp.svg" alt="checked" aria-label="Valid file, toggle tooltip"height="24" width="24">
+
+          Stable version
+          <img class="go-Icon" role="button" tabindex="0" aria-label="Toggle stable version tooltip" src="/static/shared/icon/help_gm_grey_24dp.svg" alt="" height="24" width="24">
+        </summary>
+        <p aria-live="polite" role="tooltip">When a project reaches major version v1 it is considered stable.</p>
+      </details>
+    </li>
+    <li class="UnitMeta-detailsLearn">
+      <a href="/about#best-practices" data-gtmc="meta link">Learn more about best practices</a>
+    </li>
+  </ul>
+
+    <h2 class="go-textLabel">Repository</h2>
+    <div class="UnitMeta-repo">
+      
+        <a href="https://cs.opensource.google/go/go" title="https://cs.opensource.google/go/go" target="_blank" rel="noopener">
+          cs.opensource.google/go/go
+        </a>
+      
+    </div>
+    
+      <h2 class="go-textLabel" data-test-id="links-heading">Links</h2>
+      <ul class="UnitMeta-links">
+        
+          <li>
+            <a href="https://go.dev/security/policy"
+                title="Report security issues in the Go standard library and sub-repositories">
+              <img class="go-Icon" height="24" width="24" src="/static/shared/icon/security_grey_24dp.svg" alt="">
+              Report a Vulnerability
+            </a>
+          </li>
+        
+        
+        
+        
+  
+
+        
+  
+
+        
+  
+
+      </ul>
+    
+  </div>
+
+</aside>
+    
+    <nav class="go-Main-nav go-Main-nav--sticky js-mainNav" aria-label="Outline">
+  <div class="go-Main-navDesktop">
+    
+  <div class="UnitOutline-jumpTo">
+    <button class="UnitOutline-jumpToInput go-ShortcutKey js-jumpToInput"
+        aria-controls="jump-to-modal"
+        aria-label="Open Jump to Identifier"
+        data-shortcut="f"
+        data-shortcut-alt="find"
+        data-test-id="jump-to-button" data-gtmc="outline button">
+      Jump to ...
+    </button>
+  </div>
+  <ul class="go-Tree js-tree" role="tree" aria-label="Outline">
+    
+    
+      <li>
+        <a href="#section-documentation" data-gtmc="outline link">
+          Documentation
+        </a>
+        
+<ul>
+  
+    <li>
+      <a href="#pkg-overview" data-gtmc="doc outline link">Overview</a>
+    </li>
+  <li class="DocNav-overview">
+      <a href="#pkg-index" data-gtmc="doc outline link">
+        Index
+      </a>
+    </li>
+      <li>
+        <a href="#pkg-examples" data-gtmc="doc outline link">
+          Examples
+        </a>
+        <ul>
+            <li>
+              <a href="#example-Glob" title="Glob" data-gtmc="doc outline link">
+                Glob
+              </a>
+            </li>
+            <li>
+              <a href="#example-ReadFile" title="ReadFile" data-gtmc="doc outline link">
+                ReadFile
+              </a>
+            </li>
+            <li>
+              <a href="#example-ValidPath" title="ValidPath" data-gtmc="doc outline link">
+                ValidPath
+              </a>
+            </li>
+            <li>
+              <a href="#example-WalkDir" title="WalkDir" data-gtmc="doc outline link">
+                WalkDir
+              </a>
+            </li>
+        </ul>
+      </li>
+    <li class="DocNav-constants">
+      <a href="#pkg-constants" data-gtmc="doc outline link">
+        Constants
+      </a>
+    </li>
+    <li class="DocNav-variables">
+      <a href="#pkg-variables" data-gtmc="doc outline link">
+        Variables
+      </a>
+    </li>
+    <li class="DocNav-functions">
+      <a href="#pkg-functions" data-gtmc="doc outline link">
+        Functions
+      </a>
+      
+        <ul>
+          
+            <li>
+              <a href="#FormatDirEntry" title="FormatDirEntry(dir)" data-gtmc="doc outline link">
+                FormatDirEntry(dir)
+              </a>
+            </li>
+          
+            <li>
+              <a href="#FormatFileInfo" title="FormatFileInfo(info)" data-gtmc="doc outline link">
+                FormatFileInfo(info)
+              </a>
+            </li>
+          
+            <li>
+              <a href="#Glob" title="Glob(fsys, pattern)" data-gtmc="doc outline link">
+                Glob(fsys, pattern)
+              </a>
+            </li>
+          
+            <li>
+              <a href="#ReadFile" title="ReadFile(fsys, name)" data-gtmc="doc outline link">
+                ReadFile(fsys, name)
+              </a>
+            </li>
+          
+            <li>
+              <a href="#ReadLink" title="ReadLink(fsys, name)" data-gtmc="doc outline link">
+                ReadLink(fsys, name)
+              </a>
+            </li>
+          
+            <li>
+              <a href="#ValidPath" title="ValidPath(name)" data-gtmc="doc outline link">
+                ValidPath(name)
+              </a>
+            </li>
+          
+            <li>
+              <a href="#WalkDir" title="WalkDir(fsys, root, fn)" data-gtmc="doc outline link">
+                WalkDir(fsys, root, fn)
+              </a>
+            </li>
+          
+        </ul>
+      
+    </li>
+    <li class="DocNav-types">
+      <a href="#pkg-types" data-gtmc="doc outline link">
+        Types
+      </a>
+      <ul>
+        
+          
+          <li>
+            <a href="#DirEntry" title="type DirEntry" data-gtmc="doc outline link">
+              type DirEntry
+            </a>
+            
+              <ul>
+                
+                  <li>
+                    <a href="#FileInfoToDirEntry" title="FileInfoToDirEntry(info)"
+                        data-gtmc="doc outline link">
+                      FileInfoToDirEntry(info)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#ReadDir" title="ReadDir(fsys, name)"
+                        data-gtmc="doc outline link">
+                      ReadDir(fsys, name)
+                    </a>
+                  </li>
+                
+                
+              </ul>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#FS" title="type FS" data-gtmc="doc outline link">
+              type FS
+            </a>
+            
+              <ul>
+                
+                  <li>
+                    <a href="#Sub" title="Sub(fsys, dir)"
+                        data-gtmc="doc outline link">
+                      Sub(fsys, dir)
+                    </a>
+                  </li>
+                
+                
+              </ul>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#File" title="type File" data-gtmc="doc outline link">
+              type File
+            </a>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#FileInfo" title="type FileInfo" data-gtmc="doc outline link">
+              type FileInfo
+            </a>
+            
+              <ul>
+                
+                  <li>
+                    <a href="#Lstat" title="Lstat(fsys, name)"
+                        data-gtmc="doc outline link">
+                      Lstat(fsys, name)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Stat" title="Stat(fsys, name)"
+                        data-gtmc="doc outline link">
+                      Stat(fsys, name)
+                    </a>
+                  </li>
+                
+                
+              </ul>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#FileMode" title="type FileMode" data-gtmc="doc outline link">
+              type FileMode
+            </a>
+            
+              <ul>
+                
+                
+                  <li>
+                    <a href="#FileMode.IsDir" title="(m) IsDir()"
+                        data-gtmc="doc outline link">
+                      (m) IsDir()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#FileMode.IsRegular" title="(m) IsRegular()"
+                        data-gtmc="doc outline link">
+                      (m) IsRegular()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#FileMode.Perm" title="(m) Perm()"
+                        data-gtmc="doc outline link">
+                      (m) Perm()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#FileMode.String" title="(m) String()"
+                        data-gtmc="doc outline link">
+                      (m) String()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#FileMode.Type" title="(m) Type()"
+                        data-gtmc="doc outline link">
+                      (m) Type()
+                    </a>
+                  </li>
+                
+              </ul>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#GlobFS" title="type GlobFS" data-gtmc="doc outline link">
+              type GlobFS
+            </a>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#PathError" title="type PathError" data-gtmc="doc outline link">
+              type PathError
+            </a>
+            
+              <ul>
+                
+                
+                  <li>
+                    <a href="#PathError.Error" title="(e) Error()"
+                        data-gtmc="doc outline link">
+                      (e) Error()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#PathError.Timeout" title="(e) Timeout()"
+                        data-gtmc="doc outline link">
+                      (e) Timeout()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#PathError.Unwrap" title="(e) Unwrap()"
+                        data-gtmc="doc outline link">
+                      (e) Unwrap()
+                    </a>
+                  </li>
+                
+              </ul>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#ReadDirFS" title="type ReadDirFS" data-gtmc="doc outline link">
+              type ReadDirFS
+            </a>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#ReadDirFile" title="type ReadDirFile" data-gtmc="doc outline link">
+              type ReadDirFile
+            </a>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#ReadFileFS" title="type ReadFileFS" data-gtmc="doc outline link">
+              type ReadFileFS
+            </a>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#ReadLinkFS" title="type ReadLinkFS" data-gtmc="doc outline link">
+              type ReadLinkFS
+            </a>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#StatFS" title="type StatFS" data-gtmc="doc outline link">
+              type StatFS
+            </a>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#SubFS" title="type SubFS" data-gtmc="doc outline link">
+              type SubFS
+            </a>
+             
+          </li>
+        
+          
+          <li>
+            <a href="#WalkDirFunc" title="type WalkDirFunc" data-gtmc="doc outline link">
+              type WalkDirFunc
+            </a>
+             
+          </li>
+         
+      </ul>
+    </li>
+  
+  
+</ul>
+
+      </li>
+    
+    
+      <li>
+        <a href="#section-sourcefiles" data-gtmc="outline link">
+          Source Files
+        </a>
+      </li>
+    
+    
+  </ul>
+
+  </div>
+  <div class="go-Main-navMobile js-mainNavMobile">
+    <label class="go-Label">
+      <select class="go-Select">
+        
+          <option selected disabled>Documentation</option>
+        
+      </select>
+    </label>
+  </div>
+</nav>
+    <article class="go-Main-article js-mainContent">
+  <div class="UnitDetails" data-test-id="UnitDetails" style="display: block;">
+    <div class="UnitDetails-content js-unitDetailsContent" data-test-id="UnitDetails-content">
+      
+      
+        
+          
+  <div class="UnitDoc">
+    <h2 class="UnitDoc-title" id="section-documentation">
+      <img class="go-Icon" height="24" width="24" src="/static/shared/icon/code_gm_grey_24dp.svg" alt="">
+      Documentation
+      <a class="UnitDoc-idLink" href="#section-documentation" title="Go to Documentation" aria-label="Go to Documentation">¶</a>
+    </h2>
+    
+  
+    
+  
+
+    <div class="Documentation js-documentation">
+      
+        
+
+<div class="Documentation-content js-docContent"> <section class="Documentation-overview">
+    <h3 tabindex="-1" id="pkg-overview" class="Documentation-overviewHeader">Overview <a href="#pkg-overview" title="Go to Overview" aria-label="Go to Overview">¶</a></h3>
+
+<p>Package fs defines basic interfaces to a file system.
+A file system can be provided by the host operating system
+but also by other packages.
+</p><p>See the <a href="/testing/fstest">testing/fstest</a> package for support with testing
+implementations of file systems.
+</p>
+</section><section class="Documentation-index">
+    <h3 id="pkg-index" class="Documentation-indexHeader">Index <a href="#pkg-index" title="Go to Index" aria-label="Go to Index">¶</a></h3>
+
+<ul class="Documentation-indexList">
+<li class="Documentation-indexVariables"><a href="#pkg-variables">Variables</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#FormatDirEntry">func FormatDirEntry(dir DirEntry) string</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#FormatFileInfo">func FormatFileInfo(info FileInfo) string</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#Glob">func Glob(fsys FS, pattern string) (matches []string, err error)</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#ReadFile">func ReadFile(fsys FS, name string) ([]byte, error)</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#ReadLink">func ReadLink(fsys FS, name string) (string, error)</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#ValidPath">func ValidPath(name string) bool</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#WalkDir">func WalkDir(fsys FS, root string, fn WalkDirFunc) error</a></li>
+<li class="Documentation-indexType">
+          <a href="#DirEntry">type DirEntry</a></li>
+<li><ul class="Documentation-indexTypeFunctions">
+<li>
+            <a href="#FileInfoToDirEntry">func FileInfoToDirEntry(info FileInfo) DirEntry</a></li>
+<li>
+            <a href="#ReadDir">func ReadDir(fsys FS, name string) ([]DirEntry, error)</a></li>
+</ul></li>
+<li class="Documentation-indexType">
+          <a href="#FS">type FS</a></li>
+<li><ul class="Documentation-indexTypeFunctions">
+<li>
+            <a href="#Sub">func Sub(fsys FS, dir string) (FS, error)</a></li>
+</ul></li>
+<li class="Documentation-indexType">
+          <a href="#File">type File</a></li>
+<li class="Documentation-indexType">
+          <a href="#FileInfo">type FileInfo</a></li>
+<li><ul class="Documentation-indexTypeFunctions">
+<li>
+            <a href="#Lstat">func Lstat(fsys FS, name string) (FileInfo, error)</a></li>
+<li>
+            <a href="#Stat">func Stat(fsys FS, name string) (FileInfo, error)</a></li>
+</ul></li>
+<li class="Documentation-indexType">
+          <a href="#FileMode">type FileMode</a></li>
+<li><ul class="Documentation-indexTypeMethods">
+<li>
+            <a href="#FileMode.IsDir">func (m FileMode) IsDir() bool</a></li>
+<li>
+            <a href="#FileMode.IsRegular">func (m FileMode) IsRegular() bool</a></li>
+<li>
+            <a href="#FileMode.Perm">func (m FileMode) Perm() FileMode</a></li>
+<li>
+            <a href="#FileMode.String">func (m FileMode) String() string</a></li>
+<li>
+            <a href="#FileMode.Type">func (m FileMode) Type() FileMode</a></li>
+</ul></li>
+<li class="Documentation-indexType">
+          <a href="#GlobFS">type GlobFS</a></li>
+<li class="Documentation-indexType">
+          <a href="#PathError">type PathError</a></li>
+<li><ul class="Documentation-indexTypeMethods">
+<li>
+            <a href="#PathError.Error">func (e *PathError) Error() string</a></li>
+<li>
+            <a href="#PathError.Timeout">func (e *PathError) Timeout() bool</a></li>
+<li>
+            <a href="#PathError.Unwrap">func (e *PathError) Unwrap() error</a></li>
+</ul></li>
+<li class="Documentation-indexType">
+          <a href="#ReadDirFS">type ReadDirFS</a></li>
+<li class="Documentation-indexType">
+          <a href="#ReadDirFile">type ReadDirFile</a></li>
+<li class="Documentation-indexType">
+          <a href="#ReadFileFS">type ReadFileFS</a></li>
+<li class="Documentation-indexType">
+          <a href="#ReadLinkFS">type ReadLinkFS</a></li>
+<li class="Documentation-indexType">
+          <a href="#StatFS">type StatFS</a></li>
+<li class="Documentation-indexType">
+          <a href="#SubFS">type SubFS</a></li>
+<li class="Documentation-indexType">
+          <a href="#WalkDirFunc">type WalkDirFunc</a></li>
+</ul>
+</section><section class="Documentation-examples">
+    <h3 tabindex="-1" id="pkg-examples" class="Documentation-examplesHeader">Examples <a class="Documentation-idLink" href="#pkg-examples" title="Go to Examples" aria-label="Go to Examples">¶</a></h3>
+<ul class="Documentation-examplesList">
+<li><a href="#example-Glob" class="js-exampleHref">Glob</a></li>
+<li><a href="#example-ReadFile" class="js-exampleHref">ReadFile</a></li>
+<li><a href="#example-ValidPath" class="js-exampleHref">ValidPath</a></li>
+<li><a href="#example-WalkDir" class="js-exampleHref">WalkDir</a></li>
+</ul>
+</section><h3 tabindex="-1" id="pkg-constants" class="Documentation-constantsHeader">Constants <a href="#pkg-constants" title="Go to Constants" aria-label="Go to Constants">¶</a></h3>
+
+  <section class="Documentation-constants"><p class="Documentation-empty">This section is empty.</p></section>
+
+  <h3 tabindex="-1" id="pkg-variables" class="Documentation-variablesHeader">Variables <a href="#pkg-variables" title="Go to Variables" aria-label="Go to Variables">¶</a></h3>
+
+  <section class="Documentation-variables">
+    <div class="Documentation-declaration">
+      <span class="Documentation-declarationLink"><a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=143">View Source</a></span>
+      <pre>var (
+<span id="ErrInvalid" data-kind="variable">	ErrInvalid    = errInvalid()    <span class="comment">// &#34;invalid argument&#34;</span>
+</span><span id="ErrPermission" data-kind="variable">	ErrPermission = errPermission() <span class="comment">// &#34;permission denied&#34;</span>
+</span><span id="ErrExist" data-kind="variable">	ErrExist      = errExist()      <span class="comment">// &#34;file already exists&#34;</span>
+</span><span id="ErrNotExist" data-kind="variable">	ErrNotExist   = errNotExist()   <span class="comment">// &#34;file does not exist&#34;</span>
+</span><span id="ErrClosed" data-kind="variable">	ErrClosed     = errClosed()     <span class="comment">// &#34;file already closed&#34;</span>
+</span>)</pre>
+    </div>
+  <p>Generic file system errors.
+Errors returned by file systems can be tested against these errors
+using <a href="/errors#Is">errors.Is</a>.
+</p>
+
+    <div class="Documentation-declaration">
+      <span class="Documentation-declarationLink"><a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/walk.go;l=20">View Source</a></span>
+      <pre><span id="SkipAll" data-kind="variable">var SkipAll = <a href="/errors">errors</a>.<a href="/errors#New">New</a>(&#34;skip everything and stop the walk&#34;)</span></pre>
+    </div>
+  <p>SkipAll is used as a return value from <a href="#WalkDirFunc">WalkDirFunc</a> to indicate that
+all remaining files and directories are to be skipped. It is not returned
+as an error by any function.
+</p>
+
+    <div class="Documentation-declaration">
+      <span class="Documentation-declarationLink"><a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/walk.go;l=15">View Source</a></span>
+      <pre><span id="SkipDir" data-kind="variable">var SkipDir = <a href="/errors">errors</a>.<a href="/errors#New">New</a>(&#34;skip this directory&#34;)</span></pre>
+    </div>
+  <p>SkipDir is used as a return value from <a href="#WalkDirFunc">WalkDirFunc</a> to indicate that
+the directory named in the call is to be skipped. It is not returned
+as an error by any function.
+</p>
+</section>
+
+  <h3 tabindex="-1" id="pkg-functions" class="Documentation-functionsHeader">Functions <a href="#pkg-functions" title="Go to Functions" aria-label="Go to Functions">¶</a></h3>
+
+  <section class="Documentation-functions"><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="FormatDirEntry" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/format.go;l=60">FormatDirEntry</a> <a class="Documentation-idLink" href="#FormatDirEntry" title="Go to FormatDirEntry" aria-label="Go to FormatDirEntry">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.21.0</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func FormatDirEntry(dir <a href="#DirEntry">DirEntry</a>) <a href="/builtin#string">string</a></pre>
+    </div>
+  <p>FormatDirEntry returns a formatted version of dir for human readability.
+Implementations of <a href="#DirEntry">DirEntry</a> can call this from a String method.
+The outputs for a directory named subdir and a file named hello.go are:
+</p><pre>d subdir/
+- hello.go
+</pre>
+
+  
+
+        </div><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="FormatFileInfo" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/format.go;l=17">FormatFileInfo</a> <a class="Documentation-idLink" href="#FormatFileInfo" title="Go to FormatFileInfo" aria-label="Go to FormatFileInfo">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.21.0</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func FormatFileInfo(info <a href="#FileInfo">FileInfo</a>) <a href="/builtin#string">string</a></pre>
+    </div>
+  <p>FormatFileInfo returns a formatted version of info for human readability.
+Implementations of <a href="#FileInfo">FileInfo</a> can call this from a String method.
+The output for a file named &#34;hello.go&#34;, 100 bytes, mode 0o644, created
+January 1, 1970 at noon is
+</p><pre>-rw-r--r-- 100 1970-01-01 12:00:00 hello.go
+</pre>
+
+  
+
+        </div><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="Glob" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/glob.go;l=33">Glob</a> <a class="Documentation-idLink" href="#Glob" title="Go to Glob" aria-label="Go to Glob">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func Glob(fsys <a href="#FS">FS</a>, pattern <a href="/builtin#string">string</a>) (matches []<a href="/builtin#string">string</a>, err <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>Glob returns the names of all files matching pattern or nil
+if there is no matching file. The syntax of patterns is the same
+as in <a href="/path#Match">path.Match</a>. The pattern may describe hierarchical names such as
+usr/*/bin/ed.
+</p><p>Glob ignores file system errors such as I/O errors reading directories.
+The only possible returned error is <a href="/path#ErrBadPattern">path.ErrBadPattern</a>, reporting that
+the pattern is malformed.
+</p><p>If fs implements <a href="#GlobFS">GlobFS</a>, Glob calls fs.Glob.
+Otherwise, Glob uses <a href="#ReadDir">ReadDir</a> to traverse the directory tree
+and look for matches for the pattern.
+</p>
+<details tabindex="-1" id="example-Glob" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Glob" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;io/fs&#34;
+	&#34;log&#34;
+	&#34;testing/fstest&#34;
+)
+
+func main() {
+	fsys := fstest.MapFS{
+		&#34;file.txt&#34;:        {},
+		&#34;file.go&#34;:         {},
+		&#34;dir/file.txt&#34;:    {},
+		&#34;dir/file.go&#34;:     {},
+		&#34;dir/subdir/x.go&#34;: {},
+	}
+
+	patterns := []string{
+		&#34;*.txt&#34;,
+		&#34;*.go&#34;,
+		&#34;dir/*.go&#34;,
+		&#34;dir/*/x.go&#34;,
+	}
+
+	for _, pattern := range patterns {
+		matches, err := fs.Glob(fsys, pattern)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf(&#34;%q matches: %v\n&#34;, pattern, matches)
+	}
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">&#34;*.txt&#34; matches: [file.txt]
+&#34;*.go&#34; matches: [file.go]
+&#34;dir/*.go&#34; matches: [dir/file.go]
+&#34;dir/*/x.go&#34; matches: [dir/subdir/x.go]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+        </div><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="ReadFile" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readfile.go;l=32">ReadFile</a> <a class="Documentation-idLink" href="#ReadFile" title="Go to ReadFile" aria-label="Go to ReadFile">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func ReadFile(fsys <a href="#FS">FS</a>, name <a href="/builtin#string">string</a>) ([]<a href="/builtin#byte">byte</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>ReadFile reads the named file from the file system fs and returns its contents.
+A successful call returns a nil error, not <a href="/io#EOF">io.EOF</a>.
+(Because ReadFile reads the whole file, the expected EOF
+from the final Read is not treated as an error to be reported.)
+</p><p>If fs implements <a href="#ReadFileFS">ReadFileFS</a>, ReadFile calls fs.ReadFile.
+Otherwise ReadFile calls fs.Open and uses Read and Close
+on the returned <a href="#File">File</a>.
+</p>
+<details tabindex="-1" id="example-ReadFile" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-ReadFile" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;io/fs&#34;
+	&#34;log&#34;
+	&#34;testing/fstest&#34;
+)
+
+func main() {
+	fsys := fstest.MapFS{
+		&#34;hello.txt&#34;: {
+			Data: []byte(&#34;Hello, World!\n&#34;),
+		},
+	}
+
+	data, err := fs.ReadFile(fsys, &#34;hello.txt&#34;)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Print(string(data))
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">Hello, World!
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+        </div><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="ReadLink" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readlink.go;l=26">ReadLink</a> <a class="Documentation-idLink" href="#ReadLink" title="Go to ReadLink" aria-label="Go to ReadLink">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.25.0</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func ReadLink(fsys <a href="#FS">FS</a>, name <a href="/builtin#string">string</a>) (<a href="/builtin#string">string</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>ReadLink returns the destination of the named symbolic link.
+</p><p>If fsys does not implement <a href="#ReadLinkFS">ReadLinkFS</a>, then ReadLink returns an error.
+</p>
+
+  
+
+        </div><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="ValidPath" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=54">ValidPath</a> <a class="Documentation-idLink" href="#ValidPath" title="Go to ValidPath" aria-label="Go to ValidPath">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func ValidPath(name <a href="/builtin#string">string</a>) <a href="/builtin#bool">bool</a></pre>
+    </div>
+  <p>ValidPath reports whether the given path name
+is valid for use in a call to Open.
+</p><p>Path names passed to open are UTF-8-encoded,
+unrooted, slash-separated sequences of path elements, like “x/y/z”.
+Path names must not contain an element that is “.” or “..” or the empty string,
+except for the special case that the name &#34;.&#34; may be used for the root directory.
+Paths must not start or end with a slash: “/x” and “x/” are invalid.
+</p><p>Note that paths are slash-separated on all systems, even Windows.
+Paths containing other characters such as backslash and colon
+are accepted as valid, but those characters must never be
+interpreted by an <a href="#FS">FS</a> implementation as path element separators.
+</p>
+<details tabindex="-1" id="example-ValidPath" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-ValidPath" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;io/fs&#34;
+)
+
+func main() {
+	paths := []string{
+		&#34;.&#34;,
+		&#34;x&#34;,
+		&#34;x/y/z&#34;,
+		&#34;&#34;,
+		&#34;..&#34;,
+		&#34;/x&#34;,
+		&#34;x/&#34;,
+		&#34;x//y&#34;,
+		&#34;x/./y&#34;,
+		&#34;x/../y&#34;,
+	}
+
+	for _, path := range paths {
+		fmt.Printf(&#34;ValidPath(%q) = %t\n&#34;, path, fs.ValidPath(path))
+	}
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">ValidPath(&#34;.&#34;) = true
+ValidPath(&#34;x&#34;) = true
+ValidPath(&#34;x/y/z&#34;) = true
+ValidPath(&#34;&#34;) = false
+ValidPath(&#34;..&#34;) = false
+ValidPath(&#34;/x&#34;) = false
+ValidPath(&#34;x/&#34;) = false
+ValidPath(&#34;x//y&#34;) = false
+ValidPath(&#34;x/./y&#34;) = false
+ValidPath(&#34;x/../y&#34;) = false
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+        </div><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="WalkDir" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/walk.go;l=117">WalkDir</a> <a class="Documentation-idLink" href="#WalkDir" title="Go to WalkDir" aria-label="Go to WalkDir">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func WalkDir(fsys <a href="#FS">FS</a>, root <a href="/builtin#string">string</a>, fn <a href="#WalkDirFunc">WalkDirFunc</a>) <a href="/builtin#error">error</a></pre>
+    </div>
+  <p>WalkDir walks the file tree rooted at root, calling fn for each file or
+directory in the tree, including root.
+</p><p>All errors that arise visiting files and directories are filtered by fn:
+see the <a href="#WalkDirFunc">fs.WalkDirFunc</a> documentation for details.
+</p><p>The files are walked in lexical order, which makes the output deterministic
+but requires WalkDir to read an entire directory into memory before proceeding
+to walk that directory.
+</p><p>WalkDir does not follow symbolic links found in directories,
+but if root itself is a symbolic link, its target will be walked.
+</p>
+<details tabindex="-1" id="example-WalkDir" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-WalkDir" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;io/fs&#34;
+	&#34;log&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	root := &#34;/usr/local/go/bin&#34;
+	fileSystem := os.DirFS(root)
+
+	fs.WalkDir(fileSystem, &#34;.&#34;, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(path)
+		return nil
+	})
+}
+</pre>
+
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+        </div></section>
+
+  <h3 tabindex="-1" id="pkg-types" class="Documentation-typesHeader">Types <a href="#pkg-types" title="Go to Types" aria-label="Go to Types">¶</a></h3>
+
+  <section class="Documentation-types"><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="DirEntry" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=93">DirEntry</a> <a class="Documentation-idLink" href="#DirEntry" title="Go to DirEntry" aria-label="Go to DirEntry">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type DirEntry interface {
+<span id="DirEntry.Name" data-kind="method">	<span class="comment">// Name returns the name of the file (or subdirectory) described by the entry.</span>
+</span>	<span class="comment">// This name is only the final element of the path (the base name), not the entire path.</span>
+	<span class="comment">// For example, Name would return &#34;hello.go&#34; not &#34;home/gopher/hello.go&#34;.</span>
+	Name() <a href="/builtin#string">string</a>
+
+<span id="DirEntry.IsDir" data-kind="method">	<span class="comment">// IsDir reports whether the entry describes a directory.</span>
+</span>	IsDir() <a href="/builtin#bool">bool</a>
+
+<span id="DirEntry.Type" data-kind="method">	<span class="comment">// Type returns the type bits for the entry.</span>
+</span>	<span class="comment">// The type bits are a subset of the usual FileMode bits, those returned by the FileMode.Type method.</span>
+	Type() <a href="#FileMode">FileMode</a>
+
+<span id="DirEntry.Info" data-kind="method">	<span class="comment">// Info returns the FileInfo for the file or subdirectory described by the entry.</span>
+</span>	<span class="comment">// The returned FileInfo may be from the time of the original directory read</span>
+	<span class="comment">// or from the time of the call to Info. If the file has been removed or renamed</span>
+	<span class="comment">// since the directory read, Info may return an error satisfying errors.Is(err, ErrNotExist).</span>
+	<span class="comment">// If the entry denotes a symbolic link, Info reports the information about the link itself,</span>
+	<span class="comment">// not the link&#39;s target.</span>
+	Info() (<a href="#FileInfo">FileInfo</a>, <a href="/builtin#error">error</a>)
+}</pre>
+    </div>
+  <p>A DirEntry is an entry read from a directory
+(using the <a href="#ReadDir">ReadDir</a> function or a <a href="#ReadDirFile">ReadDirFile</a>&#39;s ReadDir method).
+</p>
+<div class="Documentation-typeFunc">
+    
+  
+  
+    <h4 tabindex="-1" id="FileInfoToDirEntry" data-kind="function" class="Documentation-typeFuncHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readdir.go;l=79">FileInfoToDirEntry</a> <a class="Documentation-idLink" href="#FileInfoToDirEntry" title="Go to FileInfoToDirEntry" aria-label="Go to FileInfoToDirEntry">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.17</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func FileInfoToDirEntry(info <a href="#FileInfo">FileInfo</a>) <a href="#DirEntry">DirEntry</a></pre>
+    </div>
+  <p>FileInfoToDirEntry returns a <a href="#DirEntry">DirEntry</a> that returns information from info.
+If info is nil, FileInfoToDirEntry returns nil.
+</p>
+
+  
+
+  </div><div class="Documentation-typeFunc">
+    
+  
+  
+    <h4 tabindex="-1" id="ReadDir" data-kind="function" class="Documentation-typeFuncHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readdir.go;l=29">ReadDir</a> <a class="Documentation-idLink" href="#ReadDir" title="Go to ReadDir" aria-label="Go to ReadDir">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func ReadDir(fsys <a href="#FS">FS</a>, name <a href="/builtin#string">string</a>) ([]<a href="#DirEntry">DirEntry</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>ReadDir reads the named directory
+and returns a list of directory entries sorted by filename.
+</p><p>If fs implements <a href="#ReadDirFS">ReadDirFS</a>, ReadDir calls fs.ReadDir.
+Otherwise ReadDir calls fs.Open and uses ReadDir and Close
+on the returned file.
+</p>
+
+  
+
+  </div>
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="FS" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=27">FS</a> <a class="Documentation-idLink" href="#FS" title="Go to FS" aria-label="Go to FS">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type FS interface {
+<span id="FS.Open" data-kind="method">	<span class="comment">// Open opens the named file.</span>
+</span>	<span class="comment">// [File.Close] must be called to release any associated resources.</span>
+	<span class="comment">//</span>
+	<span class="comment">// When Open returns an error, it should be of type *PathError</span>
+	<span class="comment">// with the Op field set to &#34;open&#34;, the Path field set to name,</span>
+	<span class="comment">// and the Err field describing the problem.</span>
+	<span class="comment">//</span>
+	<span class="comment">// Open should reject attempts to open names that do not satisfy</span>
+	<span class="comment">// ValidPath(name), returning a *PathError with Err set to</span>
+	<span class="comment">// ErrInvalid or ErrNotExist.</span>
+	Open(name <a href="/builtin#string">string</a>) (<a href="#File">File</a>, <a href="/builtin#error">error</a>)
+}</pre>
+    </div>
+  <p>An FS provides access to a hierarchical file system.
+</p><p>The FS interface is the minimum implementation required of the file system.
+A file system may implement additional interfaces,
+such as <a href="#ReadFileFS">ReadFileFS</a>, to provide additional or optimized functionality.
+</p><p><a href="/testing/fstest#TestFS">testing/fstest.TestFS</a> may be used to test implementations of an FS for
+correctness.
+</p>
+<div class="Documentation-typeFunc">
+    
+  
+  
+    <h4 tabindex="-1" id="Sub" data-kind="function" class="Documentation-typeFuncHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/sub.go;l=35">Sub</a> <a class="Documentation-idLink" href="#Sub" title="Go to Sub" aria-label="Go to Sub">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func Sub(fsys <a href="#FS">FS</a>, dir <a href="/builtin#string">string</a>) (<a href="#FS">FS</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>Sub returns an <a href="#FS">FS</a> corresponding to the subtree rooted at fsys&#39;s dir.
+</p><p>If dir is &#34;.&#34;, Sub returns fsys unchanged.
+Otherwise, if fs implements <a href="#SubFS">SubFS</a>, Sub returns fsys.Sub(dir).
+Otherwise, Sub returns a new <a href="#FS">FS</a> implementation sub that,
+in effect, implements sub.Open(name) as fsys.Open(path.Join(dir, name)).
+The implementation also translates calls to ReadDir, ReadFile,
+ReadLink, Lstat, and Glob appropriately.
+</p><p>Note that Sub(os.DirFS(&#34;/&#34;), &#34;prefix&#34;) is equivalent to os.DirFS(&#34;/prefix&#34;)
+and that neither of them guarantees to avoid operating system
+accesses outside &#34;/prefix&#34;, because the implementation of <a href="/os#DirFS">os.DirFS</a>
+does not check for symbolic links inside &#34;/prefix&#34; that point to
+other directories. That is, <a href="/os#DirFS">os.DirFS</a> is not a general substitute for a
+chroot-style security mechanism, and Sub does not change that fact.
+</p>
+
+  
+
+  </div>
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="File" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=85">File</a> <a class="Documentation-idLink" href="#File" title="Go to File" aria-label="Go to File">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type File interface {
+<span id="File.Stat" data-kind="method">	Stat() (<a href="#FileInfo">FileInfo</a>, <a href="/builtin#error">error</a>)
+</span><span id="File.Read" data-kind="method">	Read([]<a href="/builtin#byte">byte</a>) (<a href="/builtin#int">int</a>, <a href="/builtin#error">error</a>)
+</span><span id="File.Close" data-kind="method">	Close() <a href="/builtin#error">error</a>
+</span>}</pre>
+    </div>
+  <p>A File provides access to a single file.
+The File interface is the minimum implementation required of the file.
+Directory files should also implement <a href="#ReadDirFile">ReadDirFile</a>.
+A file may implement <a href="/io#ReaderAt">io.ReaderAt</a> or <a href="/io#Seeker">io.Seeker</a> as optimizations.
+</p>
+
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="FileInfo" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=158">FileInfo</a> <a class="Documentation-idLink" href="#FileInfo" title="Go to FileInfo" aria-label="Go to FileInfo">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type FileInfo interface {
+<span id="FileInfo.Name" data-kind="method">	Name() <a href="/builtin#string">string</a>       <span class="comment">// base name of the file</span>
+</span><span id="FileInfo.Size" data-kind="method">	Size() <a href="/builtin#int64">int64</a>        <span class="comment">// length in bytes for regular files; system-dependent for others</span>
+</span><span id="FileInfo.Mode" data-kind="method">	Mode() <a href="#FileMode">FileMode</a>     <span class="comment">// file mode bits</span>
+</span><span id="FileInfo.ModTime" data-kind="method">	ModTime() <a href="/time">time</a>.<a href="/time#Time">Time</a> <span class="comment">// modification time</span>
+</span><span id="FileInfo.IsDir" data-kind="method">	IsDir() <a href="/builtin#bool">bool</a>        <span class="comment">// abbreviation for Mode().IsDir()</span>
+</span><span id="FileInfo.Sys" data-kind="method">	Sys() <a href="/builtin#any">any</a>           <span class="comment">// underlying data source (can return nil)</span>
+</span>}</pre>
+    </div>
+  <p>A FileInfo describes a file and is returned by <a href="#Stat">Stat</a>.
+</p>
+<div class="Documentation-typeFunc">
+    
+  
+  
+    <h4 tabindex="-1" id="Lstat" data-kind="function" class="Documentation-typeFuncHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readlink.go;l=39">Lstat</a> <a class="Documentation-idLink" href="#Lstat" title="Go to Lstat" aria-label="Go to Lstat">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.25.0</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func Lstat(fsys <a href="#FS">FS</a>, name <a href="/builtin#string">string</a>) (<a href="#FileInfo">FileInfo</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>Lstat returns a <a href="#FileInfo">FileInfo</a> describing the named file.
+If the file is a symbolic link, the returned <a href="#FileInfo">FileInfo</a> describes the symbolic link.
+Lstat makes no attempt to follow the link.
+</p><p>If fsys does not implement <a href="#ReadLinkFS">ReadLinkFS</a>, then Lstat is identical to <a href="#Stat">Stat</a>.
+</p>
+
+  
+
+  </div><div class="Documentation-typeFunc">
+    
+  
+  
+    <h4 tabindex="-1" id="Stat" data-kind="function" class="Documentation-typeFuncHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/stat.go;l=20">Stat</a> <a class="Documentation-idLink" href="#Stat" title="Go to Stat" aria-label="Go to Stat">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func Stat(fsys <a href="#FS">FS</a>, name <a href="/builtin#string">string</a>) (<a href="#FileInfo">FileInfo</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>Stat returns a <a href="#FileInfo">FileInfo</a> describing the named file from the file system.
+</p><p>If fs implements <a href="#StatFS">StatFS</a>, Stat calls fs.Stat.
+Otherwise, Stat opens the <a href="#File">File</a> to stat it.
+</p>
+
+  
+
+  </div>
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="FileMode" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=172">FileMode</a> <a class="Documentation-idLink" href="#FileMode" title="Go to FileMode" aria-label="Go to FileMode">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type FileMode <a href="/builtin#uint32">uint32</a></pre>
+    </div>
+  <p>A FileMode represents a file&#39;s mode and permission bits.
+The bits have the same definition on all systems, so that
+information about files can be moved from one system
+to another portably. Not all bits apply to all systems.
+The only required bit is <a href="#ModeDir">ModeDir</a> for directories.
+</p>
+<div class="Documentation-typeConstant">
+    <div class="Documentation-declaration">
+      <pre>const (
+	<span class="comment">// The single letters are the abbreviations</span>
+	<span class="comment">// used by the String method&#39;s formatting.</span>
+<span id="ModeDir" data-kind="constant">	ModeDir        <a href="#FileMode">FileMode</a> = 1 &lt;&lt; (32 - 1 - <a href="/builtin#iota">iota</a>) <span class="comment">// d: is a directory</span>
+</span><span id="ModeAppend" data-kind="constant">	ModeAppend                                     <span class="comment">// a: append-only</span>
+</span><span id="ModeExclusive" data-kind="constant">	ModeExclusive                                  <span class="comment">// l: exclusive use</span>
+</span><span id="ModeTemporary" data-kind="constant">	ModeTemporary                                  <span class="comment">// T: temporary file; Plan 9 only</span>
+</span><span id="ModeSymlink" data-kind="constant">	ModeSymlink                                    <span class="comment">// L: symbolic link</span>
+</span><span id="ModeDevice" data-kind="constant">	ModeDevice                                     <span class="comment">// D: device file</span>
+</span><span id="ModeNamedPipe" data-kind="constant">	ModeNamedPipe                                  <span class="comment">// p: named pipe (FIFO)</span>
+</span><span id="ModeSocket" data-kind="constant">	ModeSocket                                     <span class="comment">// S: Unix domain socket</span>
+</span><span id="ModeSetuid" data-kind="constant">	ModeSetuid                                     <span class="comment">// u: setuid</span>
+</span><span id="ModeSetgid" data-kind="constant">	ModeSetgid                                     <span class="comment">// g: setgid</span>
+</span><span id="ModeCharDevice" data-kind="constant">	ModeCharDevice                                 <span class="comment">// c: Unix character device, when ModeDevice is set</span>
+</span><span id="ModeSticky" data-kind="constant">	ModeSticky                                     <span class="comment">// t: sticky</span>
+</span><span id="ModeIrregular" data-kind="constant">	ModeIrregular                                  <span class="comment">// ?: non-regular file; nothing else is known about this file</span>
+</span>
+<span id="ModeType" data-kind="constant">	<span class="comment">// Mask for the type bits. For regular files, none will be set.</span>
+</span>	ModeType = <a href="#ModeDir">ModeDir</a> | <a href="#ModeSymlink">ModeSymlink</a> | <a href="#ModeNamedPipe">ModeNamedPipe</a> | <a href="#ModeSocket">ModeSocket</a> | <a href="#ModeDevice">ModeDevice</a> | <a href="#ModeCharDevice">ModeCharDevice</a> | <a href="#ModeIrregular">ModeIrregular</a>
+
+<span id="ModePerm" data-kind="constant">	ModePerm <a href="#FileMode">FileMode</a> = 0777 <span class="comment">// Unix permission bits</span>
+</span>)</pre>
+    </div>
+  <p>The defined file mode bits are the most significant bits of the <a href="#FileMode">FileMode</a>.
+The nine least-significant bits are the standard Unix rwxrwxrwx permissions.
+The values of these bits should be considered part of the public API and
+may be used in wire protocols or disk representations: they must not be
+changed, although new bits might be added.
+</p>
+</div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="FileMode.IsDir" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (FileMode) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=230">IsDir</a> <a class="Documentation-idLink" href="#FileMode.IsDir" title="Go to FileMode.IsDir" aria-label="Go to FileMode.IsDir">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (m <a href="#FileMode">FileMode</a>) IsDir() <a href="/builtin#bool">bool</a></pre>
+    </div>
+  <p>IsDir reports whether m describes a directory.
+That is, it tests for the <a href="#ModeDir">ModeDir</a> bit being set in m.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="FileMode.IsRegular" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (FileMode) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=236">IsRegular</a> <a class="Documentation-idLink" href="#FileMode.IsRegular" title="Go to FileMode.IsRegular" aria-label="Go to FileMode.IsRegular">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (m <a href="#FileMode">FileMode</a>) IsRegular() <a href="/builtin#bool">bool</a></pre>
+    </div>
+  <p>IsRegular reports whether m describes a regular file.
+That is, it tests that no mode type bits are set.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="FileMode.Perm" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (FileMode) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=241">Perm</a> <a class="Documentation-idLink" href="#FileMode.Perm" title="Go to FileMode.Perm" aria-label="Go to FileMode.Perm">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (m <a href="#FileMode">FileMode</a>) Perm() <a href="#FileMode">FileMode</a></pre>
+    </div>
+  <p>Perm returns the Unix permission bits in m (m &amp; <a href="#ModePerm">ModePerm</a>).
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="FileMode.String" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (FileMode) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=202">String</a> <a class="Documentation-idLink" href="#FileMode.String" title="Go to FileMode.String" aria-label="Go to FileMode.String">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (m <a href="#FileMode">FileMode</a>) String() <a href="/builtin#string">string</a></pre>
+    </div>
+  
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="FileMode.Type" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (FileMode) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=246">Type</a> <a class="Documentation-idLink" href="#FileMode.Type" title="Go to FileMode.Type" aria-label="Go to FileMode.Type">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (m <a href="#FileMode">FileMode</a>) Type() <a href="#FileMode">FileMode</a></pre>
+    </div>
+  <p>Type returns type bits in m (m &amp; <a href="#ModeType">ModeType</a>).
+</p>
+
+  
+
+  </div>
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="GlobFS" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/glob.go;l=12">GlobFS</a> <a class="Documentation-idLink" href="#GlobFS" title="Go to GlobFS" aria-label="Go to GlobFS">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type GlobFS interface {
+	<a href="#FS">FS</a>
+
+<span id="GlobFS.Glob" data-kind="method">	<span class="comment">// Glob returns the names of all files matching pattern,</span>
+</span>	<span class="comment">// providing an implementation of the top-level</span>
+	<span class="comment">// Glob function.</span>
+	Glob(pattern <a href="/builtin#string">string</a>) ([]<a href="/builtin#string">string</a>, <a href="/builtin#error">error</a>)
+}</pre>
+    </div>
+  <p>A GlobFS is a file system with a Glob method.
+</p>
+
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="PathError" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=251">PathError</a> <a class="Documentation-idLink" href="#PathError" title="Go to PathError" aria-label="Go to PathError">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type PathError struct {
+<span id="PathError.Op" data-kind="field">	Op   <a href="/builtin#string">string</a>
+</span><span id="PathError.Path" data-kind="field">	Path <a href="/builtin#string">string</a>
+</span><span id="PathError.Err" data-kind="field">	Err  <a href="/builtin#error">error</a>
+</span>}</pre>
+    </div>
+  <p>PathError records an error and the operation and file path that caused it.
+</p>
+<div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="PathError.Error" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*PathError) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=257">Error</a> <a class="Documentation-idLink" href="#PathError.Error" title="Go to PathError.Error" aria-label="Go to PathError.Error">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (e *<a href="#PathError">PathError</a>) Error() <a href="/builtin#string">string</a></pre>
+    </div>
+  
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="PathError.Timeout" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*PathError) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=262">Timeout</a> <a class="Documentation-idLink" href="#PathError.Timeout" title="Go to PathError.Timeout" aria-label="Go to PathError.Timeout">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (e *<a href="#PathError">PathError</a>) Timeout() <a href="/builtin#bool">bool</a></pre>
+    </div>
+  <p>Timeout reports whether this error represents a timeout.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="PathError.Unwrap" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*PathError) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=259">Unwrap</a> <a class="Documentation-idLink" href="#PathError.Unwrap" title="Go to PathError.Unwrap" aria-label="Go to PathError.Unwrap">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (e *<a href="#PathError">PathError</a>) Unwrap() <a href="/builtin#error">error</a></pre>
+    </div>
+  
+
+  
+
+  </div>
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="ReadDirFS" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readdir.go;l=15">ReadDirFS</a> <a class="Documentation-idLink" href="#ReadDirFS" title="Go to ReadDirFS" aria-label="Go to ReadDirFS">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type ReadDirFS interface {
+	<a href="#FS">FS</a>
+
+<span id="ReadDirFS.ReadDir" data-kind="method">	<span class="comment">// ReadDir reads the named directory</span>
+</span>	<span class="comment">// and returns a list of directory entries sorted by filename.</span>
+	ReadDir(name <a href="/builtin#string">string</a>) ([]<a href="#DirEntry">DirEntry</a>, <a href="/builtin#error">error</a>)
+}</pre>
+    </div>
+  <p>ReadDirFS is the interface implemented by a file system
+that provides an optimized implementation of <a href="#ReadDir">ReadDir</a>.
+</p>
+
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="ReadDirFile" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go;l=119">ReadDirFile</a> <a class="Documentation-idLink" href="#ReadDirFile" title="Go to ReadDirFile" aria-label="Go to ReadDirFile">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type ReadDirFile interface {
+	<a href="#File">File</a>
+
+<span id="ReadDirFile.ReadDir" data-kind="method">	<span class="comment">// ReadDir reads the contents of the directory and returns</span>
+</span>	<span class="comment">// a slice of up to n DirEntry values in directory order.</span>
+	<span class="comment">// Subsequent calls on the same file will yield further DirEntry values.</span>
+	<span class="comment">//</span>
+	<span class="comment">// If n &gt; 0, ReadDir returns at most n DirEntry structures.</span>
+	<span class="comment">// In this case, if ReadDir returns an empty slice, it will return</span>
+	<span class="comment">// a non-nil error explaining why.</span>
+	<span class="comment">// At the end of a directory, the error is io.EOF.</span>
+	<span class="comment">// (ReadDir must return io.EOF itself, not an error wrapping io.EOF.)</span>
+	<span class="comment">//</span>
+	<span class="comment">// If n &lt;= 0, ReadDir returns all remaining DirEntry values from the directory</span>
+	<span class="comment">// in a single slice. In this case, if ReadDir succeeds (reads all the way</span>
+	<span class="comment">// to the end of the directory), it returns the slice and a nil error.</span>
+	<span class="comment">// If it encounters an error before the end of the directory,</span>
+	<span class="comment">// ReadDir returns the DirEntry list read until that point and a non-nil error.</span>
+	ReadDir(n <a href="/builtin#int">int</a>) ([]<a href="#DirEntry">DirEntry</a>, <a href="/builtin#error">error</a>)
+}</pre>
+    </div>
+  <p>A ReadDirFile is a directory file whose entries can be read with the ReadDir method.
+Every directory file should implement this interface.
+(It is permissible for any file to implement this interface,
+but if so ReadDir should return an error for non-directories.)
+</p>
+
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="ReadFileFS" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readfile.go;l=11">ReadFileFS</a> <a class="Documentation-idLink" href="#ReadFileFS" title="Go to ReadFileFS" aria-label="Go to ReadFileFS">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type ReadFileFS interface {
+	<a href="#FS">FS</a>
+
+<span id="ReadFileFS.ReadFile" data-kind="method">	<span class="comment">// ReadFile reads the named file and returns its contents.</span>
+</span>	<span class="comment">// A successful call returns a nil error, not io.EOF.</span>
+	<span class="comment">// (Because ReadFile reads the whole file, the expected EOF</span>
+	<span class="comment">// from the final Read is not treated as an error to be reported.)</span>
+	<span class="comment">//</span>
+	<span class="comment">// The caller is permitted to modify the returned byte slice.</span>
+	<span class="comment">// This method should return a copy of the underlying data.</span>
+	ReadFile(name <a href="/builtin#string">string</a>) ([]<a href="/builtin#byte">byte</a>, <a href="/builtin#error">error</a>)
+}</pre>
+    </div>
+  <p>ReadFileFS is the interface implemented by a file system
+that provides an optimized implementation of <a href="#ReadFile">ReadFile</a>.
+</p>
+
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="ReadLinkFS" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readlink.go;l=9">ReadLinkFS</a> <a class="Documentation-idLink" href="#ReadLinkFS" title="Go to ReadLinkFS" aria-label="Go to ReadLinkFS">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.25.0</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type ReadLinkFS interface {
+	<a href="#FS">FS</a>
+
+<span id="ReadLinkFS.ReadLink" data-kind="method">	<span class="comment">// ReadLink returns the destination of the named symbolic link.</span>
+</span>	<span class="comment">// If there is an error, it should be of type [*PathError].</span>
+	ReadLink(name <a href="/builtin#string">string</a>) (<a href="/builtin#string">string</a>, <a href="/builtin#error">error</a>)
+
+<span id="ReadLinkFS.Lstat" data-kind="method">	<span class="comment">// Lstat returns a [FileInfo] describing the named file.</span>
+</span>	<span class="comment">// If the file is a symbolic link, the returned [FileInfo] describes the symbolic link.</span>
+	<span class="comment">// Lstat makes no attempt to follow the link.</span>
+	<span class="comment">// If there is an error, it should be of type [*PathError].</span>
+	Lstat(name <a href="/builtin#string">string</a>) (<a href="#FileInfo">FileInfo</a>, <a href="/builtin#error">error</a>)
+}</pre>
+    </div>
+  <p>ReadLinkFS is the interface implemented by a file system
+that supports reading symbolic links.
+</p>
+
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="StatFS" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/stat.go;l=8">StatFS</a> <a class="Documentation-idLink" href="#StatFS" title="Go to StatFS" aria-label="Go to StatFS">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type StatFS interface {
+	<a href="#FS">FS</a>
+
+<span id="StatFS.Stat" data-kind="method">	<span class="comment">// Stat returns a FileInfo describing the file.</span>
+</span>	<span class="comment">// If there is an error, it should be of type *PathError.</span>
+	Stat(name <a href="/builtin#string">string</a>) (<a href="#FileInfo">FileInfo</a>, <a href="/builtin#error">error</a>)
+}</pre>
+    </div>
+  <p>A StatFS is a file system with a Stat method.
+</p>
+
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="SubFS" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/sub.go;l=13">SubFS</a> <a class="Documentation-idLink" href="#SubFS" title="Go to SubFS" aria-label="Go to SubFS">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type SubFS interface {
+	<a href="#FS">FS</a>
+
+<span id="SubFS.Sub" data-kind="method">	<span class="comment">// Sub returns an FS corresponding to the subtree rooted at dir.</span>
+</span>	Sub(dir <a href="/builtin#string">string</a>) (<a href="#FS">FS</a>, <a href="/builtin#error">error</a>)
+}</pre>
+    </div>
+  <p>A SubFS is a file system with a Sub method.
+</p>
+
+  
+
+    </div><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="WalkDirFunc" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/walk.go;l=69">WalkDirFunc</a> <a class="Documentation-idLink" href="#WalkDirFunc" title="Go to WalkDirFunc" aria-label="Go to WalkDirFunc">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type WalkDirFunc func(path <a href="/builtin#string">string</a>, d <a href="#DirEntry">DirEntry</a>, err <a href="/builtin#error">error</a>) <a href="/builtin#error">error</a></pre>
+    </div>
+  <p>WalkDirFunc is the type of the function called by <a href="#WalkDir">WalkDir</a> to visit
+each file or directory.
+</p><p>The path argument contains the argument to <a href="#WalkDir">WalkDir</a> as a prefix.
+That is, if WalkDir is called with root argument &#34;dir&#34; and finds a file
+named &#34;a&#34; in that directory, the walk function will be called with
+argument &#34;dir/a&#34;.
+</p><p>The d argument is the <a href="#DirEntry">DirEntry</a> for the named path.
+</p><p>The error result returned by the function controls how <a href="#WalkDir">WalkDir</a>
+continues. If the function returns the special value <a href="#SkipDir">SkipDir</a>, WalkDir
+skips the current directory (path if d.IsDir() is true, otherwise
+path&#39;s parent directory). If the function returns the special value
+<a href="#SkipAll">SkipAll</a>, WalkDir skips all remaining files and directories. Otherwise,
+if the function returns a non-nil error, WalkDir stops entirely and
+returns that error.
+</p><p>The err argument reports an error related to path, signaling that
+<a href="#WalkDir">WalkDir</a> will not walk into that directory. The function can decide how
+to handle that error; as described earlier, returning the error will
+cause WalkDir to stop walking the entire tree.
+</p><p><a href="#WalkDir">WalkDir</a> calls the function with a non-nil err argument in two cases.
+</p><p>First, if the initial <a href="#Stat">Stat</a> on the root directory fails, WalkDir
+calls the function with path set to root, d set to nil, and err set to
+the error from <a href="#Stat">fs.Stat</a>.
+</p><p>Second, if a directory&#39;s ReadDir method (see <a href="#ReadDirFile">ReadDirFile</a>) fails, WalkDir calls the
+function with path set to the directory&#39;s path, d set to an
+<a href="#DirEntry">DirEntry</a> describing the directory, and err set to the error from
+ReadDir. In this second case, the function is called twice with the
+path of the directory: the first call is before the directory read is
+attempted and has err set to nil, giving the function a chance to
+return <a href="#SkipDir">SkipDir</a> or <a href="#SkipAll">SkipAll</a> and avoid the ReadDir entirely. The second call
+is after a failed ReadDir and reports the error from ReadDir.
+(If ReadDir succeeds, there is no second call.)
+</p><p>The differences between WalkDirFunc compared to <a href="/path/filepath#WalkFunc">path/filepath.WalkFunc</a> are:
+</p><ul class="Documentation-bulletList">
+  <li>The second argument has type <a href="#DirEntry">DirEntry</a> instead of <a href="#FileInfo">FileInfo</a>.</li>
+  <li>The function is called before reading a directory, to allow <a href="#SkipDir">SkipDir</a>
+or <a href="#SkipAll">SkipAll</a> to bypass the directory read entirely or skip all remaining
+files and directories respectively.</li>
+  <li>If a directory read fails, the function is called a second time
+for that directory to report the error.</li>
+</ul>
+
+  
+
+    </div></section></div> 
+
+
+
+
+
+
+
+      
+    </div>
+  </div>
+
+        
+      
+      
+        
+  <div class="UnitFiles js-unitFiles">
+    <h2 class="UnitFiles-title" id="section-sourcefiles">
+      <img class="go-Icon" height="24" width="24" src="/static/shared/icon/insert_drive_file_gm_grey_24dp.svg" alt="">
+      Source Files
+      <a class="UnitFiles-idLink" href="#section-sourcefiles" title="Go to Source Files" aria-label="Go to Source Files">¶</a>
+    </h2><div class="UnitFiles-titleLink">
+      <a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs" target="_blank" rel="noopener">View all Source files</a>
+    </div><div>
+      <ul class="UnitFiles-fileList"><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/format.go" target="_blank" rel="noopener" title="format.go">format.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/fs.go" target="_blank" rel="noopener" title="fs.go">fs.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/glob.go" target="_blank" rel="noopener" title="glob.go">glob.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readdir.go" target="_blank" rel="noopener" title="readdir.go">readdir.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readfile.go" target="_blank" rel="noopener" title="readfile.go">readfile.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/readlink.go" target="_blank" rel="noopener" title="readlink.go">readlink.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/stat.go" target="_blank" rel="noopener" title="stat.go">stat.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/sub.go" target="_blank" rel="noopener" title="sub.go">sub.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/io/fs/walk.go" target="_blank" rel="noopener" title="walk.go">walk.go</a></li></ul>
+    </div>
+  </div>
+
+      
+      
+    </div>
+  </div>
+  <div id="showInternal-description" hidden> Click to show internal directories. </div>
+  <div id="hideInternal-description" hidden> Click to hide internal directories. </div>
+</article>
+    <footer class="go-Main-footer"></footer>
+  </main>
+
+    
+  <footer class="go-Footer">
+    
+    <div class="go-Footer-links">
+      <div class="go-Footer-linkColumn">
+        <a href="https://go.dev/solutions" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Why Go
+        </a>
+        <a href="https://go.dev/solutions#use-cases" class="go-Footer-link"
+            data-gtmc="footer link">
+          Use Cases
+        </a>
+        <a href="https://go.dev/solutions#case-studies" class="go-Footer-link"
+            data-gtmc="footer link">
+          Case Studies
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://learn.go.dev/" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Get Started
+        </a>
+        <a href="https://play.golang.org" class="go-Footer-link" data-gtmc="footer link">
+          Playground
+        </a>
+        <a href="https://tour.golang.org" class="go-Footer-link" data-gtmc="footer link">
+          Tour
+        </a>
+        <a href="https://stackoverflow.com/questions/tagged/go?tab=Newest" class="go-Footer-link"
+            data-gtmc="footer link">
+          Stack Overflow
+        </a>
+        <a href="https://go.dev/help" class="go-Footer-link"
+            data-gtmc="footer link">
+          Help
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://pkg.go.dev" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Packages
+        </a>
+        <a href="/std" class="go-Footer-link" data-gtmc="footer link">
+          Standard Library
+        </a>
+        <a href="/golang.org/x" class="go-Footer-link" data-gtmc="footer link">
+          Sub-repositories
+        </a>
+        <a href="https://pkg.go.dev/about" class="go-Footer-link" data-gtmc="footer link">
+          About Go Packages
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://go.dev/project" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          About
+        </a>
+        <a href="https://go.dev/dl/" class="go-Footer-link" data-gtmc="footer link">Download</a>
+        <a href="https://go.dev/blog" class="go-Footer-link" data-gtmc="footer link">Blog</a>
+        <a href="https://github.com/golang/go/issues" class="go-Footer-link" data-gtmc="footer link">
+          Issue Tracker
+        </a>
+        <a href="https://go.dev/doc/devel/release.html" class="go-Footer-link"
+            data-gtmc="footer link">
+          Release Notes
+        </a>
+        <a href="https://go.dev/brand" class="go-Footer-link" data-gtmc="footer link">
+          Brand Guidelines
+        </a>
+        <a href="https://go.dev/conduct" class="go-Footer-link" data-gtmc="footer link">
+          Code of Conduct
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://www.twitter.com/golang" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Connect
+        </a>
+        <a href="https://www.twitter.com/golang" class="go-Footer-link" data-gtmc="footer link">
+          Twitter
+        </a>
+        <a href="https://github.com/golang" class="go-Footer-link" data-gtmc="footer link">GitHub</a>
+        <a href="https://invite.slack.golangbridge.org/" class="go-Footer-link"
+            data-gtmc="footer link">
+          Slack
+        </a>
+        <a href="https://reddit.com/r/golang" class="go-Footer-link" data-gtmc="footer link">
+          r/golang
+        </a>
+        <a href="https://www.meetup.com/pro/go" class="go-Footer-link" data-gtmc="footer link">
+          Meetup
+        </a>
+        <a href="https://golangweekly.com/" class="go-Footer-link" data-gtmc="footer link">
+          Golang Weekly
+        </a>
+      </div>
+    </div>
+    <div class="go-Footer-bottom">
+      <img class="go-Footer-gopher"  width="1431" height="901"
+          src="/static/shared/gopher/pilot-bust-1431x901.svg" alt="Gopher in flight goggles">
+      <ul class="go-Footer-listRow">
+        <li class="go-Footer-listItem">
+          <a href="https://go.dev/copyright" data-gtmc="footer link">Copyright</a>
+        </li>
+        <li class="go-Footer-listItem">
+          <a href="https://go.dev/tos" data-gtmc="footer link">Terms of Service</a>
+        </li>
+        <li class="go-Footer-listItem">
+          <a href="http://www.google.com/intl/en/policies/privacy/" data-gtmc="footer link"
+              target="_blank" rel="noopener">
+            Privacy Policy
+          </a>
+        </li>
+        <li class="go-Footer-listItem">
+          <a href="https://go.dev/s/pkgsite-feedback" target="_blank" rel="noopener"
+              data-gtmc="footer link">
+            Report an Issue
+          </a>
+        </li>
+        <li class="go-Footer-listItem">
+          <button class="go-Button go-Button--text go-Footer-toggleTheme js-toggleTheme" aria-label="Theme Toggle">
+            <img data-value="auto" class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/brightness_6_gm_grey_24dp.svg" alt="System theme">
+            <img data-value="dark" class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/brightness_2_gm_grey_24dp.svg" alt="Dark theme">
+            <img data-value="light" class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/light_mode_gm_grey_24dp.svg" alt="Light theme">
+            <p> Theme Toggle </p>
+          </button>
+        </li>
+        <li class="go-Footer-listItem">
+          <button class="go-Button go-Button--text go-Footer-keyboard js-openShortcuts" aria-label="Shorcuts Modal">
+            <img class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/keyboard_grey_24dp.svg" alt="">
+            <p> Shortcuts Modal </p>
+          </button>
+        </li>
+      </ul>
+      <a class="go-Footer-googleLogo" href="https://google.com" target="_blank"rel="noopener"
+          data-gtmc="footer link">
+        <img class="go-Footer-googleLogoImg" height="24" width="72"
+            src="/static/shared/logo/google-white.svg" alt="Google logo">
+      </a>
+    </div>
+  </footer>
+
+    
+  <dialog id="jump-to-modal" class="JumpDialog go-Modal go-Modal--md js-modal">
+    <form method="dialog" data-gmtc="jump to form" aria-label="Jump to Identifier">
+      <div class="Dialog-title go-Modal-header">
+        <h2>Jump to</h2>
+        <button
+          class="go-Button go-Button--inline"
+          type="button"
+          data-modal-close
+          data-gtmc="modal button"
+          aria-label="Close"
+        >
+          <img
+            class="go-Icon"
+            height="24"
+            width="24"
+            src="/static/shared/icon/close_gm_grey_24dp.svg"
+            alt=""
+          />
+        </button>
+      </div>
+      <div class="JumpDialog-filter">
+        <input class="JumpDialog-input go-Input" autocomplete="off" type="text">
+      </div>
+      <div class="JumpDialog-body go-Modal-body">
+        <div class="JumpDialog-list"></div>
+      </div>
+      <div class="go-Modal-actions">
+        <button class="go-Button" data-test-id="close-dialog">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="ShortcutsDialog go-Modal go-Modal--sm js-modal">
+    <form method="dialog">
+      <div class="go-Modal-header">
+        <h2>Keyboard shortcuts</h2>
+        <button
+          class="go-Button go-Button--inline"
+          type="button"
+          data-modal-close
+          data-gtmc="modal button"
+          aria-label="Close"
+        >
+          <img
+            class="go-Icon"
+            height="24"
+            width="24"
+            src="/static/shared/icon/close_gm_grey_24dp.svg"
+            alt=""
+          />
+        </button>
+      </div>
+      <div class="go-Modal-body">
+        <table>
+          <tbody>
+            <tr><td class="ShortcutsDialog-key">
+              <strong>?</strong></td><td> : This menu</td>
+            </tr>
+            <tr><td class="ShortcutsDialog-key">
+              <strong>/</strong></td><td> : Search site</td>
+            </tr>
+            <tr><td class="ShortcutsDialog-key">
+              <strong>f</strong> or <strong>F</strong></td><td> : Jump to</td>
+            </tr>
+            <tr>
+              <td class="ShortcutsDialog-key"><strong>y</strong> or <strong>Y</strong></td>
+              <td> : Canonical URL</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="go-Modal-actions">
+        <button class="go-Button" data-test-id="close-dialog">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+    
+      <section class="Cookie-notice js-cookieNotice">
+        <div>go.dev uses cookies from Google to deliver and enhance the quality of its services and to
+        analyze traffic. <a target=_blank href="https://policies.google.com/technologies/cookies">Learn more.</a></div>
+        <div><button class="go-Button">Okay</button></div>
+      </section>
+    
+    
+      <script>
+        // this will throw if the querySelector can’t find the element
+        const gtmId = document.querySelector('.js-gtmID').dataset.gtmid;
+        if (!gtmId) {
+          throw new Error('Google Tag Manager ID not found');
+        }
+        loadScript(`https://www.googletagmanager.com/gtm.js?id=${gtmId}`);
+      </script>
+      <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8MVQXG"
+                height="0" width="0" style="display:none;visibility:hidden">
+        </iframe>
+      </noscript>
+    
+    
+  
+  <div class="js-canonicalURLPath" data-canonical-url-path="/io/fs@go1.25.7" hidden></div>
+  <div class="js-playgroundVars" data-modulepath="std" data-version="v1.25.7" hidden></div>
+  <script>
+    loadScript('/static/frontend/unit/main/main.js')
+  </script>
+
+  <script>
+    loadScript('/static/frontend/unit/unit.js')
+  </script>
+
+  </body>
+</html>

@@ -1,0 +1,1470 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-layout="" data-local="">
+  <head>
+    
+    <script>
+      window.addEventListener('error', window.__err=function f(e){f.p=f.p||[];f.p.push(e)});
+    </script>
+    <script>
+      (function() {
+        const theme = document.cookie.match(/prefers-color-scheme=(light|dark|auto)/)?.[1]
+        if (theme) {
+          document.querySelector('html').setAttribute('data-theme', theme);
+        }
+      }())
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+      <meta name="description" content="Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.">
+    
+    
+  <meta name="robots" content="noindex">
+
+    <meta class="js-gtmID" data-gtmid="GTM-W8MVQXG">
+    <link rel="shortcut icon" href="/static/shared/icon/favicon.ico">
+    
+    <link href="/static/frontend/frontend.min.css?version=prod-frontend-00140-lzv" rel="stylesheet">
+    
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Go Packages">
+    
+    
+  <title>mcp-go - Search Results - Go Packages</title>
+
+    
+  <link href="/static/frontend/search/search.min.css?version=prod-frontend-00140-lzv" rel="stylesheet">
+
+  </head>
+  <body>
+    
+    <script>
+      function loadScript(src, mod = true) {
+        let s = document.createElement('script');
+        s.src = src;
+        if (mod) {
+          s.type = 'module';
+          s.async = true;
+          s.defer = true
+        }
+        document.head.appendChild(s);
+      }
+      loadScript("/third_party/dialog-polyfill/dialog-polyfill.js", false)
+      loadScript("/static/frontend/frontend.js");
+    </script>
+    
+  <header class="go-Header js-siteHeader">
+    <div class="go-Header-inner go-Header-inner--dark">
+      <nav class="go-Header-nav">
+        <a href="https://go.dev/" class="js-headerLogo" data-gtmc="nav link"
+            data-test-id="go-header-logo-link" role="heading" aria-level="1">
+          <img class="go-Header-logo" src="/static/shared/logo/go-white.svg" alt="Go">
+        </a>
+         <div class="skip-navigation-wrapper">
+            <a class="skip-to-content-link" aria-label="Skip to main content" href="#main-content"> Skip to Main Content </a>
+          </div>
+        <div class="go-Header-rightContent">
+          
+<div class="go-SearchForm js-searchForm">
+  <form
+    class="go-InputGroup go-ShortcutKey go-SearchForm-form"
+    action="/search"
+    data-shortcut="/"
+    data-shortcut-alt="search"
+    data-gtmc="search form"
+    aria-label="Search for a package"
+    role="search"
+  >
+    <input name="q" class="go-Input js-searchFocus" aria-label="Search for a package" type="search"
+        autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"
+        placeholder="Search packages or symbols"
+        value="mcp-go" />
+    <input name="m" value="package" hidden>
+    <button class="go-Button go-Button--inverted" aria-label="Submit search">
+      <img
+        class="go-Icon"
+        height="24"
+        width="24"
+        src="/static/shared/icon/search_gm_grey_24dp.svg"
+        alt=""
+      />
+    </button>
+  </form>
+  <button class="go-SearchForm-expandSearch js-expandSearch" data-gtmc="nav button"
+      aria-label="Open search" data-test-id="expand-search">
+    <img class="go-Icon go-Icon--inverted" height="24" width="24"
+        src="/static/shared/icon/search_gm_grey_24dp.svg" alt="">
+
+  </button>
+</div>
+
+          <ul class="go-Header-menu">
+            <li class="go-Header-menuItem">
+              <a class="js-desktop-menu-hover" href="#" data-gtmc="nav link">
+                Why Go
+                <img class="go-Icon" height="24" width="24" src="/static/shared/icon/arrow_drop_down_gm_grey_24dp.svg" alt="submenu dropdown icon">
+              </a>
+              <ul class="go-Header-submenu go-Header-submenu--why js-desktop-submenu-hover" aria-label="submenu">
+                  <li class="go-Header-submenuItem">
+                    <div>
+                      <a href="https://go.dev/solutions#case-studies">
+                        <span>Case Studies</span>
+                      </a>
+                    </div>
+                    <p>Common problems companies solve with Go</p>
+                  </li>
+                  <li class="go-Header-submenuItem">
+                    <div>
+                      <a href="https://go.dev/solutions#use-cases">
+                        <span>Use Cases</span>
+                      </a>
+                    </div>
+                    <p>Stories about how and why companies use Go</p>
+                  </li>
+                  <li class="go-Header-submenuItem">
+                    <div>
+                      <a href="https://go.dev/security/">
+                        <span>Security</span>
+                      </a>
+                    </div>
+                    <p>How Go can help keep you secure by default</p>
+                  </li>
+              </ul>
+            </li>
+            <li class="go-Header-menuItem">
+              <a href="https://go.dev/learn/" data-gtmc="nav link">Learn</a>
+            </li>
+            <li class="go-Header-menuItem">
+              <a class="js-desktop-menu-hover" href="#" data-gtmc="nav link">
+                Docs
+                <img class="go-Icon" height="24" width="24" src="/static/shared/icon/arrow_drop_down_gm_grey_24dp.svg" alt="submenu dropdown icon">
+              </a>
+              <ul class="go-Header-submenu go-Header-submenu--docs js-desktop-submenu-hover" aria-label="submenu">
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/doc/effective_go">
+                      <span>Effective Go</span>
+                    </a>
+                  </div>
+                  <p>Tips for writing clear, performant, and idiomatic Go code</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/doc/">
+                      <span>Go User Manual</span>
+                    </a>
+                  </div>
+                  <p>A complete introduction to building software with Go</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://pkg.go.dev/std">
+                      <span>Standard library</span>
+                    </a>
+                  </div>
+                  <p>Reference documentation for Go's standard library</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/doc/devel/release">
+                      <span>Release Notes</span>
+                    </a>
+                  </div>
+                  <p>Learn what's new in each Go release</p>
+                </li>
+              </ul>
+            </li>
+            <li class="go-Header-menuItem go-Header-menuItem--active">
+              <a href="/" data-gtmc="nav link">Packages</a>
+            </li>
+            <li class="go-Header-menuItem">
+              <a class="js-desktop-menu-hover" href="#" data-gtmc="nav link">
+                Community
+                <img class="go-Icon" height="24" width="24" src="/static/shared/icon/arrow_drop_down_gm_grey_24dp.svg" alt="submenu dropdown icon">
+              </a>
+              <ul class="go-Header-submenu go-Header-submenu--community js-desktop-submenu-hover" aria-label="submenu">
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/talks/">
+                      <span>Recorded Talks</span>
+                    </a>
+                  </div>
+                  <p>Videos from prior events</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://www.meetup.com/pro/go">
+                      <span>Meetups</span>
+                      <i class="material-icons">
+                        <img class="go-Icon" height="24" width="24"
+                            src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </div>
+                  <p>Meet other local Go developers</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://github.com/golang/go/wiki/Conferences">
+                      <span>Conferences</span>
+                      <i class="material-icons">
+                        <img class="go-Icon" height="24" width="24"
+                            src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </div>
+                  <p>Learn and network with Go developers from around the world</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/blog">
+                      <span>Go blog</span>
+                    </a>
+                  </div>
+                  <p>The Go project's official blog.</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/help">
+                      <span>Go project</span>
+                    </a>
+                  </div>
+                  <p>Get help and stay informed from Go</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    Get connected
+                  </div>
+                  <p></p>
+                  <div class="go-Header-socialIcons">
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with google-groups (Opens in new window)"
+                        title="Get connected with google-groups (Opens in new window)"
+                        href="https://groups.google.com/g/golang-nuts">
+                        <img src="/static/shared/logo/social/google-groups.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with github (Opens in new window)"
+                        title="Get connected with github (Opens in new window)"
+                        href="https://github.com/golang">
+                        <img src="/static/shared/logo/social/github.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with twitter (Opens in new window)"
+                        title="Get connected with twitter (Opens in new window)"
+                        href="https://twitter.com/golang">
+                        <img src="/static/shared/logo/social/twitter.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with reddit (Opens in new window)"
+                        title="Get connected with reddit (Opens in new window)"
+                        href="https://www.reddit.com/r/golang/">
+                        <img src="/static/shared/logo/social/reddit.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with slack (Opens in new window)"
+                        title="Get connected with slack (Opens in new window)"
+                        href="https://invite.slack.golangbridge.org/">
+                        <img src="/static/shared/logo/social/slack.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with stack-overflow (Opens in new window)"
+                        title=""
+                        href="https://stackoverflow.com/collectives/go">
+                        <img src="/static/shared/logo/social/stack-overflow.svg" />
+                      </a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <button class="go-Header-navOpen js-headerMenuButton go-Header-navOpen--white" data-gtmc="nav button" aria-label="Open navigation">
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <aside class="go-NavigationDrawer js-header">
+    <nav class="go-NavigationDrawer-nav">
+      <div class="go-NavigationDrawer-header">
+        <a href="https://go.dev/">
+          <img class="go-NavigationDrawer-logo" src="/static/shared/logo/go-blue.svg" alt="Go.">
+        </a>
+      </div>
+      <ul class="go-NavigationDrawer-list">
+          <li class="go-NavigationDrawer-listItem js-mobile-subnav-trigger go-NavigationDrawer-hasSubnav">
+            <a href="#">
+              <span>Why Go</span>
+              <i class="material-icons">
+                <img class="go-Icon" height="24" width="24"
+                  src="/static/shared/icon/navigate_next_gm_grey_24dp.svg" alt="">
+              </i>
+            </a>
+
+            <div class="go-NavigationDrawer go-NavigationDrawer-submenuItem">
+              <div class="go-NavigationDrawer-nav">
+                <div class="go-NavigationDrawer-header">
+                  <a href="#">
+                    <i class="material-icons">
+                      <img class="go-Icon" height="24" width="24"
+                        src="/static/shared/icon/navigate_before_gm_grey_24dp.svg" alt="">
+                      </i>
+                      Why Go
+                  </a>
+                </div>
+                <ul class="go-NavigationDrawer-list">
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/solutions#case-studies">
+                      Case Studies
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/solutions#use-cases">
+                      Use Cases
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/security/">
+                      Security
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="go-NavigationDrawer-listItem">
+            <a href="https://go.dev/learn/">Learn</a>
+          </li>
+          <li class="go-NavigationDrawer-listItem js-mobile-subnav-trigger go-NavigationDrawer-hasSubnav">
+            <a href="#">
+              <span>Docs</span>
+              <i class="material-icons">
+                <img class="go-Icon" height="24" width="24"
+                  src="/static/shared/icon/navigate_next_gm_grey_24dp.svg" alt="">
+              </i>
+            </a>
+
+            <div class="go-NavigationDrawer go-NavigationDrawer-submenuItem">
+              <div class="go-NavigationDrawer-nav">
+                <div class="go-NavigationDrawer-header">
+                  <a href="#"><i class="material-icons">
+                    <img class="go-Icon" height="24" width="24"
+                      src="/static/shared/icon/navigate_before_gm_grey_24dp.svg" alt="">
+                    </i>
+                    Docs
+                  </a>
+                </div>
+                <ul class="go-NavigationDrawer-list">
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/doc/effective_go">
+                      Effective Go
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/doc/">
+                      Go User Manual
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://pkg.go.dev/std">
+                      Standard library
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/doc/devel/release">
+                      Release Notes
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="go-NavigationDrawer-listItem go-NavigationDrawer-listItem--active">
+            <a href="/">Packages</a>
+          </li>
+          <li class="go-NavigationDrawer-listItem js-mobile-subnav-trigger go-NavigationDrawer-hasSubnav">
+            <a href="#">
+              <span>Community</span>
+              <i class="material-icons">
+                <img class="go-Icon" height="24" width="24"
+                  src="/static/shared/icon/navigate_next_gm_grey_24dp.svg" alt="">
+              </i>
+            </a>
+            <div class="go-NavigationDrawer go-NavigationDrawer-submenuItem">
+              <div class="go-NavigationDrawer-nav">
+                <div class="go-NavigationDrawer-header">
+                  <a href="#">
+                    <i class="material-icons">
+                      <img class="go-Icon" height="24" width="24"
+                        src="/static/shared/icon/navigate_before_gm_grey_24dp.svg" alt="">
+                    </i>
+                    Community
+                  </a>
+                </div>
+                <ul class="go-NavigationDrawer-list">
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/talks/">
+                      Recorded Talks
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://www.meetup.com/pro/go">
+                      Meetups
+                      <i class="material-icons">
+                      <img class="go-Icon" height="24" width="24"
+                          src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://github.com/golang/go/wiki/Conferences">
+                      Conferences
+                      <i class="material-icons">
+                        <img class="go-Icon" height="24" width="24" src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/blog">
+                      Go blog
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/help">
+                      Go project
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <div>Get connected</div>
+                    <div class="go-Header-socialIcons">
+                        <a class="go-Header-socialIcon" href="https://groups.google.com/g/golang-nuts"><img src="/static/shared/logo/social/google-groups.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://github.com/golang"><img src="/static/shared/logo/social/github.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://twitter.com/golang"><img src="/static/shared/logo/social/twitter.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://www.reddit.com/r/golang/"><img src="/static/shared/logo/social/reddit.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://invite.slack.golangbridge.org/"><img src="/static/shared/logo/social/slack.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://stackoverflow.com/collectives/go"><img src="/static/shared/logo/social/stack-overflow.svg" /></a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+      </ul>
+    </nav>
+  </aside>
+  <div class="go-NavigationDrawer-scrim js-scrim" role="presentation"></div>
+
+    
+  <main class="go-Container" id="main-content">
+    
+  <header class="SearchResults-header js-searchHeader">
+    <div class="SearchResults-headerContent">
+      <a class="SearchResults-headerLogo" href="https://go.dev/" aria-hidden="true" tabindex="-1" data-gtmc="header link"
+          aria-label="Link to Go Homepage">
+        <img height="78" width="207" src="/static/shared/logo/go-blue.svg" alt="Go">
+      </a>
+      <form
+        class="go-InputGroup go-ShortcutKey SearchResults-search"
+        action="/search"
+        data-shortcut="/"
+        data-shortcut-alt="search"
+        data-gtmc="search form"
+        aria-label="Search for a package"
+        role="search"
+      >
+        <input name="q" class="go-Input js-searchFocus" aria-label="Search for a package" type="search"
+            autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"
+            placeholder="Search packages or symbols" value="mcp-go" />
+        <input name="m" value="package" hidden>
+        <button class="go-Button go-Button--inverted" aria-label="Submit search">
+          <img
+            class="go-Icon"
+            height="24"
+            width="24"
+            src="/static/shared/icon/search_gm_grey_24dp.svg"
+            alt=""
+          />
+        </button>
+      </form>
+    </div>
+  </header>
+
+    
+  <div class="SearchResults-tabs">
+    <nav class="go-TabNav">
+      <ul>
+        <li aria-current="page">
+          <a href="/search?limit=25&amp;m=package&amp;q=mcp-go">Packages</a>
+        </li>
+        <li >
+          <a href="/search?limit=25&amp;m=symbol&amp;q=mcp-go">Symbols</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+    <div class="go-Content SearchResults">
+      
+        
+  <div class="SearchResults-summary" role="heading" aria-level="1">
+    Showing <strong>16</strong> modules with matching packages. <a href="/search-help">Search help</a>
+  </div>
+  
+    
+  <div>
+    
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/ks6088ts-labs/mcp-go" data-gtmc="search result" data-gtmv="0"
+                data-test-id="snippet-title">
+              mcp-go
+              <span class="SearchSnippet-header-path">(github.com/ks6088ts-labs/mcp-go)</span>
+            </a>
+          </h2>
+          <span class="go-Chip go-Chip--inverted">command</span>
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/ks6088ts-labs/mcp-go?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.0.1</strong> published on <span data-test-id="snippet-published"><strong>Apr  5, 2025</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/ks6088ts-labs/mcp-go?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/DataDog/dd-trace-go/contrib/mark3labs/mcp-go/v2" data-gtmc="search result" data-gtmv="1"
+                data-test-id="snippet-title">
+              mcpgo
+              <span class="SearchSnippet-header-path">(github.com/DataDog/dd-trace-go/contrib/mark3labs/mcp-go/v2)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/DataDog/dd-trace-go/contrib/mark3labs/mcp-go/v2?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v2.5.0</strong> published on <span data-test-id="snippet-published"><strong>Jan  9, 2026</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/DataDog/dd-trace-go/contrib/mark3labs/mcp-go/v2?tab=licenses" aria-label="Go to Licenses">
+        Apache-2.0, BSD-3-Clause
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/agnostai/agnost-go/agnost" data-gtmc="search result" data-gtmv="2"
+                data-test-id="snippet-title">
+              agnost
+              <span class="SearchSnippet-header-path">(github.com/agnostai/agnost-go/agnost)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+          <p class="SearchSnippet-synopsis" data-test-id="snippet-synopsis">
+            Package agnost provides analytics tracking for MCP servers built with mcp-go
+          </p>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/agnostai/agnost-go/agnost?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.1.2</strong> published on <span data-test-id="snippet-published"><strong>Oct 17, 2025</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/agnostai/agnost-go/agnost?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/XiaoConstantine/mcp-go" data-gtmc="search result" data-gtmv="3"
+                data-test-id="snippet-title">
+              mcp
+              <span class="SearchSnippet-header-path">(github.com/XiaoConstantine/mcp-go)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+          <p class="SearchSnippet-synopsis" data-test-id="snippet-synopsis">
+            Package mcp provides a comprehensive Go implementation of the Model Context Protocol (MCP), a standardized protocol for communication between Large Language Models (LLMs) and context providers.
+          </p>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/XiaoConstantine/mcp-go?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.3.1</strong> published on <span data-test-id="snippet-published"><strong>Jul 28, 2025</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/XiaoConstantine/mcp-go?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/cavernouskina/mcp-go" data-gtmc="search result" data-gtmv="4"
+                data-test-id="snippet-title">
+              mcp
+              <span class="SearchSnippet-header-path">(github.com/cavernouskina/mcp-go)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/cavernouskina/mcp-go?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.0.0-...-0672bd6</strong> published on <span data-test-id="snippet-published"><strong>Apr 16, 2025</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/cavernouskina/mcp-go?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/dentaku7/mcp-go-sdk" data-gtmc="search result" data-gtmv="5"
+                data-test-id="snippet-title">
+              mcp
+              <span class="SearchSnippet-header-path">(github.com/dentaku7/mcp-go-sdk)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/dentaku7/mcp-go-sdk?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.1.2</strong> published on <span data-test-id="snippet-published"><strong>Apr 12, 2025</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/dentaku7/mcp-go-sdk?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/gitlab.flexinfer.ai/libs/mcp-go" data-gtmc="search result" data-gtmv="6"
+                data-test-id="snippet-title">
+              mcp
+              <span class="SearchSnippet-header-path">(gitlab.flexinfer.ai/libs/mcp-go)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+          <p class="SearchSnippet-synopsis" data-test-id="snippet-synopsis">
+            Package mcp implements the Model Context Protocol (MCP) for building AI tool servers.
+          </p>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/gitlab.flexinfer.ai/libs/mcp-go?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.1.0</strong> published on <span data-test-id="snippet-published"><strong>Dec 28, 2025</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/gitlab.flexinfer.ai/libs/mcp-go?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/mark3labs/mcp-go-x402" data-gtmc="search result" data-gtmv="7"
+                data-test-id="snippet-title">
+              x402
+              <span class="SearchSnippet-header-path">(github.com/mark3labs/mcp-go-x402)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/mark3labs/mcp-go-x402?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.8.2</strong> published on <span data-test-id="snippet-published"><strong>Oct 26, 2025</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/mark3labs/mcp-go-x402?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/edmondfrank/mcp-probe-go" data-gtmc="search result" data-gtmv="8"
+                data-test-id="snippet-title">
+              mcpprobego
+              <span class="SearchSnippet-header-path">(github.com/edmondfrank/mcp-probe-go)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/edmondfrank/mcp-probe-go?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.0.2</strong> published on <span data-test-id="snippet-published"><strong>May 28, 2025</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/edmondfrank/mcp-probe-go?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/felixgeelhaar/mcp-go" data-gtmc="search result" data-gtmv="9"
+                data-test-id="snippet-title">
+              mcp
+              <span class="SearchSnippet-header-path">(github.com/felixgeelhaar/mcp-go)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+          <p class="SearchSnippet-synopsis" data-test-id="snippet-synopsis">
+            Package mcp provides a framework for building MCP (Model Context Protocol) servers.
+          </p>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/felixgeelhaar/mcp-go?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v1.6.4</strong> published on <span data-test-id="snippet-published"><strong>Feb  1, 2026</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/felixgeelhaar/mcp-go?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/DR1N0/mcp-go" data-gtmc="search result" data-gtmv="10"
+                data-test-id="snippet-title">
+              mcpgo
+              <span class="SearchSnippet-header-path">(github.com/DR1N0/mcp-go)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/DR1N0/mcp-go?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.0.2</strong> published on <span data-test-id="snippet-published"><strong>Jan  6, 2026</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/DR1N0/mcp-go?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/go-kratos/kratos/contrib/transport/mcp/v2" data-gtmc="search result" data-gtmv="11"
+                data-test-id="snippet-title">
+              mcp
+              <span class="SearchSnippet-header-path">(github.com/go-kratos/kratos/contrib/transport/mcp/v2)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/go-kratos/kratos/contrib/transport/mcp/v2?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v2.0.0-...-c7a58ff</strong> published on <span data-test-id="snippet-published"><strong>Jan  5, 2026</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/go-kratos/kratos/contrib/transport/mcp/v2?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/vllm-project/semantic-router/dashboard/backend/mcp" data-gtmc="search result" data-gtmv="12"
+                data-test-id="snippet-title">
+              mcp
+              <span class="SearchSnippet-header-path">(github.com/vllm-project/semantic-router/dashboard/backend/mcp)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+          <p class="SearchSnippet-synopsis" data-test-id="snippet-synopsis">
+            Package mcp provides MCP (Model Context Protocol) client implementation using the official mcp-go SDK (github.com/mark3labs/mcp-go).
+          </p>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/vllm-project/semantic-router/dashboard/backend/mcp?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.0.0-...-cdd0ca1</strong> published on <span data-test-id="snippet-published"><strong>today</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/vllm-project/semantic-router/dashboard/backend/mcp?tab=licenses" aria-label="Go to Licenses">
+        Apache-2.0
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/fredcamaral/gomcp-sdk" data-gtmc="search result" data-gtmv="13"
+                data-test-id="snippet-title">
+              mcp
+              <span class="SearchSnippet-header-path">(github.com/fredcamaral/gomcp-sdk)</span>
+            </a>
+          </h2>
+          
+          
+  
+  
+
+        </div>
+        
+          <p class="SearchSnippet-synopsis" data-test-id="snippet-synopsis">
+            Package mcp provides a high-level interface for the Model Context Protocol.
+          </p>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/fredcamaral/gomcp-sdk?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v1.2.0</strong> published on <span data-test-id="snippet-published"><strong>Jun  1, 2025</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/fredcamaral/gomcp-sdk?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/landmaster135/mcps-go" data-gtmc="search result" data-gtmv="14"
+                data-test-id="snippet-title">
+              mcps-go
+              <span class="SearchSnippet-header-path">(github.com/landmaster135/mcps-go)</span>
+            </a>
+          </h2>
+          <span class="go-Chip go-Chip--inverted">command</span>
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/landmaster135/mcps-go?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.0.0-...-55730a4</strong> published on <span data-test-id="snippet-published"><strong>Jan 25, 2026</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/landmaster135/mcps-go?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+      
+      
+      <div class="SearchSnippet" >
+        <div class="SearchSnippet-headerContainer">
+          <h2>
+            <a href="/github.com/rsclarke/mcp-taskfile-server" data-gtmc="search result" data-gtmv="15"
+                data-test-id="snippet-title">
+              mcp-taskfile-server
+              <span class="SearchSnippet-header-path">(github.com/rsclarke/mcp-taskfile-server)</span>
+            </a>
+          </h2>
+          <span class="go-Chip go-Chip--inverted">command</span>
+          
+  
+  
+
+        </div>
+        
+        
+  <div class="SearchSnippet-infoLabel">
+    <a href="/github.com/rsclarke/mcp-taskfile-server?tab=importedby" aria-label="Go to Imported By">
+       <span class="go-textSubtle">Imported by </span><strong>0</strong>
+    </a>
+    <span class="go-textSubtle">|</span>
+    <span class="go-textSubtle">
+      <strong>v0.0.0-...-1e04259</strong> published on <span data-test-id="snippet-published"><strong>Jan 29, 2026</strong></span>
+    </span>
+    <span class="go-textSubtle">|</span>
+    <span data-test-id="snippet-license">
+    
+      <a href="/github.com/rsclarke/mcp-taskfile-server?tab=licenses" aria-label="Go to Licenses">
+        MIT
+      </a>
+    
+    </span>
+  </div>
+
+        
+        
+      </div> 
+    
+  </div>
+
+  
+
+      
+      
+        
+  
+  <div class="SearchPagination" data-test-id="pagination">
+    Didn't find what you were looking for?
+    See <a href="/search-help" data-gtmc="search help"> search help.</a></div>
+
+      
+    </div>
+  </main>
+
+    
+  <footer class="go-Footer">
+    
+    <div class="go-Footer-links">
+      <div class="go-Footer-linkColumn">
+        <a href="https://go.dev/solutions" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Why Go
+        </a>
+        <a href="https://go.dev/solutions#use-cases" class="go-Footer-link"
+            data-gtmc="footer link">
+          Use Cases
+        </a>
+        <a href="https://go.dev/solutions#case-studies" class="go-Footer-link"
+            data-gtmc="footer link">
+          Case Studies
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://learn.go.dev/" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Get Started
+        </a>
+        <a href="https://play.golang.org" class="go-Footer-link" data-gtmc="footer link">
+          Playground
+        </a>
+        <a href="https://tour.golang.org" class="go-Footer-link" data-gtmc="footer link">
+          Tour
+        </a>
+        <a href="https://stackoverflow.com/questions/tagged/go?tab=Newest" class="go-Footer-link"
+            data-gtmc="footer link">
+          Stack Overflow
+        </a>
+        <a href="https://go.dev/help" class="go-Footer-link"
+            data-gtmc="footer link">
+          Help
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://pkg.go.dev" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Packages
+        </a>
+        <a href="/std" class="go-Footer-link" data-gtmc="footer link">
+          Standard Library
+        </a>
+        <a href="/golang.org/x" class="go-Footer-link" data-gtmc="footer link">
+          Sub-repositories
+        </a>
+        <a href="https://pkg.go.dev/about" class="go-Footer-link" data-gtmc="footer link">
+          About Go Packages
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://go.dev/project" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          About
+        </a>
+        <a href="https://go.dev/dl/" class="go-Footer-link" data-gtmc="footer link">Download</a>
+        <a href="https://go.dev/blog" class="go-Footer-link" data-gtmc="footer link">Blog</a>
+        <a href="https://github.com/golang/go/issues" class="go-Footer-link" data-gtmc="footer link">
+          Issue Tracker
+        </a>
+        <a href="https://go.dev/doc/devel/release.html" class="go-Footer-link"
+            data-gtmc="footer link">
+          Release Notes
+        </a>
+        <a href="https://go.dev/brand" class="go-Footer-link" data-gtmc="footer link">
+          Brand Guidelines
+        </a>
+        <a href="https://go.dev/conduct" class="go-Footer-link" data-gtmc="footer link">
+          Code of Conduct
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://www.twitter.com/golang" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Connect
+        </a>
+        <a href="https://www.twitter.com/golang" class="go-Footer-link" data-gtmc="footer link">
+          Twitter
+        </a>
+        <a href="https://github.com/golang" class="go-Footer-link" data-gtmc="footer link">GitHub</a>
+        <a href="https://invite.slack.golangbridge.org/" class="go-Footer-link"
+            data-gtmc="footer link">
+          Slack
+        </a>
+        <a href="https://reddit.com/r/golang" class="go-Footer-link" data-gtmc="footer link">
+          r/golang
+        </a>
+        <a href="https://www.meetup.com/pro/go" class="go-Footer-link" data-gtmc="footer link">
+          Meetup
+        </a>
+        <a href="https://golangweekly.com/" class="go-Footer-link" data-gtmc="footer link">
+          Golang Weekly
+        </a>
+      </div>
+    </div>
+    <div class="go-Footer-bottom">
+      <img class="go-Footer-gopher"  width="1431" height="901"
+          src="/static/shared/gopher/pilot-bust-1431x901.svg" alt="Gopher in flight goggles">
+      <ul class="go-Footer-listRow">
+        <li class="go-Footer-listItem">
+          <a href="https://go.dev/copyright" data-gtmc="footer link">Copyright</a>
+        </li>
+        <li class="go-Footer-listItem">
+          <a href="https://go.dev/tos" data-gtmc="footer link">Terms of Service</a>
+        </li>
+        <li class="go-Footer-listItem">
+          <a href="http://www.google.com/intl/en/policies/privacy/" data-gtmc="footer link"
+              target="_blank" rel="noopener">
+            Privacy Policy
+          </a>
+        </li>
+        <li class="go-Footer-listItem">
+          <a href="https://go.dev/s/pkgsite-feedback" target="_blank" rel="noopener"
+              data-gtmc="footer link">
+            Report an Issue
+          </a>
+        </li>
+        <li class="go-Footer-listItem">
+          <button class="go-Button go-Button--text go-Footer-toggleTheme js-toggleTheme" aria-label="Theme Toggle">
+            <img data-value="auto" class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/brightness_6_gm_grey_24dp.svg" alt="System theme">
+            <img data-value="dark" class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/brightness_2_gm_grey_24dp.svg" alt="Dark theme">
+            <img data-value="light" class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/light_mode_gm_grey_24dp.svg" alt="Light theme">
+            <p> Theme Toggle </p>
+          </button>
+        </li>
+        <li class="go-Footer-listItem">
+          <button class="go-Button go-Button--text go-Footer-keyboard js-openShortcuts" aria-label="Shorcuts Modal">
+            <img class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/keyboard_grey_24dp.svg" alt="">
+            <p> Shortcuts Modal </p>
+          </button>
+        </li>
+      </ul>
+      <a class="go-Footer-googleLogo" href="https://google.com" target="_blank"rel="noopener"
+          data-gtmc="footer link">
+        <img class="go-Footer-googleLogoImg" height="24" width="72"
+            src="/static/shared/logo/google-white.svg" alt="Google logo">
+      </a>
+    </div>
+  </footer>
+
+    
+  <dialog id="jump-to-modal" class="JumpDialog go-Modal go-Modal--md js-modal">
+    <form method="dialog" data-gmtc="jump to form" aria-label="Jump to Identifier">
+      <div class="Dialog-title go-Modal-header">
+        <h2>Jump to</h2>
+        <button
+          class="go-Button go-Button--inline"
+          type="button"
+          data-modal-close
+          data-gtmc="modal button"
+          aria-label="Close"
+        >
+          <img
+            class="go-Icon"
+            height="24"
+            width="24"
+            src="/static/shared/icon/close_gm_grey_24dp.svg"
+            alt=""
+          />
+        </button>
+      </div>
+      <div class="JumpDialog-filter">
+        <input class="JumpDialog-input go-Input" autocomplete="off" type="text">
+      </div>
+      <div class="JumpDialog-body go-Modal-body">
+        <div class="JumpDialog-list"></div>
+      </div>
+      <div class="go-Modal-actions">
+        <button class="go-Button" data-test-id="close-dialog">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="ShortcutsDialog go-Modal go-Modal--sm js-modal">
+    <form method="dialog">
+      <div class="go-Modal-header">
+        <h2>Keyboard shortcuts</h2>
+        <button
+          class="go-Button go-Button--inline"
+          type="button"
+          data-modal-close
+          data-gtmc="modal button"
+          aria-label="Close"
+        >
+          <img
+            class="go-Icon"
+            height="24"
+            width="24"
+            src="/static/shared/icon/close_gm_grey_24dp.svg"
+            alt=""
+          />
+        </button>
+      </div>
+      <div class="go-Modal-body">
+        <table>
+          <tbody>
+            <tr><td class="ShortcutsDialog-key">
+              <strong>?</strong></td><td> : This menu</td>
+            </tr>
+            <tr><td class="ShortcutsDialog-key">
+              <strong>/</strong></td><td> : Search site</td>
+            </tr>
+            <tr><td class="ShortcutsDialog-key">
+              <strong>f</strong> or <strong>F</strong></td><td> : Jump to</td>
+            </tr>
+            <tr>
+              <td class="ShortcutsDialog-key"><strong>y</strong> or <strong>Y</strong></td>
+              <td> : Canonical URL</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="go-Modal-actions">
+        <button class="go-Button" data-test-id="close-dialog">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+    
+      <section class="Cookie-notice js-cookieNotice">
+        <div>go.dev uses cookies from Google to deliver and enhance the quality of its services and to
+        analyze traffic. <a target=_blank href="https://policies.google.com/technologies/cookies">Learn more.</a></div>
+        <div><button class="go-Button">Okay</button></div>
+      </section>
+    
+    
+      <script>
+        // this will throw if the querySelector can’t find the element
+        const gtmId = document.querySelector('.js-gtmID').dataset.gtmid;
+        if (!gtmId) {
+          throw new Error('Google Tag Manager ID not found');
+        }
+        loadScript(`https://www.googletagmanager.com/gtm.js?id=${gtmId}`);
+      </script>
+      <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8MVQXG"
+                height="0" width="0" style="display:none;visibility:hidden">
+        </iframe>
+      </noscript>
+    
+    
+  <script>
+    loadScript('/static/frontend/search/search.js')
+  </script>
+
+  </body>
+</html>
