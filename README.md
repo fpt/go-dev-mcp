@@ -2,7 +2,7 @@
 
 ## Introduction
 
-GoDevMCP provides convenient tools for Go development with Model Context Protocol (MCP) integration.
+GoDevMCP is a Model Context Protocol (MCP) server that provides development tools with a focus on Go, and additional support for Rust and Python. It offers documentation lookup, code search, project navigation, and more.
 
 ## Installation
 
@@ -53,165 +53,47 @@ Add this section in your user's `settings.json`
 
 ## Tools
 
-### run_make
+### Go Documentation
 
-Runs make command for common development tasks.
+| Tool | Description |
+|------|-------------|
+| `search_godoc` | Search for Go packages on pkg.go.dev |
+| `read_godoc` | Read Go package documentation with line-based paging |
+| `search_within_godoc` | Search for keywords within a specific Go package's documentation |
+| `outline_go_package` | Get a comprehensive outline of a Go package: dependencies, exported declarations, and call graph |
+| `validate_go_code` | Validate Go code using go vet, build checks, formatting, and module tidiness |
 
-### tree_dir
+### Rust Documentation
 
-Returns directory tree structure for project navigation.
+| Tool | Description |
+|------|-------------|
+| `search_rustdoc` | Search for Rust crates on docs.rs |
+| `read_rustdoc` | Read Rust crate documentation with line-based paging |
+| `search_within_rustdoc` | Search for keywords within a specific Rust crate's documentation |
 
-### search_godoc
+### Python Documentation
 
-Searches for Go packages on pkg.go.dev and returns matching results.
+| Tool | Description |
+|------|-------------|
+| `search_pydoc` | Search Python standard library modules on docs.python.org |
+| `read_pydoc` | Read Python standard library module documentation with line-based paging |
+| `search_within_pydoc` | Search for keywords within a specific Python module's documentation |
 
-**Usage:**
-```
-search_godoc query
-```
+### Project Navigation
 
-**Example:**
-```
-search_godoc html
-```
+| Tool | Description |
+|------|-------------|
+| `tree_dir` | Display local directory tree structure with depth limiting |
+| `search_local_files` | Search file contents in local directories with match limiting |
+| `scan_markdown` | Scan markdown files to extract headings with line numbers |
 
-This will search for packages related to "html" and return a list of matching packages with their descriptions.
+### GitHub Integration
 
-### read_godoc
-
-Fetches and displays documentation for a specific Go package.
-
-**Usage:**
-```
-read_godoc package_url
-```
-
-**Example:**
-```
-read_godoc golang.org/x/net/html
-```
-
-This will retrieve the documentation for the specified package, including descriptions, functions, types, and examples.
-
-### extract_function_names
-
-Extracts exported function names from Go source files in a directory.
-
-**Usage:**
-```
-extract_function_names directory
-```
-
-**Example:**
-```
-extract_function_names ./internal/app
-```
-
-This will recursively scan the directory for `.go` files (excluding test files) and extract all exported function names, showing both regular functions and methods with their receiver types.
-
-### extract_call_graph
-
-Analyzes function call relationships within a single Go file.
-
-**Usage:**
-```
-extract_call_graph file_path
-```
-
-**Example:**
-```
-extract_call_graph ./internal/app/github.go
-```
-
-This will show which functions call which other functions, including external package calls and local function calls. Useful for understanding code dependencies and refactoring impact analysis.
-
-### search_local_files
-
-Searches for text within files in a local directory with match limiting to reduce output size.
-
-**Usage:**
-```
-search_local_files path query extension max_matches
-```
-
-**Example:**
-```
-search_local_files ./internal/app "SearchLocalFiles" go 10
-```
-
-This will search for the text "SearchLocalFiles" in all `.go` files within the `./internal/app` directory, showing up to 10 matches per file with line numbers.
-
-### get_github_content
-
-Retrieves the content of a specific file from a GitHub repository with optional line-based paging for large files.
-
-**Usage:**
-```
-get_github_content repo path [offset] [limit]
-```
-
-**Parameters:**
-- `repo`: GitHub repository in 'owner/repo' format
-- `path`: Path to the file in the repository
-- `offset`: Line number to start reading from (0-based, default: 0)
-- `limit`: Number of lines to read (default: 100, 0 for all lines)
-
-**Examples:**
-```
-# Get entire file
-get_github_content owner/repo-name README.md
-
-# Get first 20 lines
-get_github_content owner/repo-name src/main.go 0 20
-
-# Get lines 50-70 (20 lines starting from line 50)
-get_github_content owner/repo-name src/main.go 50 20
-```
-
-This fetches content from GitHub files with optional pagination for large files, similar to the `read_godoc` tool.
-
-### tree_github_repo
-
-Displays the directory tree structure of a GitHub repository with depth limiting for efficient exploration.
-
-**Usage:**
-```
-tree_github_repo repo path max_depth ignore_dot
-```
-
-**Example:**
-```
-tree_github_repo owner/repo-name "" 3 false
-```
-
-This will show the directory structure of the GitHub repository up to 3 levels deep.
-
-### search_github_code
-
-Searches for code patterns in GitHub repositories with compact formatting.
-
-**Usage:**
-```
-search_github_code query language repo
-```
-
-**Example:**
-```
-search_github_code "func main" go owner/repo-name
-```
-
-This will search for "func main" in Go files within the specified repository, returning results in a compact format.
-
-### get_current_datetime
-
-Returns the current date and time.
-
-**Usage:**
-```
-get_current_datetime
-```
-
-This tool requires no parameters and returns the current timestamp.
+| Tool | Description |
+|------|-------------|
+| `search_github_code` | Search code in GitHub repositories with compact formatting |
+| `get_github_content` | Get file content from GitHub with line-based paging |
+| `tree_github_repo` | Display GitHub repository tree structure with depth limiting |
 
 ## Instructions
 
@@ -328,6 +210,8 @@ This graph illustrates:
 
 - Follow instructions in CONTRIBUTING.md
 - Use `run_make` and `tree_dir` tools rather than using shell commands.
-- Use `search_godoc` and `read_godoc` tools to understand how to use depending packages.
-- Use `tree_github_repo`, `search_github_code`,  `get_github_content` to inspect github repository.
+- Use `search_godoc` and `read_godoc` tools to understand how to use Go packages.
+- Use `search_rustdoc` and `read_rustdoc` tools for Rust crate documentation.
+- Use `search_pydoc` and `read_pydoc` tools for Python standard library documentation.
+- Use `tree_github_repo`, `search_github_code`, `get_github_content` to inspect github repository.
 - Remember to update README.md when making significant changes

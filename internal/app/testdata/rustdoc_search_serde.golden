@@ -1,0 +1,90 @@
+* serde-1.0.228
+	URL: https://docs.rs/serde/latest/serde/
+	Description: A generic serialization/deserialization framework
+* serde_yml-0.0.12
+	URL: https://docs.rs/crate/serde_yml/latest
+	Description: A robust Rust library that simplifies the serialization and deserialization of Rust data structures to and from YAML format using the widely-used Serde framework.
+* serde-saphyr-0.0.18
+	URL: https://docs.rs/serde-saphyr/latest/serde_saphyr/
+	Description: YAML (de)serializer for Serde, emphasizing panic-free parsing and good error reporting
+* clickhouse-0.14.2
+	URL: https://docs.rs/clickhouse/latest/clickhouse/
+	Description: Official Rust client for ClickHouse DB
+* sideko_postman_api-1.0.0
+	URL: https://docs.rs/sideko_postman_api/latest/postman_api/
+	Description: Rust API bindings - spostman_api
+* serde_ext_duration-0.2.0
+	URL: https://docs.rs/serde_ext_duration/latest/serde_ext_duration/
+	Description: Serde (de)serializer for std::time::Duration from int/float/string with multiple output formats
+* discord_typed_interactions-0.1.0
+	URL: https://docs.rs/discord_typed_interactions/latest/discord_typed_interactions/
+	Description: suppose you're working with discord slash commands and you want statically typed request types
+* serde_valid-2.0.1
+	URL: https://docs.rs/serde_valid/latest/serde_valid/
+	Description: JSON Schema based validation tool using serde.
+* serde_json_untagged-1.0.145
+	URL: https://docs.rs/serde_json_untagged/latest/serde_json_untagged/
+	Description: A JSON serialization file format
+* serde_toon_format-0.1.2
+	URL: https://docs.rs/serde_toon_format/latest/serde_toon/
+	Description: Serde-compatible TOON v3.0 encoder/decoder
+* sciformats_serde_json-1.0.148
+	URL: https://docs.rs/sciformats_serde_json/latest/sciformats_serde_json/
+	Description: A JSON serialization file format
+* serde_json_experimental-1.0.29-rc1 Yanked
+	URL: https://docs.rs/serde_json_experimental/1.0.29-rc1/serde_json/
+	Description: A JSON serialization file format
+* alt_serde_json-1.0.61
+	URL: https://docs.rs/alt_serde_json/latest/alt_serde_json/
+	Description: A JSON serialization file format
+* hc_serde_json-1.0.141
+	URL: https://docs.rs/hc_serde_json/latest/serde_json/
+	Description: A JSON serialization file format
+* serde_json-1.0.149
+	URL: https://docs.rs/serde_json/latest/serde_json/
+	Description: A JSON serialization file format
+* serde_jsonc-1.0.108
+	URL: https://docs.rs/serde_jsonc/latest/serde_jsonc/
+	Description: A JSON serialization file format
+* serde_partiql-1.1.65
+	URL: https://docs.rs/serde_partiql/latest/serde_partiql/
+	Description: A PartiQL data model serialization file format
+* serde-devo-0.1.0
+	URL: https://docs.rs/serde-devo/latest/serde_devo/
+	Description: A shared type compatibility helper
+* serde-devo-derive-0.1.0
+	URL: https://docs.rs/serde-devo-derive/latest/serde_devo_derive/
+	Description: A derive macro for shared type compatibility
+* serde_jsonc2-0.1.2
+	URL: https://docs.rs/serde_jsonc2/latest/serde_jsonc2/
+	Description: A JSON(C) serialization file format (fork of serde_json)
+* serde_rson-1.0.0
+	URL: https://docs.rs/serde_rson/latest/serde_rson/
+	Description: Serde integration for RSON
+* serde_molecule-1.1.2
+	URL: https://docs.rs/serde_molecule/latest/serde_molecule/
+	Description: Implementation of Molecule using Serde.
+* serde_mosaic-0.1.0
+	URL: https://docs.rs/serde_mosaic/latest/serde_mosaic/
+	Description: Composable serialization and deserialization for Rust structs.
+* configurable_serde-0.1.1
+	URL: https://docs.rs/configurable_serde/latest/configurable_serde/
+	Description: A proc-macro to apply reusable serde configurations.
+* configurable_serde_macros-0.1.1
+	URL: https://docs.rs/configurable_serde_macros/latest/configurable_serde_macros/
+	Description: A proc-macro to apply reusable serde configurations - macros.
+* serde-versioning-1.0.219
+	URL: https://docs.rs/serde-versioning/latest/serde_versioning/
+	Description: Add versioning support to `serde`'s `Deserialize` derive macro.
+* serde-xml-fast-0.1.2
+	URL: https://docs.rs/serde-xml-fast/latest/serde_xml/
+	Description: A fast, 100% Serde-compatible XML serialization and deserialization library
+* supply-chain-trust-crate-000019-1.0.140 Yanked
+	URL: https://docs.rs/supply-chain-trust-crate-000019/1.0.140/supply_chain_trust_crate_000019/
+	Description: A JSON serialization file format
+* supply-chain-trust-example-crate-000019-2.6.1 Yanked
+	URL: https://docs.rs/supply-chain-trust-example-crate-000019/2.6.1/supply_chain_trust_example_crate_000019/
+	Description: A hash table with consistent order and fast iteration.
+* adtp-1.0.5
+	URL: https://docs.rs/adtp/latest/adtp/
+	Description: Alula's Data Transfer Protocol

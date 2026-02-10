@@ -1,0 +1,944 @@
+* __future__
+	URL: https://docs.python.org/3/library/__future__.html#module-__future__
+	Description: Future statement definitions
+* __main__
+	URL: https://docs.python.org/3/library/__main__.html#module-__main__
+	Description: The environment where top-level code is run. Covers command-line
+interfaces, import-time behavior, and ``__name__ == '__main__'``.
+* _thread
+	URL: https://docs.python.org/3/library/_thread.html#module-_thread
+	Description: Low-level threading API.
+* _tkinter
+	URL: https://docs.python.org/3/library/tkinter.html#module-_tkinter
+	Description: A binary module that contains the low-level interface to Tcl/Tk.
+* abc
+	URL: https://docs.python.org/3/library/abc.html#module-abc
+	Description: Abstract base classes according to :pep:`3119`.
+* aifc
+	URL: https://docs.python.org/3/library/aifc.html#module-aifc
+	Description: Deprecated:  Removed in 3.13.
+* annotationlib
+	URL: https://docs.python.org/3/library/annotationlib.html#module-annotationlib
+	Description: Functionality for introspecting annotations
+* argparse
+	URL: https://docs.python.org/3/library/argparse.html#module-argparse
+	Description: Command-line option and argument parsing library.
+* array
+	URL: https://docs.python.org/3/library/array.html#module-array
+	Description: Space efficient arrays of uniformly typed numeric values.
+* ast
+	URL: https://docs.python.org/3/library/ast.html#module-ast
+	Description: Abstract Syntax Tree classes and manipulation.
+* asynchat
+	URL: https://docs.python.org/3/library/asynchat.html#module-asynchat
+	Description: Deprecated:  Removed in 3.12.
+* asyncio
+	URL: https://docs.python.org/3/library/asyncio.html#module-asyncio
+	Description: Asynchronous I/O.
+* asyncore
+	URL: https://docs.python.org/3/library/asyncore.html#module-asyncore
+	Description: Deprecated:  Removed in 3.12.
+* atexit
+	URL: https://docs.python.org/3/library/atexit.html#module-atexit
+	Description: Register and execute cleanup functions.
+* audioop
+	URL: https://docs.python.org/3/library/audioop.html#module-audioop
+	Description: Deprecated:  Removed in 3.13.
+* base64
+	URL: https://docs.python.org/3/library/base64.html#module-base64
+	Description: RFC 4648: Base16, Base32, Base64 Data Encodings;
+Base85 and Ascii85
+* bdb
+	URL: https://docs.python.org/3/library/bdb.html#module-bdb
+	Description: Debugger framework.
+* binascii
+	URL: https://docs.python.org/3/library/binascii.html#module-binascii
+	Description: Tools for converting between binary and various ASCII-encoded binary
+representations.
+* bisect
+	URL: https://docs.python.org/3/library/bisect.html#module-bisect
+	Description: Array bisection algorithms for binary searching.
+* builtins
+	URL: https://docs.python.org/3/library/builtins.html#module-builtins
+	Description: The module that provides the built-in namespace.
+* bz2
+	URL: https://docs.python.org/3/library/bz2.html#module-bz2
+	Description: Interfaces for bzip2 compression and decompression.
+* calendar
+	URL: https://docs.python.org/3/library/calendar.html#module-calendar
+	Description: Functions for working with calendars, including some emulation
+of the Unix cal program.
+* cgi
+	URL: https://docs.python.org/3/library/cgi.html#module-cgi
+	Description: Deprecated:  Removed in 3.13.
+* cgitb
+	URL: https://docs.python.org/3/library/cgitb.html#module-cgitb
+	Description: Deprecated:  Removed in 3.13.
+* chunk
+	URL: https://docs.python.org/3/library/chunk.html#module-chunk
+	Description: Deprecated:  Removed in 3.13.
+* cmath
+	URL: https://docs.python.org/3/library/cmath.html#module-cmath
+	Description: Mathematical functions for complex numbers.
+* cmd
+	URL: https://docs.python.org/3/library/cmd.html#module-cmd
+	Description: Build line-oriented command interpreters.
+* code
+	URL: https://docs.python.org/3/library/code.html#module-code
+	Description: Facilities to implement read-eval-print loops.
+* codecs
+	URL: https://docs.python.org/3/library/codecs.html#module-codecs
+	Description: Encode and decode data and streams.
+* codeop
+	URL: https://docs.python.org/3/library/codeop.html#module-codeop
+	Description: Compile (possibly incomplete) Python code.
+* collections
+	URL: https://docs.python.org/3/library/collections.html#module-collections
+	Description: Container datatypes
+* collections.abc
+	URL: https://docs.python.org/3/library/collections.abc.html#module-collections.abc
+	Description: Abstract base classes for containers
+* colorsys
+	URL: https://docs.python.org/3/library/colorsys.html#module-colorsys
+	Description: Conversion functions between RGB and other color systems.
+* compileall
+	URL: https://docs.python.org/3/library/compileall.html#module-compileall
+	Description: Tools for byte-compiling all Python source files in a directory tree.
+* compression
+	URL: https://docs.python.org/3/library/compression.html#module-compression
+* compression.zstd
+	URL: https://docs.python.org/3/library/compression.zstd.html#module-compression.zstd
+	Description: Low-level interface to compression and decompression routines in
+the zstd library.
+* concurrent.futures
+	URL: https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures
+	Description: Execute computations concurrently using threads or processes.
+* concurrent.interpreters
+	URL: https://docs.python.org/3/library/concurrent.interpreters.html#module-concurrent.interpreters
+	Description: Multiple interpreters in the same process
+* configparser
+	URL: https://docs.python.org/3/library/configparser.html#module-configparser
+	Description: Configuration file parser.
+* contextlib
+	URL: https://docs.python.org/3/library/contextlib.html#module-contextlib
+	Description: Utilities for with-statement contexts.
+* contextvars
+	URL: https://docs.python.org/3/library/contextvars.html#module-contextvars
+	Description: Context Variables
+* copy
+	URL: https://docs.python.org/3/library/copy.html#module-copy
+	Description: Shallow and deep copy operations.
+* copyreg
+	URL: https://docs.python.org/3/library/copyreg.html#module-copyreg
+	Description: Register pickle support functions.
+* cProfile
+	URL: https://docs.python.org/3/library/profile.html#module-cProfile
+* crypt
+	URL: https://docs.python.org/3/library/crypt.html#module-crypt
+	Description: Deprecated:  Removed in 3.13.
+* csv
+	URL: https://docs.python.org/3/library/csv.html#module-csv
+	Description: Write and read tabular data to and from delimited files.
+* ctypes
+	URL: https://docs.python.org/3/library/ctypes.html#module-ctypes
+	Description: A foreign function library for Python.
+* curses
+	URL: https://docs.python.org/3/library/curses.html#module-curses
+	Description: An interface to the curses library, providing portable
+terminal handling.
+* curses.ascii
+	URL: https://docs.python.org/3/library/curses.ascii.html#module-curses.ascii
+	Description: Constants and set-membership functions for ASCII characters.
+* curses.panel
+	URL: https://docs.python.org/3/library/curses.panel.html#module-curses.panel
+	Description: A panel stack extension that adds depth to  curses windows.
+* curses.textpad
+	URL: https://docs.python.org/3/library/curses.html#module-curses.textpad
+	Description: Emacs-like input editing in a curses window.
+* dataclasses
+	URL: https://docs.python.org/3/library/dataclasses.html#module-dataclasses
+	Description: Generate special methods on user-defined classes.
+* datetime
+	URL: https://docs.python.org/3/library/datetime.html#module-datetime
+	Description: Basic date and time types.
+* dbm
+	URL: https://docs.python.org/3/library/dbm.html#module-dbm
+	Description: Interfaces to various Unix "database" formats.
+* dbm.dumb
+	URL: https://docs.python.org/3/library/dbm.html#module-dbm.dumb
+	Description: Portable implementation of the simple DBM interface.
+* dbm.gnu
+	URL: https://docs.python.org/3/library/dbm.html#module-dbm.gnu
+	Description: GNU database manager
+* dbm.ndbm
+	URL: https://docs.python.org/3/library/dbm.html#module-dbm.ndbm
+	Description: The New Database Manager
+* dbm.sqlite3
+	URL: https://docs.python.org/3/library/dbm.html#module-dbm.sqlite3
+	Description: SQLite backend for dbm
+* decimal
+	URL: https://docs.python.org/3/library/decimal.html#module-decimal
+	Description: Implementation of the General Decimal Arithmetic Specification.
+* difflib
+	URL: https://docs.python.org/3/library/difflib.html#module-difflib
+	Description: Helpers for computing differences between objects.
+* dis
+	URL: https://docs.python.org/3/library/dis.html#module-dis
+	Description: Disassembler for Python bytecode.
+* distutils
+	URL: https://docs.python.org/3/library/distutils.html#module-distutils
+	Description: Deprecated:  Removed in 3.12.
+* doctest
+	URL: https://docs.python.org/3/library/doctest.html#module-doctest
+	Description: Test pieces of code within docstrings.
+* email
+	URL: https://docs.python.org/3/library/email.html#module-email
+	Description: Package supporting the parsing, manipulating, and generating
+email messages.
+* email.charset
+	URL: https://docs.python.org/3/library/email.charset.html#module-email.charset
+	Description: Character Sets
+* email.contentmanager
+	URL: https://docs.python.org/3/library/email.contentmanager.html#module-email.contentmanager
+	Description: Storing and Retrieving Content from MIME Parts
+* email.encoders
+	URL: https://docs.python.org/3/library/email.encoders.html#module-email.encoders
+	Description: Encoders for email message payloads.
+* email.errors
+	URL: https://docs.python.org/3/library/email.errors.html#module-email.errors
+	Description: The exception classes used by the email package.
+* email.generator
+	URL: https://docs.python.org/3/library/email.generator.html#module-email.generator
+	Description: Generate flat text email messages from a message structure.
+* email.header
+	URL: https://docs.python.org/3/library/email.header.html#module-email.header
+	Description: Representing non-ASCII headers
+* email.headerregistry
+	URL: https://docs.python.org/3/library/email.headerregistry.html#module-email.headerregistry
+	Description: Automatic Parsing of headers based on the field name
+* email.iterators
+	URL: https://docs.python.org/3/library/email.iterators.html#module-email.iterators
+	Description: Iterate over a  message object tree.
+* email.message
+	URL: https://docs.python.org/3/library/email.message.html#module-email.message
+	Description: The base class representing email messages.
+* email.mime
+	URL: https://docs.python.org/3/library/email.mime.html#module-email.mime
+	Description: Build MIME messages.
+* email.mime.application
+	URL: https://docs.python.org/3/library/email.mime.html#module-email.mime.application
+* email.mime.audio
+	URL: https://docs.python.org/3/library/email.mime.html#module-email.mime.audio
+* email.mime.base
+	URL: https://docs.python.org/3/library/email.mime.html#module-email.mime.base
+* email.mime.image
+	URL: https://docs.python.org/3/library/email.mime.html#module-email.mime.image
+* email.mime.message
+	URL: https://docs.python.org/3/library/email.mime.html#module-email.mime.message
+* email.mime.multipart
+	URL: https://docs.python.org/3/library/email.mime.html#module-email.mime.multipart
+* email.mime.nonmultipart
+	URL: https://docs.python.org/3/library/email.mime.html#module-email.mime.nonmultipart
+* email.mime.text
+	URL: https://docs.python.org/3/library/email.mime.html#module-email.mime.text
+* email.parser
+	URL: https://docs.python.org/3/library/email.parser.html#module-email.parser
+	Description: Parse flat text email messages to produce a message object structure.
+* email.policy
+	URL: https://docs.python.org/3/library/email.policy.html#module-email.policy
+	Description: Controlling the parsing and generating of messages
+* email.utils
+	URL: https://docs.python.org/3/library/email.utils.html#module-email.utils
+	Description: Miscellaneous email package utilities.
+* encodings
+	URL: https://docs.python.org/3/library/codecs.html#module-encodings
+	Description: Encodings package
+* encodings.idna
+	URL: https://docs.python.org/3/library/codecs.html#module-encodings.idna
+	Description: Internationalized Domain Names implementation
+* encodings.mbcs
+	URL: https://docs.python.org/3/library/codecs.html#module-encodings.mbcs
+	Description: Windows ANSI codepage
+* encodings.utf_8_sig
+	URL: https://docs.python.org/3/library/codecs.html#module-encodings.utf_8_sig
+	Description: UTF-8 codec with BOM signature
+* ensurepip
+	URL: https://docs.python.org/3/library/ensurepip.html#module-ensurepip
+	Description: Bootstrapping the "pip" installer into an existing Python
+installation or virtual environment.
+* enum
+	URL: https://docs.python.org/3/library/enum.html#module-enum
+	Description: Implementation of an enumeration class.
+* errno
+	URL: https://docs.python.org/3/library/errno.html#module-errno
+	Description: Standard errno system symbols.
+* faulthandler
+	URL: https://docs.python.org/3/library/faulthandler.html#module-faulthandler
+	Description: Dump the Python traceback.
+* fcntl
+	URL: https://docs.python.org/3/library/fcntl.html#module-fcntl
+	Description: The fcntl() and ioctl() system calls.
+* filecmp
+	URL: https://docs.python.org/3/library/filecmp.html#module-filecmp
+	Description: Compare files efficiently.
+* fileinput
+	URL: https://docs.python.org/3/library/fileinput.html#module-fileinput
+	Description: Loop over standard input or a list of files.
+* fnmatch
+	URL: https://docs.python.org/3/library/fnmatch.html#module-fnmatch
+	Description: Unix shell style filename pattern matching.
+* fractions
+	URL: https://docs.python.org/3/library/fractions.html#module-fractions
+	Description: Rational numbers.
+* ftplib
+	URL: https://docs.python.org/3/library/ftplib.html#module-ftplib
+	Description: FTP protocol client (requires sockets).
+* functools
+	URL: https://docs.python.org/3/library/functools.html#module-functools
+	Description: Higher-order functions and operations on callable objects.
+* gc
+	URL: https://docs.python.org/3/library/gc.html#module-gc
+	Description: Interface to the cycle-detecting garbage collector.
+* getopt
+	URL: https://docs.python.org/3/library/getopt.html#module-getopt
+	Description: Portable parser for command line options; support both short and
+long option names.
+* getpass
+	URL: https://docs.python.org/3/library/getpass.html#module-getpass
+	Description: Portable reading of passwords and retrieval of the userid.
+* gettext
+	URL: https://docs.python.org/3/library/gettext.html#module-gettext
+	Description: Multilingual internationalization services.
+* glob
+	URL: https://docs.python.org/3/library/glob.html#module-glob
+	Description: Unix shell style pathname pattern expansion.
+* graphlib
+	URL: https://docs.python.org/3/library/graphlib.html#module-graphlib
+	Description: Functionality to operate with graph-like structures
+* grp
+	URL: https://docs.python.org/3/library/grp.html#module-grp
+	Description: The group database (getgrnam() and friends).
+* gzip
+	URL: https://docs.python.org/3/library/gzip.html#module-gzip
+	Description: Interfaces for gzip compression and decompression using file objects.
+* hashlib
+	URL: https://docs.python.org/3/library/hashlib.html#module-hashlib
+	Description: Secure hash and message digest algorithms.
+* heapq
+	URL: https://docs.python.org/3/library/heapq.html#module-heapq
+	Description: Heap queue algorithm (a.k.a. priority queue).
+* hmac
+	URL: https://docs.python.org/3/library/hmac.html#module-hmac
+	Description: Keyed-Hashing for Message Authentication (HMAC) implementation
+* html
+	URL: https://docs.python.org/3/library/html.html#module-html
+	Description: Helpers for manipulating HTML.
+* html.entities
+	URL: https://docs.python.org/3/library/html.entities.html#module-html.entities
+	Description: Definitions of HTML general entities.
+* html.parser
+	URL: https://docs.python.org/3/library/html.parser.html#module-html.parser
+	Description: A simple parser that can handle HTML and XHTML.
+* http
+	URL: https://docs.python.org/3/library/http.html#module-http
+	Description: HTTP status codes and messages
+* http.client
+	URL: https://docs.python.org/3/library/http.client.html#module-http.client
+	Description: HTTP and HTTPS protocol client (requires sockets).
+* http.cookiejar
+	URL: https://docs.python.org/3/library/http.cookiejar.html#module-http.cookiejar
+	Description: Classes for automatic handling of HTTP cookies.
+* http.cookies
+	URL: https://docs.python.org/3/library/http.cookies.html#module-http.cookies
+	Description: Support for HTTP state management (cookies).
+* http.server
+	URL: https://docs.python.org/3/library/http.server.html#module-http.server
+	Description: HTTP server and request handlers.
+* idlelib
+	URL: https://docs.python.org/3/library/idle.html#module-idlelib
+	Description: Implementation package for the IDLE shell/editor.
+* imaplib
+	URL: https://docs.python.org/3/library/imaplib.html#module-imaplib
+	Description: IMAP4 protocol client (requires sockets).
+* imghdr
+	URL: https://docs.python.org/3/library/imghdr.html#module-imghdr
+	Description: Deprecated:  Removed in 3.13.
+* imp
+	URL: https://docs.python.org/3/library/imp.html#module-imp
+	Description: Deprecated:  Removed in 3.12.
+* importlib
+	URL: https://docs.python.org/3/library/importlib.html#module-importlib
+	Description: The implementation of the import machinery.
+* importlib.abc
+	URL: https://docs.python.org/3/library/importlib.html#module-importlib.abc
+	Description: Abstract base classes related to import
+* importlib.machinery
+	URL: https://docs.python.org/3/library/importlib.html#module-importlib.machinery
+	Description: Importers and path hooks
+* importlib.metadata
+	URL: https://docs.python.org/3/library/importlib.metadata.html#module-importlib.metadata
+	Description: Accessing package metadata
+* importlib.resources
+	URL: https://docs.python.org/3/library/importlib.resources.html#module-importlib.resources
+	Description: Package resource reading, opening, and access
+* importlib.resources.abc
+	URL: https://docs.python.org/3/library/importlib.resources.abc.html#module-importlib.resources.abc
+	Description: Abstract base classes for resources
+* importlib.util
+	URL: https://docs.python.org/3/library/importlib.html#module-importlib.util
+	Description: Utility code for importers
+* inspect
+	URL: https://docs.python.org/3/library/inspect.html#module-inspect
+	Description: Extract information and source code from live objects.
+* io
+	URL: https://docs.python.org/3/library/io.html#module-io
+	Description: Core tools for working with streams.
+* ipaddress
+	URL: https://docs.python.org/3/library/ipaddress.html#module-ipaddress
+	Description: IPv4/IPv6 manipulation library.
+* itertools
+	URL: https://docs.python.org/3/library/itertools.html#module-itertools
+	Description: Functions creating iterators for efficient looping.
+* json
+	URL: https://docs.python.org/3/library/json.html#module-json
+	Description: Encode and decode the JSON format.
+* json.tool
+	URL: https://docs.python.org/3/library/json.html#module-json.tool
+	Description: A command-line interface to validate and pretty-print JSON.
+* keyword
+	URL: https://docs.python.org/3/library/keyword.html#module-keyword
+	Description: Test whether a string is a keyword in Python.
+* linecache
+	URL: https://docs.python.org/3/library/linecache.html#module-linecache
+	Description: Provides random access to individual lines from text files.
+* locale
+	URL: https://docs.python.org/3/library/locale.html#module-locale
+	Description: Internationalization services.
+* logging
+	URL: https://docs.python.org/3/library/logging.html#module-logging
+	Description: Flexible event logging system for applications.
+* logging.config
+	URL: https://docs.python.org/3/library/logging.config.html#module-logging.config
+	Description: Configuration of the logging module.
+* logging.handlers
+	URL: https://docs.python.org/3/library/logging.handlers.html#module-logging.handlers
+	Description: Handlers for the logging module.
+* lzma
+	URL: https://docs.python.org/3/library/lzma.html#module-lzma
+	Description: A Python wrapper for the liblzma compression library.
+* mailbox
+	URL: https://docs.python.org/3/library/mailbox.html#module-mailbox
+	Description: Manipulate mailboxes in various formats
+* mailcap
+	URL: https://docs.python.org/3/library/mailcap.html#module-mailcap
+	Description: Deprecated:  Removed in 3.13.
+* marshal
+	URL: https://docs.python.org/3/library/marshal.html#module-marshal
+	Description: Convert Python objects to streams of bytes and back (with different
+constraints).
+* math
+	URL: https://docs.python.org/3/library/math.html#module-math
+	Description: Mathematical functions (sin() etc.).
+* mimetypes
+	URL: https://docs.python.org/3/library/mimetypes.html#module-mimetypes
+	Description: Mapping of filename extensions to MIME types.
+* mmap
+	URL: https://docs.python.org/3/library/mmap.html#module-mmap
+	Description: Interface to memory-mapped files for Unix and Windows.
+* modulefinder
+	URL: https://docs.python.org/3/library/modulefinder.html#module-modulefinder
+	Description: Find modules used by a script.
+* msilib
+	URL: https://docs.python.org/3/library/msilib.html#module-msilib
+	Description: Deprecated:  Removed in 3.13.
+* msvcrt
+	URL: https://docs.python.org/3/library/msvcrt.html#module-msvcrt
+	Description: Miscellaneous useful routines from the MS VC++ runtime.
+* multiprocessing
+	URL: https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing
+	Description: Process-based parallelism.
+* multiprocessing.connection
+	URL: https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing.connection
+	Description: API for dealing with sockets.
+* multiprocessing.dummy
+	URL: https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing.dummy
+	Description: Dumb wrapper around threading.
+* multiprocessing.managers
+	URL: https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing.managers
+	Description: Share data between process with shared objects.
+* multiprocessing.pool
+	URL: https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing.pool
+	Description: Create pools of processes.
+* multiprocessing.shared_memory
+	URL: https://docs.python.org/3/library/multiprocessing.shared_memory.html#module-multiprocessing.shared_memory
+	Description: Provides shared memory for direct access across processes.
+* multiprocessing.sharedctypes
+	URL: https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing.sharedctypes
+	Description: Allocate ctypes objects from shared memory.
+* netrc
+	URL: https://docs.python.org/3/library/netrc.html#module-netrc
+	Description: Loading of .netrc files.
+* nis
+	URL: https://docs.python.org/3/library/nis.html#module-nis
+	Description: Deprecated:  Removed in 3.13.
+* nntplib
+	URL: https://docs.python.org/3/library/nntplib.html#module-nntplib
+	Description: Deprecated:  Removed in 3.13.
+* numbers
+	URL: https://docs.python.org/3/library/numbers.html#module-numbers
+	Description: Numeric abstract base classes (Complex, Real, Integral, etc.).
+* operator
+	URL: https://docs.python.org/3/library/operator.html#module-operator
+	Description: Functions corresponding to the standard operators.
+* optparse
+	URL: https://docs.python.org/3/library/optparse.html#module-optparse
+	Description: Command-line option parsing library.
+* os
+	URL: https://docs.python.org/3/library/os.html#module-os
+	Description: Miscellaneous operating system interfaces.
+* os.path
+	URL: https://docs.python.org/3/library/os.path.html#module-os.path
+	Description: Operations on pathnames.
+* ossaudiodev
+	URL: https://docs.python.org/3/library/ossaudiodev.html#module-ossaudiodev
+	Description: Deprecated:  Removed in 3.13.
+* pathlib
+	URL: https://docs.python.org/3/library/pathlib.html#module-pathlib
+	Description: Object-oriented filesystem paths
+* pathlib.types
+	URL: https://docs.python.org/3/library/pathlib.html#module-pathlib.types
+	Description: pathlib types for static type checking
+* pdb
+	URL: https://docs.python.org/3/library/pdb.html#module-pdb
+	Description: The Python debugger for interactive interpreters.
+* pickle
+	URL: https://docs.python.org/3/library/pickle.html#module-pickle
+	Description: Convert Python objects to streams of bytes and back.
+* pickletools
+	URL: https://docs.python.org/3/library/pickletools.html#module-pickletools
+	Description: Contains extensive comments about the pickle protocols and
+pickle-machine opcodes, as well as some useful functions.
+* pipes
+	URL: https://docs.python.org/3/library/pipes.html#module-pipes
+	Description: Deprecated:  Removed in 3.13.
+* pkgutil
+	URL: https://docs.python.org/3/library/pkgutil.html#module-pkgutil
+	Description: Utilities for the import system.
+* platform
+	URL: https://docs.python.org/3/library/platform.html#module-platform
+	Description: Retrieves as much platform identifying data as possible.
+* plistlib
+	URL: https://docs.python.org/3/library/plistlib.html#module-plistlib
+	Description: Generate and parse Apple plist files.
+* poplib
+	URL: https://docs.python.org/3/library/poplib.html#module-poplib
+	Description: POP3 protocol client (requires sockets).
+* posix
+	URL: https://docs.python.org/3/library/posix.html#module-posix
+	Description: The most common POSIX system calls (normally used via module os).
+* pprint
+	URL: https://docs.python.org/3/library/pprint.html#module-pprint
+	Description: Data pretty printer.
+* profile
+	URL: https://docs.python.org/3/library/profile.html#module-profile
+	Description: Python source profiler.
+* pstats
+	URL: https://docs.python.org/3/library/profile.html#module-pstats
+	Description: Statistics object for use with the profiler.
+* pty
+	URL: https://docs.python.org/3/library/pty.html#module-pty
+	Description: Pseudo-Terminal Handling for Unix.
+* pwd
+	URL: https://docs.python.org/3/library/pwd.html#module-pwd
+	Description: The password database (getpwnam() and friends).
+* py_compile
+	URL: https://docs.python.org/3/library/py_compile.html#module-py_compile
+	Description: Generate byte-code files from Python source files.
+* pyclbr
+	URL: https://docs.python.org/3/library/pyclbr.html#module-pyclbr
+	Description: Supports information extraction for a Python module browser.
+* pydoc
+	URL: https://docs.python.org/3/library/pydoc.html#module-pydoc
+	Description: Documentation generator and online help system.
+* queue
+	URL: https://docs.python.org/3/library/queue.html#module-queue
+	Description: A synchronized queue class.
+* quopri
+	URL: https://docs.python.org/3/library/quopri.html#module-quopri
+	Description: Encode and decode files using the MIME quoted-printable encoding.
+* random
+	URL: https://docs.python.org/3/library/random.html#module-random
+	Description: Generate pseudo-random numbers with various common distributions.
+* re
+	URL: https://docs.python.org/3/library/re.html#module-re
+	Description: Regular expression operations.
+* readline
+	URL: https://docs.python.org/3/library/readline.html#module-readline
+	Description: GNU readline support for Python.
+* reprlib
+	URL: https://docs.python.org/3/library/reprlib.html#module-reprlib
+	Description: Alternate repr() implementation with size limits.
+* resource
+	URL: https://docs.python.org/3/library/resource.html#module-resource
+	Description: An interface to provide resource usage information on the current process.
+* rlcompleter
+	URL: https://docs.python.org/3/library/rlcompleter.html#module-rlcompleter
+	Description: Python identifier completion, suitable for the GNU readline library.
+* runpy
+	URL: https://docs.python.org/3/library/runpy.html#module-runpy
+	Description: Locate and run Python modules without importing them first.
+* sched
+	URL: https://docs.python.org/3/library/sched.html#module-sched
+	Description: General purpose event scheduler.
+* secrets
+	URL: https://docs.python.org/3/library/secrets.html#module-secrets
+	Description: Generate secure random numbers for managing secrets.
+* select
+	URL: https://docs.python.org/3/library/select.html#module-select
+	Description: Wait for I/O completion on multiple streams.
+* selectors
+	URL: https://docs.python.org/3/library/selectors.html#module-selectors
+	Description: High-level I/O multiplexing.
+* shelve
+	URL: https://docs.python.org/3/library/shelve.html#module-shelve
+	Description: Python object persistence.
+* shlex
+	URL: https://docs.python.org/3/library/shlex.html#module-shlex
+	Description: Simple lexical analysis for Unix shell-like languages.
+* shutil
+	URL: https://docs.python.org/3/library/shutil.html#module-shutil
+	Description: High-level file operations, including copying.
+* signal
+	URL: https://docs.python.org/3/library/signal.html#module-signal
+	Description: Set handlers for asynchronous events.
+* site
+	URL: https://docs.python.org/3/library/site.html#module-site
+	Description: Module responsible for site-specific configuration.
+* sitecustomize
+	URL: https://docs.python.org/3/library/site.html#module-sitecustomize
+* smtpd
+	URL: https://docs.python.org/3/library/smtpd.html#module-smtpd
+	Description: Deprecated:  Removed in 3.12.
+* smtplib
+	URL: https://docs.python.org/3/library/smtplib.html#module-smtplib
+	Description: SMTP protocol client (requires sockets).
+* sndhdr
+	URL: https://docs.python.org/3/library/sndhdr.html#module-sndhdr
+	Description: Deprecated:  Removed in 3.13.
+* socket
+	URL: https://docs.python.org/3/library/socket.html#module-socket
+	Description: Low-level networking interface.
+* socketserver
+	URL: https://docs.python.org/3/library/socketserver.html#module-socketserver
+	Description: A framework for network servers.
+* spwd
+	URL: https://docs.python.org/3/library/spwd.html#module-spwd
+	Description: Deprecated:  Removed in 3.13.
+* sqlite3
+	URL: https://docs.python.org/3/library/sqlite3.html#module-sqlite3
+	Description: A DB-API 2.0 implementation using SQLite 3.x.
+* ssl
+	URL: https://docs.python.org/3/library/ssl.html#module-ssl
+	Description: TLS/SSL wrapper for socket objects
+* stat
+	URL: https://docs.python.org/3/library/stat.html#module-stat
+	Description: Utilities for interpreting the results of os.stat(),
+os.lstat() and os.fstat().
+* statistics
+	URL: https://docs.python.org/3/library/statistics.html#module-statistics
+	Description: Mathematical statistics functions
+* string
+	URL: https://docs.python.org/3/library/string.html#module-string
+	Description: Common string operations.
+* string.templatelib
+	URL: https://docs.python.org/3/library/string.templatelib.html#module-string.templatelib
+	Description: Support for template string literals.
+* stringprep
+	URL: https://docs.python.org/3/library/stringprep.html#module-stringprep
+	Description: String preparation, as per RFC 3453
+* struct
+	URL: https://docs.python.org/3/library/struct.html#module-struct
+	Description: Interpret bytes as packed binary data.
+* subprocess
+	URL: https://docs.python.org/3/library/subprocess.html#module-subprocess
+	Description: Subprocess management.
+* sunau
+	URL: https://docs.python.org/3/library/sunau.html#module-sunau
+	Description: Deprecated:  Removed in 3.13.
+* symtable
+	URL: https://docs.python.org/3/library/symtable.html#module-symtable
+	Description: Interface to the compiler's internal symbol tables.
+* sys
+	URL: https://docs.python.org/3/library/sys.html#module-sys
+	Description: Access system-specific parameters and functions.
+* sys.monitoring
+	URL: https://docs.python.org/3/library/sys.monitoring.html#module-sys.monitoring
+	Description: Access and control event monitoring
+* sysconfig
+	URL: https://docs.python.org/3/library/sysconfig.html#module-sysconfig
+	Description: Python's configuration information
+* syslog
+	URL: https://docs.python.org/3/library/syslog.html#module-syslog
+	Description: An interface to the Unix syslog library routines.
+* tabnanny
+	URL: https://docs.python.org/3/library/tabnanny.html#module-tabnanny
+	Description: Tool for detecting white space related problems in Python
+source files in a directory tree.
+* tarfile
+	URL: https://docs.python.org/3/library/tarfile.html#module-tarfile
+	Description: Read and write tar-format archive files.
+* telnetlib
+	URL: https://docs.python.org/3/library/telnetlib.html#module-telnetlib
+	Description: Deprecated:  Removed in 3.13.
+* tempfile
+	URL: https://docs.python.org/3/library/tempfile.html#module-tempfile
+	Description: Generate temporary files and directories.
+* termios
+	URL: https://docs.python.org/3/library/termios.html#module-termios
+	Description: POSIX style tty control.
+* test
+	URL: https://docs.python.org/3/library/test.html#module-test
+	Description: Regression tests package containing the testing suite for Python.
+* test.regrtest
+	URL: https://docs.python.org/3/library/test.html#module-test.regrtest
+	Description: Drives the regression test suite.
+* test.support
+	URL: https://docs.python.org/3/library/test.html#module-test.support
+	Description: Support for Python's regression test suite.
+* test.support.bytecode_helper
+	URL: https://docs.python.org/3/library/test.html#module-test.support.bytecode_helper
+	Description: Support tools for testing correct bytecode generation.
+* test.support.import_helper
+	URL: https://docs.python.org/3/library/test.html#module-test.support.import_helper
+	Description: Support for import tests.
+* test.support.os_helper
+	URL: https://docs.python.org/3/library/test.html#module-test.support.os_helper
+	Description: Support for os tests.
+* test.support.script_helper
+	URL: https://docs.python.org/3/library/test.html#module-test.support.script_helper
+	Description: Support for Python's script execution tests.
+* test.support.socket_helper
+	URL: https://docs.python.org/3/library/test.html#module-test.support.socket_helper
+	Description: Support for socket tests.
+* test.support.threading_helper
+	URL: https://docs.python.org/3/library/test.html#module-test.support.threading_helper
+	Description: Support for threading tests.
+* test.support.warnings_helper
+	URL: https://docs.python.org/3/library/test.html#module-test.support.warnings_helper
+	Description: Support for warnings tests.
+* textwrap
+	URL: https://docs.python.org/3/library/textwrap.html#module-textwrap
+	Description: Text wrapping and filling
+* threading
+	URL: https://docs.python.org/3/library/threading.html#module-threading
+	Description: Thread-based parallelism.
+* time
+	URL: https://docs.python.org/3/library/time.html#module-time
+	Description: Time access and conversions.
+* timeit
+	URL: https://docs.python.org/3/library/timeit.html#module-timeit
+	Description: Measure the execution time of small code snippets.
+* tkinter
+	URL: https://docs.python.org/3/library/tkinter.html#module-tkinter
+	Description: Interface to Tcl/Tk for graphical user interfaces
+* tkinter.colorchooser
+	URL: https://docs.python.org/3/library/tkinter.colorchooser.html#module-tkinter.colorchooser
+	Description: Color choosing dialog
+* tkinter.commondialog
+	URL: https://docs.python.org/3/library/dialog.html#module-tkinter.commondialog
+	Description: Tkinter base class for dialogs
+* tkinter.dnd
+	URL: https://docs.python.org/3/library/tkinter.dnd.html#module-tkinter.dnd
+	Description: Tkinter drag-and-drop interface
+* tkinter.filedialog
+	URL: https://docs.python.org/3/library/dialog.html#module-tkinter.filedialog
+	Description: Dialog classes for file selection
+* tkinter.font
+	URL: https://docs.python.org/3/library/tkinter.font.html#module-tkinter.font
+	Description: Tkinter font-wrapping class
+* tkinter.messagebox
+	URL: https://docs.python.org/3/library/tkinter.messagebox.html#module-tkinter.messagebox
+	Description: Various types of alert dialogs
+* tkinter.scrolledtext
+	URL: https://docs.python.org/3/library/tkinter.scrolledtext.html#module-tkinter.scrolledtext
+	Description: Text widget with a vertical scroll bar.
+* tkinter.simpledialog
+	URL: https://docs.python.org/3/library/dialog.html#module-tkinter.simpledialog
+	Description: Simple dialog windows
+* tkinter.ttk
+	URL: https://docs.python.org/3/library/tkinter.ttk.html#module-tkinter.ttk
+	Description: Tk themed widget set
+* token
+	URL: https://docs.python.org/3/library/token.html#module-token
+	Description: Constants representing terminal nodes of the parse tree.
+* tokenize
+	URL: https://docs.python.org/3/library/tokenize.html#module-tokenize
+	Description: Lexical scanner for Python source code.
+* tomllib
+	URL: https://docs.python.org/3/library/tomllib.html#module-tomllib
+	Description: Parse TOML files.
+* trace
+	URL: https://docs.python.org/3/library/trace.html#module-trace
+	Description: Trace or track Python statement execution.
+* traceback
+	URL: https://docs.python.org/3/library/traceback.html#module-traceback
+	Description: Print or retrieve a stack traceback.
+* tracemalloc
+	URL: https://docs.python.org/3/library/tracemalloc.html#module-tracemalloc
+	Description: Trace memory allocations.
+* tty
+	URL: https://docs.python.org/3/library/tty.html#module-tty
+	Description: Utility functions that perform common terminal control operations.
+* turtle
+	URL: https://docs.python.org/3/library/turtle.html#module-turtle
+	Description: An educational framework for simple graphics applications
+* turtledemo
+	URL: https://docs.python.org/3/library/turtle.html#module-turtledemo
+	Description: A viewer for example turtle scripts
+* types
+	URL: https://docs.python.org/3/library/types.html#module-types
+	Description: Names for built-in types.
+* typing
+	URL: https://docs.python.org/3/library/typing.html#module-typing
+	Description: Support for type hints (see :pep:`484`).
+* unicodedata
+	URL: https://docs.python.org/3/library/unicodedata.html#module-unicodedata
+	Description: Access the Unicode Database.
+* unittest
+	URL: https://docs.python.org/3/library/unittest.html#module-unittest
+	Description: Unit testing framework for Python.
+* unittest.mock
+	URL: https://docs.python.org/3/library/unittest.mock.html#module-unittest.mock
+	Description: Mock object library.
+* urllib
+	URL: https://docs.python.org/3/library/urllib.html#module-urllib
+* urllib.error
+	URL: https://docs.python.org/3/library/urllib.error.html#module-urllib.error
+	Description: Exception classes raised by urllib.request.
+* urllib.parse
+	URL: https://docs.python.org/3/library/urllib.parse.html#module-urllib.parse
+	Description: Parse URLs into or assemble them from components.
+* urllib.request
+	URL: https://docs.python.org/3/library/urllib.request.html#module-urllib.request
+	Description: Extensible library for opening URLs.
+* urllib.response
+	URL: https://docs.python.org/3/library/urllib.request.html#module-urllib.response
+	Description: Response classes used by urllib.
+* urllib.robotparser
+	URL: https://docs.python.org/3/library/urllib.robotparser.html#module-urllib.robotparser
+	Description: Load a robots.txt file and answer questions about
+fetchability of other URLs.
+* usercustomize
+	URL: https://docs.python.org/3/library/site.html#module-usercustomize
+* uu
+	URL: https://docs.python.org/3/library/uu.html#module-uu
+	Description: Deprecated:  Removed in 3.13.
+* uuid
+	URL: https://docs.python.org/3/library/uuid.html#module-uuid
+	Description: UUID objects (universally unique identifiers) according to RFC 9562
+* venv
+	URL: https://docs.python.org/3/library/venv.html#module-venv
+	Description: Creation of virtual environments.
+* warnings
+	URL: https://docs.python.org/3/library/warnings.html#module-warnings
+	Description: Issue warning messages and control their disposition.
+* wave
+	URL: https://docs.python.org/3/library/wave.html#module-wave
+	Description: Provide an interface to the WAV sound format.
+* weakref
+	URL: https://docs.python.org/3/library/weakref.html#module-weakref
+	Description: Support for weak references and weak dictionaries.
+* webbrowser
+	URL: https://docs.python.org/3/library/webbrowser.html#module-webbrowser
+	Description: Easy-to-use controller for web browsers.
+* winreg
+	URL: https://docs.python.org/3/library/winreg.html#module-winreg
+	Description: Routines and objects for manipulating the Windows registry.
+* winsound
+	URL: https://docs.python.org/3/library/winsound.html#module-winsound
+	Description: Access to the sound-playing machinery for Windows.
+* wsgiref
+	URL: https://docs.python.org/3/library/wsgiref.html#module-wsgiref
+	Description: WSGI Utilities and Reference Implementation.
+* wsgiref.handlers
+	URL: https://docs.python.org/3/library/wsgiref.html#module-wsgiref.handlers
+	Description: WSGI server/gateway base classes.
+* wsgiref.headers
+	URL: https://docs.python.org/3/library/wsgiref.html#module-wsgiref.headers
+	Description: WSGI response header tools.
+* wsgiref.simple_server
+	URL: https://docs.python.org/3/library/wsgiref.html#module-wsgiref.simple_server
+	Description: A simple WSGI HTTP server.
+* wsgiref.types
+	URL: https://docs.python.org/3/library/wsgiref.html#module-wsgiref.types
+	Description: WSGI types for static type checking
+* wsgiref.util
+	URL: https://docs.python.org/3/library/wsgiref.html#module-wsgiref.util
+	Description: WSGI environment utilities.
+* wsgiref.validate
+	URL: https://docs.python.org/3/library/wsgiref.html#module-wsgiref.validate
+	Description: WSGI conformance checker.
+* xdrlib
+	URL: https://docs.python.org/3/library/xdrlib.html#module-xdrlib
+	Description: Deprecated:  Removed in 3.13.
+* xml
+	URL: https://docs.python.org/3/library/xml.html#module-xml
+	Description: Package containing XML processing modules
+* xml.dom
+	URL: https://docs.python.org/3/library/xml.dom.html#module-xml.dom
+	Description: Document Object Model API for Python.
+* xml.dom.minidom
+	URL: https://docs.python.org/3/library/xml.dom.minidom.html#module-xml.dom.minidom
+	Description: Minimal Document Object Model (DOM) implementation.
+* xml.dom.pulldom
+	URL: https://docs.python.org/3/library/xml.dom.pulldom.html#module-xml.dom.pulldom
+	Description: Support for building partial DOM trees from SAX events.
+* xml.etree.ElementInclude
+	URL: https://docs.python.org/3/library/xml.etree.elementtree.html#module-xml.etree.ElementInclude
+* xml.etree.ElementTree
+	URL: https://docs.python.org/3/library/xml.etree.elementtree.html#module-xml.etree.ElementTree
+	Description: Implementation of the ElementTree API.
+* xml.parsers.expat
+	URL: https://docs.python.org/3/library/pyexpat.html#module-xml.parsers.expat
+	Description: An interface to the Expat non-validating XML parser.
+* xml.parsers.expat.errors
+	URL: https://docs.python.org/3/library/pyexpat.html#module-xml.parsers.expat.errors
+* xml.parsers.expat.model
+	URL: https://docs.python.org/3/library/pyexpat.html#module-xml.parsers.expat.model
+* xml.sax
+	URL: https://docs.python.org/3/library/xml.sax.html#module-xml.sax
+	Description: Package containing SAX2 base classes and convenience functions.
+* xml.sax.handler
+	URL: https://docs.python.org/3/library/xml.sax.handler.html#module-xml.sax.handler
+	Description: Base classes for SAX event handlers.
+* xml.sax.saxutils
+	URL: https://docs.python.org/3/library/xml.sax.utils.html#module-xml.sax.saxutils
+	Description: Convenience functions and classes for use with SAX.
+* xml.sax.xmlreader
+	URL: https://docs.python.org/3/library/xml.sax.reader.html#module-xml.sax.xmlreader
+	Description: Interface which SAX-compliant XML parsers must implement.
+* xmlrpc
+	URL: https://docs.python.org/3/library/xmlrpc.html#module-xmlrpc
+	Description: Server and client modules implementing XML-RPC.
+* xmlrpc.client
+	URL: https://docs.python.org/3/library/xmlrpc.client.html#module-xmlrpc.client
+	Description: XML-RPC client access.
+* xmlrpc.server
+	URL: https://docs.python.org/3/library/xmlrpc.server.html#module-xmlrpc.server
+	Description: Basic XML-RPC server implementations.
+* zipapp
+	URL: https://docs.python.org/3/library/zipapp.html#module-zipapp
+	Description: Manage executable Python zip archives
+* zipfile
+	URL: https://docs.python.org/3/library/zipfile.html#module-zipfile
+	Description: Read and write ZIP-format archive files.
+* zipimport
+	URL: https://docs.python.org/3/library/zipimport.html#module-zipimport
+	Description: Support for importing Python modules from ZIP archives.
+* zlib
+	URL: https://docs.python.org/3/library/zlib.html#module-zlib
+	Description: Low-level interface to compression and decompression routines
+compatible with gzip.
+* zoneinfo
+	URL: https://docs.python.org/3/library/zoneinfo.html#module-zoneinfo
+	Description: IANA time zone support

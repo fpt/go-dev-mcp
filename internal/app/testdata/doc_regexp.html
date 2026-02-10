@@ -1,0 +1,4265 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-layout="responsive" data-local="">
+  <head>
+    
+    <script>
+      window.addEventListener('error', window.__err=function f(e){f.p=f.p||[];f.p.push(e)});
+    </script>
+    <script>
+      (function() {
+        const theme = document.cookie.match(/prefers-color-scheme=(light|dark|auto)/)?.[1]
+        if (theme) {
+          document.querySelector('html').setAttribute('data-theme', theme);
+        }
+      }())
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Description" content="Package regexp implements regular expression search.">
+    
+    <meta class="js-gtmID" data-gtmid="GTM-W8MVQXG">
+    <link rel="shortcut icon" href="/static/shared/icon/favicon.ico">
+    
+  
+    <link rel="canonical" href="https://pkg.go.dev/regexp">
+  
+
+    <link href="/static/frontend/frontend.min.css?version=prod-frontend-00140-lzv" rel="stylesheet">
+    
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Go Packages">
+    
+    
+  <title>regexp package - regexp - Go Packages</title>
+
+    
+  <link href="/static/frontend/unit/unit.min.css?version=prod-frontend-00140-lzv" rel="stylesheet">
+  
+  <link href="/static/frontend/unit/main/main.min.css?version=prod-frontend-00140-lzv" rel="stylesheet">
+
+
+  </head>
+  <body>
+    
+    <script>
+      function loadScript(src, mod = true) {
+        let s = document.createElement('script');
+        s.src = src;
+        if (mod) {
+          s.type = 'module';
+          s.async = true;
+          s.defer = true
+        }
+        document.head.appendChild(s);
+      }
+      loadScript("/third_party/dialog-polyfill/dialog-polyfill.js", false)
+      loadScript("/static/frontend/frontend.js");
+    </script>
+    
+  <header class="go-Header go-Header--full js-siteHeader">
+    <div class="go-Header-inner go-Header-inner--dark">
+      <nav class="go-Header-nav">
+        <a href="https://go.dev/" class="js-headerLogo" data-gtmc="nav link"
+            data-test-id="go-header-logo-link" role="heading" aria-level="1">
+          <img class="go-Header-logo" src="/static/shared/logo/go-white.svg" alt="Go">
+        </a>
+         <div class="skip-navigation-wrapper">
+            <a class="skip-to-content-link" aria-label="Skip to main content" href="#main-content"> Skip to Main Content </a>
+          </div>
+        <div class="go-Header-rightContent">
+          
+<div class="go-SearchForm js-searchForm">
+  <form
+    class="go-InputGroup go-ShortcutKey go-SearchForm-form"
+    action="/search"
+    data-shortcut="/"
+    data-shortcut-alt="search"
+    data-gtmc="search form"
+    aria-label="Search for a package"
+    role="search"
+  >
+    <input name="q" class="go-Input js-searchFocus" aria-label="Search for a package" type="search"
+        autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"
+        placeholder="Search packages or symbols"
+        value="" />
+    <input name="m" value="" hidden>
+    <button class="go-Button go-Button--inverted" aria-label="Submit search">
+      <img
+        class="go-Icon"
+        height="24"
+        width="24"
+        src="/static/shared/icon/search_gm_grey_24dp.svg"
+        alt=""
+      />
+    </button>
+  </form>
+  <button class="go-SearchForm-expandSearch js-expandSearch" data-gtmc="nav button"
+      aria-label="Open search" data-test-id="expand-search">
+    <img class="go-Icon go-Icon--inverted" height="24" width="24"
+        src="/static/shared/icon/search_gm_grey_24dp.svg" alt="">
+
+  </button>
+</div>
+
+          <ul class="go-Header-menu">
+            <li class="go-Header-menuItem">
+              <a class="js-desktop-menu-hover" href="#" data-gtmc="nav link">
+                Why Go
+                <img class="go-Icon" height="24" width="24" src="/static/shared/icon/arrow_drop_down_gm_grey_24dp.svg" alt="submenu dropdown icon">
+              </a>
+              <ul class="go-Header-submenu go-Header-submenu--why js-desktop-submenu-hover" aria-label="submenu">
+                  <li class="go-Header-submenuItem">
+                    <div>
+                      <a href="https://go.dev/solutions#case-studies">
+                        <span>Case Studies</span>
+                      </a>
+                    </div>
+                    <p>Common problems companies solve with Go</p>
+                  </li>
+                  <li class="go-Header-submenuItem">
+                    <div>
+                      <a href="https://go.dev/solutions#use-cases">
+                        <span>Use Cases</span>
+                      </a>
+                    </div>
+                    <p>Stories about how and why companies use Go</p>
+                  </li>
+                  <li class="go-Header-submenuItem">
+                    <div>
+                      <a href="https://go.dev/security/">
+                        <span>Security</span>
+                      </a>
+                    </div>
+                    <p>How Go can help keep you secure by default</p>
+                  </li>
+              </ul>
+            </li>
+            <li class="go-Header-menuItem">
+              <a href="https://go.dev/learn/" data-gtmc="nav link">Learn</a>
+            </li>
+            <li class="go-Header-menuItem">
+              <a class="js-desktop-menu-hover" href="#" data-gtmc="nav link">
+                Docs
+                <img class="go-Icon" height="24" width="24" src="/static/shared/icon/arrow_drop_down_gm_grey_24dp.svg" alt="submenu dropdown icon">
+              </a>
+              <ul class="go-Header-submenu go-Header-submenu--docs js-desktop-submenu-hover" aria-label="submenu">
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/doc/effective_go">
+                      <span>Effective Go</span>
+                    </a>
+                  </div>
+                  <p>Tips for writing clear, performant, and idiomatic Go code</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/doc/">
+                      <span>Go User Manual</span>
+                    </a>
+                  </div>
+                  <p>A complete introduction to building software with Go</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://pkg.go.dev/std">
+                      <span>Standard library</span>
+                    </a>
+                  </div>
+                  <p>Reference documentation for Go's standard library</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/doc/devel/release">
+                      <span>Release Notes</span>
+                    </a>
+                  </div>
+                  <p>Learn what's new in each Go release</p>
+                </li>
+              </ul>
+            </li>
+            <li class="go-Header-menuItem go-Header-menuItem--active">
+              <a href="/" data-gtmc="nav link">Packages</a>
+            </li>
+            <li class="go-Header-menuItem">
+              <a class="js-desktop-menu-hover" href="#" data-gtmc="nav link">
+                Community
+                <img class="go-Icon" height="24" width="24" src="/static/shared/icon/arrow_drop_down_gm_grey_24dp.svg" alt="submenu dropdown icon">
+              </a>
+              <ul class="go-Header-submenu go-Header-submenu--community js-desktop-submenu-hover" aria-label="submenu">
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/talks/">
+                      <span>Recorded Talks</span>
+                    </a>
+                  </div>
+                  <p>Videos from prior events</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://www.meetup.com/pro/go">
+                      <span>Meetups</span>
+                      <i class="material-icons">
+                        <img class="go-Icon" height="24" width="24"
+                            src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </div>
+                  <p>Meet other local Go developers</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://github.com/golang/go/wiki/Conferences">
+                      <span>Conferences</span>
+                      <i class="material-icons">
+                        <img class="go-Icon" height="24" width="24"
+                            src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </div>
+                  <p>Learn and network with Go developers from around the world</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/blog">
+                      <span>Go blog</span>
+                    </a>
+                  </div>
+                  <p>The Go project's official blog.</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    <a href="https://go.dev/help">
+                      <span>Go project</span>
+                    </a>
+                  </div>
+                  <p>Get help and stay informed from Go</p>
+                </li>
+                <li class="go-Header-submenuItem">
+                  <div>
+                    Get connected
+                  </div>
+                  <p></p>
+                  <div class="go-Header-socialIcons">
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with google-groups (Opens in new window)"
+                        title="Get connected with google-groups (Opens in new window)"
+                        href="https://groups.google.com/g/golang-nuts">
+                        <img src="/static/shared/logo/social/google-groups.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with github (Opens in new window)"
+                        title="Get connected with github (Opens in new window)"
+                        href="https://github.com/golang">
+                        <img src="/static/shared/logo/social/github.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with twitter (Opens in new window)"
+                        title="Get connected with twitter (Opens in new window)"
+                        href="https://twitter.com/golang">
+                        <img src="/static/shared/logo/social/twitter.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with reddit (Opens in new window)"
+                        title="Get connected with reddit (Opens in new window)"
+                        href="https://www.reddit.com/r/golang/">
+                        <img src="/static/shared/logo/social/reddit.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with slack (Opens in new window)"
+                        title="Get connected with slack (Opens in new window)"
+                        href="https://invite.slack.golangbridge.org/">
+                        <img src="/static/shared/logo/social/slack.svg" />
+                      </a>
+                      <a
+                        class="go-Header-socialIcon"
+                        aria-label="Get connected with stack-overflow (Opens in new window)"
+                        title=""
+                        href="https://stackoverflow.com/collectives/go">
+                        <img src="/static/shared/logo/social/stack-overflow.svg" />
+                      </a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <button class="go-Header-navOpen js-headerMenuButton go-Header-navOpen--white" data-gtmc="nav button" aria-label="Open navigation">
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <aside class="go-NavigationDrawer js-header">
+    <nav class="go-NavigationDrawer-nav">
+      <div class="go-NavigationDrawer-header">
+        <a href="https://go.dev/">
+          <img class="go-NavigationDrawer-logo" src="/static/shared/logo/go-blue.svg" alt="Go.">
+        </a>
+      </div>
+      <ul class="go-NavigationDrawer-list">
+          <li class="go-NavigationDrawer-listItem js-mobile-subnav-trigger go-NavigationDrawer-hasSubnav">
+            <a href="#">
+              <span>Why Go</span>
+              <i class="material-icons">
+                <img class="go-Icon" height="24" width="24"
+                  src="/static/shared/icon/navigate_next_gm_grey_24dp.svg" alt="">
+              </i>
+            </a>
+
+            <div class="go-NavigationDrawer go-NavigationDrawer-submenuItem">
+              <div class="go-NavigationDrawer-nav">
+                <div class="go-NavigationDrawer-header">
+                  <a href="#">
+                    <i class="material-icons">
+                      <img class="go-Icon" height="24" width="24"
+                        src="/static/shared/icon/navigate_before_gm_grey_24dp.svg" alt="">
+                      </i>
+                      Why Go
+                  </a>
+                </div>
+                <ul class="go-NavigationDrawer-list">
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/solutions#case-studies">
+                      Case Studies
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/solutions#use-cases">
+                      Use Cases
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/security/">
+                      Security
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="go-NavigationDrawer-listItem">
+            <a href="https://go.dev/learn/">Learn</a>
+          </li>
+          <li class="go-NavigationDrawer-listItem js-mobile-subnav-trigger go-NavigationDrawer-hasSubnav">
+            <a href="#">
+              <span>Docs</span>
+              <i class="material-icons">
+                <img class="go-Icon" height="24" width="24"
+                  src="/static/shared/icon/navigate_next_gm_grey_24dp.svg" alt="">
+              </i>
+            </a>
+
+            <div class="go-NavigationDrawer go-NavigationDrawer-submenuItem">
+              <div class="go-NavigationDrawer-nav">
+                <div class="go-NavigationDrawer-header">
+                  <a href="#"><i class="material-icons">
+                    <img class="go-Icon" height="24" width="24"
+                      src="/static/shared/icon/navigate_before_gm_grey_24dp.svg" alt="">
+                    </i>
+                    Docs
+                  </a>
+                </div>
+                <ul class="go-NavigationDrawer-list">
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/doc/effective_go">
+                      Effective Go
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/doc/">
+                      Go User Manual
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://pkg.go.dev/std">
+                      Standard library
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/doc/devel/release">
+                      Release Notes
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="go-NavigationDrawer-listItem go-NavigationDrawer-listItem--active">
+            <a href="/">Packages</a>
+          </li>
+          <li class="go-NavigationDrawer-listItem js-mobile-subnav-trigger go-NavigationDrawer-hasSubnav">
+            <a href="#">
+              <span>Community</span>
+              <i class="material-icons">
+                <img class="go-Icon" height="24" width="24"
+                  src="/static/shared/icon/navigate_next_gm_grey_24dp.svg" alt="">
+              </i>
+            </a>
+            <div class="go-NavigationDrawer go-NavigationDrawer-submenuItem">
+              <div class="go-NavigationDrawer-nav">
+                <div class="go-NavigationDrawer-header">
+                  <a href="#">
+                    <i class="material-icons">
+                      <img class="go-Icon" height="24" width="24"
+                        src="/static/shared/icon/navigate_before_gm_grey_24dp.svg" alt="">
+                    </i>
+                    Community
+                  </a>
+                </div>
+                <ul class="go-NavigationDrawer-list">
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/talks/">
+                      Recorded Talks
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://www.meetup.com/pro/go">
+                      Meetups
+                      <i class="material-icons">
+                      <img class="go-Icon" height="24" width="24"
+                          src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://github.com/golang/go/wiki/Conferences">
+                      Conferences
+                      <i class="material-icons">
+                        <img class="go-Icon" height="24" width="24" src="/static/shared/icon/launch_gm_grey_24dp.svg" alt="">
+                      </i>
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/blog">
+                      Go blog
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <a href="https://go.dev/help">
+                      Go project
+                    </a>
+                  </li>
+                  <li class="go-NavigationDrawer-listItem">
+                    <div>Get connected</div>
+                    <div class="go-Header-socialIcons">
+                        <a class="go-Header-socialIcon" href="https://groups.google.com/g/golang-nuts"><img src="/static/shared/logo/social/google-groups.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://github.com/golang"><img src="/static/shared/logo/social/github.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://twitter.com/golang"><img src="/static/shared/logo/social/twitter.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://www.reddit.com/r/golang/"><img src="/static/shared/logo/social/reddit.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://invite.slack.golangbridge.org/"><img src="/static/shared/logo/social/slack.svg" /></a>
+                        <a class="go-Header-socialIcon" href="https://stackoverflow.com/collectives/go"><img src="/static/shared/logo/social/stack-overflow.svg" /></a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+      </ul>
+    </nav>
+  </aside>
+  <div class="go-NavigationDrawer-scrim js-scrim" role="presentation"></div>
+
+    
+  <main class="go-Main" id="main-content">
+    <div class="go-Main-banner" role="alert"></div>
+    <header class="go-Main-header js-mainHeader">
+  
+  
+  <nav class="go-Main-headerBreadcrumb go-Breadcrumb" aria-label="Breadcrumb" data-test-id="UnitHeader-breadcrumb">
+    <ol>
+      
+        
+          <li data-test-id="UnitHeader-breadcrumbItem">
+            <a href="/" data-gtmc="breadcrumb link">Discover Packages</a>
+          </li>
+        
+          <li data-test-id="UnitHeader-breadcrumbItem">
+            <a href="/std" data-gtmc="breadcrumb link">Standard library</a>
+          </li>
+        
+        <li>
+          <a href="/regexp@go1.25.7" data-gtmc="breadcrumb link" aria-current="location"
+              data-test-id="UnitHeader-breadcrumbCurrent">
+            regexp
+          </a>
+          
+            <button
+              class="go-Button go-Button--inline go-Clipboard js-clipboard"
+              title="Copy path to clipboard.&#10;&#10;regexp"
+              aria-label="Copy Path to Clipboard"
+              data-to-copy="regexp"
+              data-gtmc="breadcrumbs button"
+            >
+              <img
+                class="go-Icon go-Icon--accented"
+                height="24"
+                width="24"
+                src="/static/shared/icon/content_copy_gm_grey_24dp.svg"
+                alt=""
+              >
+            </button>
+          
+        
+      </li>
+    </ol>
+  </nav>
+
+  <div class="go-Main-headerContent">
+    
+  <div class="go-Main-headerTitle js-stickyHeader">
+    <a class="go-Main-headerLogo" href="https://go.dev/" aria-hidden="true" tabindex="-1" data-gtmc="header link" aria-label="Link to Go Homepage">
+      <img height="78" width="207" src="/static/shared/logo/go-blue.svg" alt="Go">
+    </a>
+    <h1 class="UnitHeader-titleHeading" data-test-id="UnitHeader-title">regexp</h1>
+    
+      <span class="go-Chip go-Chip--inverted">package</span>
+    
+      <span class="go-Chip go-Chip--inverted">standard library</span>
+    
+    
+      
+        <button
+          class="go-Button go-Button--inline go-Clipboard js-clipboard"
+          title="Copy path to clipboard.&#10;&#10;regexp"
+          aria-label="Copy Path to Clipboard"
+          data-to-copy="regexp"
+          data-gtmc="title button"
+          tabindex="-1"
+        >
+          <img
+            class="go-Icon go-Icon--accented"
+            height="24"
+            width="24"
+            src="/static/shared/icon/content_copy_gm_grey_24dp.svg"
+            alt=""
+          />
+        </button>
+      
+    
+  </div>
+
+    
+      
+  <div class="go-Main-headerDetails">
+    
+      
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-version">
+    <a href="?tab=versions" aria-label="Version: go1.25.7" 
+    data-gtmc="header link" aria-describedby="version-description">
+      <span class="go-textSubtle" aria-hidden="true">Version: </span>
+        go1.25.7
+    </a>
+    <div class="screen-reader-only" id="version-description" hidden>
+      Opens a new window with list of versions in this module.
+    </div>
+    
+    <span class="DetailsHeader-badge--latest" data-test-id="UnitHeader-minorVersionBanner">
+      <span class="go-Chip DetailsHeader-span--latest">Latest</span>
+      <span class="go-Chip DetailsHeader-span--notAtLatest">
+        Latest
+        
+  <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+    <summary>
+      <img class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/alert_gm_grey_24dp.svg" alt="Warning">
+    </summary>
+    <p>This package is not in the latest version of its module.</p>
+  </details>
+
+      </span>
+      <a href="/regexp" aria-label="Go to Latest Version" data-gtmc="header link">
+        <span class="go-Chip go-Chip--alert DetailsHeader-span--goToLatest">Go to latest</span>
+      </a>
+    </span>
+  </span>
+
+      
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-commitTime">
+    Published: Feb  4, 2026
+  </span>
+
+      
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-licenses">
+    License: <a href="/regexp?tab=licenses" data-test-id="UnitHeader-license" 
+        data-gtmc="header link" aria-describedby="license-description">BSD-3-Clause</a>
+      
+    
+  </span>
+  <div class="screen-reader-only" id="license-description" hidden>
+    Opens a new window with license information.
+  </div>
+
+      
+        
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-imports">
+    <a href="/regexp?tab=imports" aria-label="Imports: 9"
+        data-gtmc="header link" aria-describedby="imports-description">
+      <span class="go-textSubtle">Imports: </span>9
+    </a>
+  </span>
+  <div class="screen-reader-only" id="imports-description" hidden>
+    Opens a new window with list of imports.
+  </div>
+
+        
+  <span class="go-Main-headerDetailItem" data-test-id="UnitHeader-importedby">
+    <a href="/regexp?tab=importedby" aria-label="Imported By: 487,451"
+        data-gtmc="header link" aria-describedby="importedby-description">
+       <span class="go-textSubtle">Imported by: </span>487,451
+    </a>
+  </span>
+  <div class="screen-reader-only" id="importedby-description" hidden>
+    Opens a new window with list of known importers.
+  </div>
+
+      
+    
+  </div>
+  
+  <div class="UnitHeader-overflowContainer">
+    <svg class="UnitHeader-overflowImage" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+    </svg>
+    <select class="UnitHeader-overflowSelect js-selectNav" tabindex="-1">
+      <option value="/">Main</option>
+      <option value="/regexp?tab=versions">
+        Versions
+      </option>
+      <option value="/regexp?tab=licenses">
+        Licenses
+      </option>
+      
+        <option value="/regexp?tab=imports">
+          Imports
+        </option>
+        <option value="/regexp?tab=importedby">
+          Imported By
+        </option>
+      
+    </select>
+  </div>
+
+
+    
+  </div>
+
+</header>
+    
+      <aside class="go-Main-aside  js-mainAside">
+  
+  <div class="UnitMeta">
+    <h2 class="go-textLabel">Details</h2>
+    
+  <ul class="UnitMeta-details">
+    <li>
+      <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+        <summary class="go-textSubtle">
+          
+  <img class="go-Icon go-Icon--accented"
+    tabindex="0"
+    role="button"src="/static/shared/icon/check_circle_gm_grey_24dp.svg" alt="checked" aria-label="Valid file, toggle tooltip"height="24" width="24">
+
+          Valid <a href="https://cs.opensource.google/go/go/+/go1.25.7:src/go.mod" target="_blank" rel="noopener">go.mod</a> file
+          <img class="go-Icon" role="button" tabindex="0" src="/static/shared/icon/help_gm_grey_24dp.svg" alt="" aria-label="Toggle go.mod validity tooltip" height="24" width="24">
+        </summary>
+        <p aria-live="polite" role="tooltip">
+          The Go module system was introduced in Go 1.11 and is the official dependency management
+          solution for Go.
+        </p>
+      </details>
+    </li>
+    <li>
+      <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+        <summary class="go-textSubtle">
+          
+  <img class="go-Icon go-Icon--accented"
+    tabindex="0"
+    role="button"src="/static/shared/icon/check_circle_gm_grey_24dp.svg" alt="checked" aria-label="Valid file, toggle tooltip"height="24" width="24">
+
+          Redistributable license
+          <img class="go-Icon" role="button" tabindex="0" src="/static/shared/icon/help_gm_grey_24dp.svg" alt="" aria-label="Toggle redistributable help tooltip" height="24" width="24">
+        </summary>
+        <p aria-live="polite" role="tooltip">
+          Redistributable licenses place minimal restrictions on how software can be used,
+          modified, and redistributed.
+        </p>
+      </details>
+    </li>
+    <li>
+      <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+        <summary class="go-textSubtle">
+          
+  <img class="go-Icon go-Icon--accented"
+    tabindex="0"
+    role="button"src="/static/shared/icon/check_circle_gm_grey_24dp.svg" alt="checked" aria-label="Valid file, toggle tooltip"height="24" width="24">
+
+          Tagged version
+          <img class="go-Icon" role="button" tabindex="0" src="/static/shared/icon/help_gm_grey_24dp.svg" alt="" aria-label="Toggle tagged version tooltip" height="24" width="24">
+        </summary>
+        <p aria-live="polite" role="tooltip">Modules with tagged versions give importers more predictable builds.</p>
+      </details>
+    </li>
+    <li>
+      <details class="go-Tooltip js-tooltip" data-gtmc="tooltip">
+        <summary class="go-textSubtle">
+          
+  <img class="go-Icon go-Icon--accented"
+    tabindex="0"
+    role="button"src="/static/shared/icon/check_circle_gm_grey_24dp.svg" alt="checked" aria-label="Valid file, toggle tooltip"height="24" width="24">
+
+          Stable version
+          <img class="go-Icon" role="button" tabindex="0" aria-label="Toggle stable version tooltip" src="/static/shared/icon/help_gm_grey_24dp.svg" alt="" height="24" width="24">
+        </summary>
+        <p aria-live="polite" role="tooltip">When a project reaches major version v1 it is considered stable.</p>
+      </details>
+    </li>
+    <li class="UnitMeta-detailsLearn">
+      <a href="/about#best-practices" data-gtmc="meta link">Learn more about best practices</a>
+    </li>
+  </ul>
+
+    <h2 class="go-textLabel">Repository</h2>
+    <div class="UnitMeta-repo">
+      
+        <a href="https://cs.opensource.google/go/go" title="https://cs.opensource.google/go/go" target="_blank" rel="noopener">
+          cs.opensource.google/go/go
+        </a>
+      
+    </div>
+    
+      <h2 class="go-textLabel" data-test-id="links-heading">Links</h2>
+      <ul class="UnitMeta-links">
+        
+          <li>
+            <a href="https://go.dev/security/policy"
+                title="Report security issues in the Go standard library and sub-repositories">
+              <img class="go-Icon" height="24" width="24" src="/static/shared/icon/security_grey_24dp.svg" alt="">
+              Report a Vulnerability
+            </a>
+          </li>
+        
+        
+        
+        
+  
+
+        
+  
+
+        
+  
+
+      </ul>
+    
+  </div>
+
+</aside>
+    
+    <nav class="go-Main-nav go-Main-nav--sticky js-mainNav" aria-label="Outline">
+  <div class="go-Main-navDesktop">
+    
+  <div class="UnitOutline-jumpTo">
+    <button class="UnitOutline-jumpToInput go-ShortcutKey js-jumpToInput"
+        aria-controls="jump-to-modal"
+        aria-label="Open Jump to Identifier"
+        data-shortcut="f"
+        data-shortcut-alt="find"
+        data-test-id="jump-to-button" data-gtmc="outline button">
+      Jump to ...
+    </button>
+  </div>
+  <ul class="go-Tree js-tree" role="tree" aria-label="Outline">
+    
+    
+      <li>
+        <a href="#section-documentation" data-gtmc="outline link">
+          Documentation
+        </a>
+        
+<ul>
+  
+    <li>
+      <a href="#pkg-overview" data-gtmc="doc outline link">Overview</a>
+    </li>
+  <li class="DocNav-overview">
+      <a href="#pkg-index" data-gtmc="doc outline link">
+        Index
+      </a>
+    </li>
+      <li>
+        <a href="#pkg-examples" data-gtmc="doc outline link">
+          Examples
+        </a>
+        <ul>
+            <li>
+              <a href="#example-package" title="Package" data-gtmc="doc outline link">
+                Package
+              </a>
+            </li>
+            <li>
+              <a href="#example-Match" title="Match" data-gtmc="doc outline link">
+                Match
+              </a>
+            </li>
+            <li>
+              <a href="#example-MatchString" title="MatchString" data-gtmc="doc outline link">
+                MatchString
+              </a>
+            </li>
+            <li>
+              <a href="#example-QuoteMeta" title="QuoteMeta" data-gtmc="doc outline link">
+                QuoteMeta
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.Expand" title="Regexp.Expand" data-gtmc="doc outline link">
+                Regexp.Expand
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.ExpandString" title="Regexp.ExpandString" data-gtmc="doc outline link">
+                Regexp.ExpandString
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.Find" title="Regexp.Find" data-gtmc="doc outline link">
+                Regexp.Find
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindAll" title="Regexp.FindAll" data-gtmc="doc outline link">
+                Regexp.FindAll
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindAllIndex" title="Regexp.FindAllIndex" data-gtmc="doc outline link">
+                Regexp.FindAllIndex
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindAllString" title="Regexp.FindAllString" data-gtmc="doc outline link">
+                Regexp.FindAllString
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindAllStringSubmatch" title="Regexp.FindAllStringSubmatch" data-gtmc="doc outline link">
+                Regexp.FindAllStringSubmatch
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindAllStringSubmatchIndex" title="Regexp.FindAllStringSubmatchIndex" data-gtmc="doc outline link">
+                Regexp.FindAllStringSubmatchIndex
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindAllSubmatch" title="Regexp.FindAllSubmatch" data-gtmc="doc outline link">
+                Regexp.FindAllSubmatch
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindAllSubmatchIndex" title="Regexp.FindAllSubmatchIndex" data-gtmc="doc outline link">
+                Regexp.FindAllSubmatchIndex
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindIndex" title="Regexp.FindIndex" data-gtmc="doc outline link">
+                Regexp.FindIndex
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindString" title="Regexp.FindString" data-gtmc="doc outline link">
+                Regexp.FindString
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindStringIndex" title="Regexp.FindStringIndex" data-gtmc="doc outline link">
+                Regexp.FindStringIndex
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindStringSubmatch" title="Regexp.FindStringSubmatch" data-gtmc="doc outline link">
+                Regexp.FindStringSubmatch
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindSubmatch" title="Regexp.FindSubmatch" data-gtmc="doc outline link">
+                Regexp.FindSubmatch
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.FindSubmatchIndex" title="Regexp.FindSubmatchIndex" data-gtmc="doc outline link">
+                Regexp.FindSubmatchIndex
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.Longest" title="Regexp.Longest" data-gtmc="doc outline link">
+                Regexp.Longest
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.Match" title="Regexp.Match" data-gtmc="doc outline link">
+                Regexp.Match
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.MatchString" title="Regexp.MatchString" data-gtmc="doc outline link">
+                Regexp.MatchString
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.NumSubexp" title="Regexp.NumSubexp" data-gtmc="doc outline link">
+                Regexp.NumSubexp
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.ReplaceAll" title="Regexp.ReplaceAll" data-gtmc="doc outline link">
+                Regexp.ReplaceAll
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.ReplaceAllLiteralString" title="Regexp.ReplaceAllLiteralString" data-gtmc="doc outline link">
+                Regexp.ReplaceAllLiteralString
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.ReplaceAllString" title="Regexp.ReplaceAllString" data-gtmc="doc outline link">
+                Regexp.ReplaceAllString
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.ReplaceAllStringFunc" title="Regexp.ReplaceAllStringFunc" data-gtmc="doc outline link">
+                Regexp.ReplaceAllStringFunc
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.Split" title="Regexp.Split" data-gtmc="doc outline link">
+                Regexp.Split
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.SubexpIndex" title="Regexp.SubexpIndex" data-gtmc="doc outline link">
+                Regexp.SubexpIndex
+              </a>
+            </li>
+            <li>
+              <a href="#example-Regexp.SubexpNames" title="Regexp.SubexpNames" data-gtmc="doc outline link">
+                Regexp.SubexpNames
+              </a>
+            </li>
+        </ul>
+      </li>
+    <li class="DocNav-constants">
+      <a href="#pkg-constants" data-gtmc="doc outline link">
+        Constants
+      </a>
+    </li>
+    <li class="DocNav-variables">
+      <a href="#pkg-variables" data-gtmc="doc outline link">
+        Variables
+      </a>
+    </li>
+    <li class="DocNav-functions">
+      <a href="#pkg-functions" data-gtmc="doc outline link">
+        Functions
+      </a>
+      
+        <ul>
+          
+            <li>
+              <a href="#Match" title="Match(pattern, b)" data-gtmc="doc outline link">
+                Match(pattern, b)
+              </a>
+            </li>
+          
+            <li>
+              <a href="#MatchReader" title="MatchReader(pattern, r)" data-gtmc="doc outline link">
+                MatchReader(pattern, r)
+              </a>
+            </li>
+          
+            <li>
+              <a href="#MatchString" title="MatchString(pattern, s)" data-gtmc="doc outline link">
+                MatchString(pattern, s)
+              </a>
+            </li>
+          
+            <li>
+              <a href="#QuoteMeta" title="QuoteMeta(s)" data-gtmc="doc outline link">
+                QuoteMeta(s)
+              </a>
+            </li>
+          
+        </ul>
+      
+    </li>
+    <li class="DocNav-types">
+      <a href="#pkg-types" data-gtmc="doc outline link">
+        Types
+      </a>
+      <ul>
+        
+          
+          <li>
+            <a href="#Regexp" title="type Regexp" data-gtmc="doc outline link">
+              type Regexp
+            </a>
+            
+              <ul>
+                
+                  <li>
+                    <a href="#Compile" title="Compile(expr)"
+                        data-gtmc="doc outline link">
+                      Compile(expr)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#CompilePOSIX" title="CompilePOSIX(expr)"
+                        data-gtmc="doc outline link">
+                      CompilePOSIX(expr)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#MustCompile" title="MustCompile(str)"
+                        data-gtmc="doc outline link">
+                      MustCompile(str)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#MustCompilePOSIX" title="MustCompilePOSIX(str)"
+                        data-gtmc="doc outline link">
+                      MustCompilePOSIX(str)
+                    </a>
+                  </li>
+                
+                
+                  <li>
+                    <a href="#Regexp.AppendText" title="(re) AppendText(b)"
+                        data-gtmc="doc outline link">
+                      (re) AppendText(b)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.Copy" title="(re) Copy()"
+                        data-gtmc="doc outline link">
+                      (re) Copy()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.Expand" title="(re) Expand(dst, template, src, match)"
+                        data-gtmc="doc outline link">
+                      (re) Expand(dst, template, src, match)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.ExpandString" title="(re) ExpandString(dst, template, src, match)"
+                        data-gtmc="doc outline link">
+                      (re) ExpandString(dst, template, src, match)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.Find" title="(re) Find(b)"
+                        data-gtmc="doc outline link">
+                      (re) Find(b)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindAll" title="(re) FindAll(b, n)"
+                        data-gtmc="doc outline link">
+                      (re) FindAll(b, n)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindAllIndex" title="(re) FindAllIndex(b, n)"
+                        data-gtmc="doc outline link">
+                      (re) FindAllIndex(b, n)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindAllString" title="(re) FindAllString(s, n)"
+                        data-gtmc="doc outline link">
+                      (re) FindAllString(s, n)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindAllStringIndex" title="(re) FindAllStringIndex(s, n)"
+                        data-gtmc="doc outline link">
+                      (re) FindAllStringIndex(s, n)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindAllStringSubmatch" title="(re) FindAllStringSubmatch(s, n)"
+                        data-gtmc="doc outline link">
+                      (re) FindAllStringSubmatch(s, n)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindAllStringSubmatchIndex" title="(re) FindAllStringSubmatchIndex(s, n)"
+                        data-gtmc="doc outline link">
+                      (re) FindAllStringSubmatchIndex(s, n)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindAllSubmatch" title="(re) FindAllSubmatch(b, n)"
+                        data-gtmc="doc outline link">
+                      (re) FindAllSubmatch(b, n)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindAllSubmatchIndex" title="(re) FindAllSubmatchIndex(b, n)"
+                        data-gtmc="doc outline link">
+                      (re) FindAllSubmatchIndex(b, n)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindIndex" title="(re) FindIndex(b)"
+                        data-gtmc="doc outline link">
+                      (re) FindIndex(b)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindReaderIndex" title="(re) FindReaderIndex(r)"
+                        data-gtmc="doc outline link">
+                      (re) FindReaderIndex(r)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindReaderSubmatchIndex" title="(re) FindReaderSubmatchIndex(r)"
+                        data-gtmc="doc outline link">
+                      (re) FindReaderSubmatchIndex(r)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindString" title="(re) FindString(s)"
+                        data-gtmc="doc outline link">
+                      (re) FindString(s)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindStringIndex" title="(re) FindStringIndex(s)"
+                        data-gtmc="doc outline link">
+                      (re) FindStringIndex(s)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindStringSubmatch" title="(re) FindStringSubmatch(s)"
+                        data-gtmc="doc outline link">
+                      (re) FindStringSubmatch(s)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindStringSubmatchIndex" title="(re) FindStringSubmatchIndex(s)"
+                        data-gtmc="doc outline link">
+                      (re) FindStringSubmatchIndex(s)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindSubmatch" title="(re) FindSubmatch(b)"
+                        data-gtmc="doc outline link">
+                      (re) FindSubmatch(b)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.FindSubmatchIndex" title="(re) FindSubmatchIndex(b)"
+                        data-gtmc="doc outline link">
+                      (re) FindSubmatchIndex(b)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.LiteralPrefix" title="(re) LiteralPrefix()"
+                        data-gtmc="doc outline link">
+                      (re) LiteralPrefix()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.Longest" title="(re) Longest()"
+                        data-gtmc="doc outline link">
+                      (re) Longest()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.MarshalText" title="(re) MarshalText()"
+                        data-gtmc="doc outline link">
+                      (re) MarshalText()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.Match" title="(re) Match(b)"
+                        data-gtmc="doc outline link">
+                      (re) Match(b)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.MatchReader" title="(re) MatchReader(r)"
+                        data-gtmc="doc outline link">
+                      (re) MatchReader(r)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.MatchString" title="(re) MatchString(s)"
+                        data-gtmc="doc outline link">
+                      (re) MatchString(s)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.NumSubexp" title="(re) NumSubexp()"
+                        data-gtmc="doc outline link">
+                      (re) NumSubexp()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.ReplaceAll" title="(re) ReplaceAll(src, repl)"
+                        data-gtmc="doc outline link">
+                      (re) ReplaceAll(src, repl)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.ReplaceAllFunc" title="(re) ReplaceAllFunc(src, repl)"
+                        data-gtmc="doc outline link">
+                      (re) ReplaceAllFunc(src, repl)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.ReplaceAllLiteral" title="(re) ReplaceAllLiteral(src, repl)"
+                        data-gtmc="doc outline link">
+                      (re) ReplaceAllLiteral(src, repl)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.ReplaceAllLiteralString" title="(re) ReplaceAllLiteralString(src, repl)"
+                        data-gtmc="doc outline link">
+                      (re) ReplaceAllLiteralString(src, repl)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.ReplaceAllString" title="(re) ReplaceAllString(src, repl)"
+                        data-gtmc="doc outline link">
+                      (re) ReplaceAllString(src, repl)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.ReplaceAllStringFunc" title="(re) ReplaceAllStringFunc(src, repl)"
+                        data-gtmc="doc outline link">
+                      (re) ReplaceAllStringFunc(src, repl)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.Split" title="(re) Split(s, n)"
+                        data-gtmc="doc outline link">
+                      (re) Split(s, n)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.String" title="(re) String()"
+                        data-gtmc="doc outline link">
+                      (re) String()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.SubexpIndex" title="(re) SubexpIndex(name)"
+                        data-gtmc="doc outline link">
+                      (re) SubexpIndex(name)
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.SubexpNames" title="(re) SubexpNames()"
+                        data-gtmc="doc outline link">
+                      (re) SubexpNames()
+                    </a>
+                  </li>
+                
+                  <li>
+                    <a href="#Regexp.UnmarshalText" title="(re) UnmarshalText(text)"
+                        data-gtmc="doc outline link">
+                      (re) UnmarshalText(text)
+                    </a>
+                  </li>
+                
+              </ul>
+             
+          </li>
+         
+      </ul>
+    </li>
+  
+  
+</ul>
+
+      </li>
+    
+    
+      <li>
+        <a href="#section-sourcefiles" data-gtmc="outline link">
+          Source Files
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="#section-directories" data-gtmc="outline link">
+          Directories
+        </a>
+      </li>
+    
+  </ul>
+
+  </div>
+  <div class="go-Main-navMobile js-mainNavMobile">
+    <label class="go-Label">
+      <select class="go-Select">
+        
+          <option selected disabled>Documentation</option>
+        
+      </select>
+    </label>
+  </div>
+</nav>
+    <article class="go-Main-article js-mainContent">
+  <div class="UnitDetails" data-test-id="UnitDetails" style="display: block;">
+    <div class="UnitDetails-content js-unitDetailsContent" data-test-id="UnitDetails-content">
+      
+      
+        
+          
+  <div class="UnitDoc">
+    <h2 class="UnitDoc-title" id="section-documentation">
+      <img class="go-Icon" height="24" width="24" src="/static/shared/icon/code_gm_grey_24dp.svg" alt="">
+      Documentation
+      <a class="UnitDoc-idLink" href="#section-documentation" title="Go to Documentation" aria-label="Go to Documentation">¶</a>
+    </h2>
+    
+  
+    
+  
+
+    <div class="Documentation js-documentation">
+      
+        
+
+<div class="Documentation-content js-docContent"> <section class="Documentation-overview">
+    <h3 tabindex="-1" id="pkg-overview" class="Documentation-overviewHeader">Overview <a href="#pkg-overview" title="Go to Overview" aria-label="Go to Overview">¶</a></h3>
+
+<p>Package regexp implements regular expression search.
+</p><p>The syntax of the regular expressions accepted is the same
+general syntax used by Perl, Python, and other languages.
+More precisely, it is the syntax accepted by RE2 and described at
+<a href="https://golang.org/s/re2syntax">https://golang.org/s/re2syntax</a>, except for \C.
+For an overview of the syntax, see the <a href="/regexp/syntax">regexp/syntax</a> package.
+</p><p>The regexp implementation provided by this package is
+guaranteed to run in time linear in the size of the input.
+(This is a property not guaranteed by most open source
+implementations of regular expressions.) For more information
+about this property, see <a href="https://swtch.com/~rsc/regexp/regexp1.html">https://swtch.com/~rsc/regexp/regexp1.html</a>
+or any book about automata theory.
+</p><p>All characters are UTF-8-encoded code points.
+Following <a href="/unicode/utf8#DecodeRune">utf8.DecodeRune</a>, each byte of an invalid UTF-8 sequence
+is treated as if it encoded utf8.RuneError (U+FFFD).
+</p><p>There are 16 methods of <a href="#Regexp">Regexp</a> that match a regular expression and identify
+the matched text. Their names are matched by this regular expression:
+</p><pre>Find(All)?(String)?(Submatch)?(Index)?
+</pre><p>If &#39;All&#39; is present, the routine matches successive non-overlapping
+matches of the entire expression. Empty matches abutting a preceding
+match are ignored. The return value is a slice containing the successive
+return values of the corresponding non-&#39;All&#39; routine. These routines take
+an extra integer argument, n. If n &gt;= 0, the function returns at most n
+matches/submatches; otherwise, it returns all of them.
+</p><p>If &#39;String&#39; is present, the argument is a string; otherwise it is a slice
+of bytes; return values are adjusted as appropriate.
+</p><p>If &#39;Submatch&#39; is present, the return value is a slice identifying the
+successive submatches of the expression. Submatches are matches of
+parenthesized subexpressions (also known as capturing groups) within the
+regular expression, numbered from left to right in order of opening
+parenthesis. Submatch 0 is the match of the entire expression, submatch 1 is
+the match of the first parenthesized subexpression, and so on.
+</p><p>If &#39;Index&#39; is present, matches and submatches are identified by byte index
+pairs within the input string: result[2*n:2*n+2] identifies the indexes of
+the nth submatch. The pair for n==0 identifies the match of the entire
+expression. If &#39;Index&#39; is not present, the match is identified by the text
+of the match/submatch. If an index is negative or text is nil, it means that
+subexpression did not match any string in the input. For &#39;String&#39; versions
+an empty string means either no match or an empty match.
+</p><p>There is also a subset of the methods that can be applied to text read from
+an <a href="/io#RuneReader">io.RuneReader</a>: <a href="#Regexp.MatchReader">Regexp.MatchReader</a>, <a href="#Regexp.FindReaderIndex">Regexp.FindReaderIndex</a>,
+<a href="#Regexp.FindReaderSubmatchIndex">Regexp.FindReaderSubmatchIndex</a>.
+</p><p>This set may grow. Note that regular expression matches may need to
+examine text beyond the text returned by a match, so the methods that
+match text from an <a href="/io#RuneReader">io.RuneReader</a> may read arbitrarily far into the input
+before returning.
+</p><p>(There are a few other methods that do not match this pattern.)
+</p>
+<details tabindex="-1" id="example-package" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-package" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	// Compile the expression once, usually at init time.
+	// Use raw strings to avoid having to quote the backslashes.
+	var validID = regexp.MustCompile(`^[a-z]+\[[0-9]+\]$`)
+
+	fmt.Println(validID.MatchString(&#34;adam[23]&#34;))
+	fmt.Println(validID.MatchString(&#34;eve[7]&#34;))
+	fmt.Println(validID.MatchString(&#34;Job[48]&#34;))
+	fmt.Println(validID.MatchString(&#34;snakey&#34;))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">true
+true
+false
+false
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+</section><section class="Documentation-index">
+    <h3 id="pkg-index" class="Documentation-indexHeader">Index <a href="#pkg-index" title="Go to Index" aria-label="Go to Index">¶</a></h3>
+
+<ul class="Documentation-indexList">
+<li class="Documentation-indexFunction">
+        <a href="#Match">func Match(pattern string, b []byte) (matched bool, err error)</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#MatchReader">func MatchReader(pattern string, r io.RuneReader) (matched bool, err error)</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#MatchString">func MatchString(pattern string, s string) (matched bool, err error)</a></li>
+<li class="Documentation-indexFunction">
+        <a href="#QuoteMeta">func QuoteMeta(s string) string</a></li>
+<li class="Documentation-indexType">
+          <a href="#Regexp">type Regexp</a></li>
+<li><ul class="Documentation-indexTypeFunctions">
+<li>
+            <a href="#Compile">func Compile(expr string) (*Regexp, error)</a></li>
+<li>
+            <a href="#CompilePOSIX">func CompilePOSIX(expr string) (*Regexp, error)</a></li>
+<li>
+            <a href="#MustCompile">func MustCompile(str string) *Regexp</a></li>
+<li>
+            <a href="#MustCompilePOSIX">func MustCompilePOSIX(str string) *Regexp</a></li>
+</ul></li>
+<li><ul class="Documentation-indexTypeMethods">
+<li>
+            <a href="#Regexp.AppendText">func (re *Regexp) AppendText(b []byte) ([]byte, error)</a></li>
+<li>
+            <a class="js-deprecatedTagLink" href="#Regexp.Copy">func (re *Regexp) Copy() *Regexp</a><span class="Documentation-indexDeprecated Documentation-deprecatedTag">deprecated</span></li>
+<li>
+            <a href="#Regexp.Expand">func (re *Regexp) Expand(dst []byte, template []byte, src []byte, match []int) []byte</a></li>
+<li>
+            <a href="#Regexp.ExpandString">func (re *Regexp) ExpandString(dst []byte, template string, src string, match []int) []byte</a></li>
+<li>
+            <a href="#Regexp.Find">func (re *Regexp) Find(b []byte) []byte</a></li>
+<li>
+            <a href="#Regexp.FindAll">func (re *Regexp) FindAll(b []byte, n int) [][]byte</a></li>
+<li>
+            <a href="#Regexp.FindAllIndex">func (re *Regexp) FindAllIndex(b []byte, n int) [][]int</a></li>
+<li>
+            <a href="#Regexp.FindAllString">func (re *Regexp) FindAllString(s string, n int) []string</a></li>
+<li>
+            <a href="#Regexp.FindAllStringIndex">func (re *Regexp) FindAllStringIndex(s string, n int) [][]int</a></li>
+<li>
+            <a href="#Regexp.FindAllStringSubmatch">func (re *Regexp) FindAllStringSubmatch(s string, n int) [][]string</a></li>
+<li>
+            <a href="#Regexp.FindAllStringSubmatchIndex">func (re *Regexp) FindAllStringSubmatchIndex(s string, n int) [][]int</a></li>
+<li>
+            <a href="#Regexp.FindAllSubmatch">func (re *Regexp) FindAllSubmatch(b []byte, n int) [][][]byte</a></li>
+<li>
+            <a href="#Regexp.FindAllSubmatchIndex">func (re *Regexp) FindAllSubmatchIndex(b []byte, n int) [][]int</a></li>
+<li>
+            <a href="#Regexp.FindIndex">func (re *Regexp) FindIndex(b []byte) (loc []int)</a></li>
+<li>
+            <a href="#Regexp.FindReaderIndex">func (re *Regexp) FindReaderIndex(r io.RuneReader) (loc []int)</a></li>
+<li>
+            <a href="#Regexp.FindReaderSubmatchIndex">func (re *Regexp) FindReaderSubmatchIndex(r io.RuneReader) []int</a></li>
+<li>
+            <a href="#Regexp.FindString">func (re *Regexp) FindString(s string) string</a></li>
+<li>
+            <a href="#Regexp.FindStringIndex">func (re *Regexp) FindStringIndex(s string) (loc []int)</a></li>
+<li>
+            <a href="#Regexp.FindStringSubmatch">func (re *Regexp) FindStringSubmatch(s string) []string</a></li>
+<li>
+            <a href="#Regexp.FindStringSubmatchIndex">func (re *Regexp) FindStringSubmatchIndex(s string) []int</a></li>
+<li>
+            <a href="#Regexp.FindSubmatch">func (re *Regexp) FindSubmatch(b []byte) [][]byte</a></li>
+<li>
+            <a href="#Regexp.FindSubmatchIndex">func (re *Regexp) FindSubmatchIndex(b []byte) []int</a></li>
+<li>
+            <a href="#Regexp.LiteralPrefix">func (re *Regexp) LiteralPrefix() (prefix string, complete bool)</a></li>
+<li>
+            <a href="#Regexp.Longest">func (re *Regexp) Longest()</a></li>
+<li>
+            <a href="#Regexp.MarshalText">func (re *Regexp) MarshalText() ([]byte, error)</a></li>
+<li>
+            <a href="#Regexp.Match">func (re *Regexp) Match(b []byte) bool</a></li>
+<li>
+            <a href="#Regexp.MatchReader">func (re *Regexp) MatchReader(r io.RuneReader) bool</a></li>
+<li>
+            <a href="#Regexp.MatchString">func (re *Regexp) MatchString(s string) bool</a></li>
+<li>
+            <a href="#Regexp.NumSubexp">func (re *Regexp) NumSubexp() int</a></li>
+<li>
+            <a href="#Regexp.ReplaceAll">func (re *Regexp) ReplaceAll(src, repl []byte) []byte</a></li>
+<li>
+            <a href="#Regexp.ReplaceAllFunc">func (re *Regexp) ReplaceAllFunc(src []byte, repl func([]byte) []byte) []byte</a></li>
+<li>
+            <a href="#Regexp.ReplaceAllLiteral">func (re *Regexp) ReplaceAllLiteral(src, repl []byte) []byte</a></li>
+<li>
+            <a href="#Regexp.ReplaceAllLiteralString">func (re *Regexp) ReplaceAllLiteralString(src, repl string) string</a></li>
+<li>
+            <a href="#Regexp.ReplaceAllString">func (re *Regexp) ReplaceAllString(src, repl string) string</a></li>
+<li>
+            <a href="#Regexp.ReplaceAllStringFunc">func (re *Regexp) ReplaceAllStringFunc(src string, repl func(string) string) string</a></li>
+<li>
+            <a href="#Regexp.Split">func (re *Regexp) Split(s string, n int) []string</a></li>
+<li>
+            <a href="#Regexp.String">func (re *Regexp) String() string</a></li>
+<li>
+            <a href="#Regexp.SubexpIndex">func (re *Regexp) SubexpIndex(name string) int</a></li>
+<li>
+            <a href="#Regexp.SubexpNames">func (re *Regexp) SubexpNames() []string</a></li>
+<li>
+            <a href="#Regexp.UnmarshalText">func (re *Regexp) UnmarshalText(text []byte) error</a></li>
+</ul></li>
+</ul>
+</section><section class="Documentation-examples">
+    <h3 tabindex="-1" id="pkg-examples" class="Documentation-examplesHeader">Examples <a class="Documentation-idLink" href="#pkg-examples" title="Go to Examples" aria-label="Go to Examples">¶</a></h3>
+<ul class="Documentation-examplesList">
+<li><a href="#example-package" class="js-exampleHref">Package</a></li>
+<li><a href="#example-Match" class="js-exampleHref">Match</a></li>
+<li><a href="#example-MatchString" class="js-exampleHref">MatchString</a></li>
+<li><a href="#example-QuoteMeta" class="js-exampleHref">QuoteMeta</a></li>
+<li><a href="#example-Regexp.Expand" class="js-exampleHref">Regexp.Expand</a></li>
+<li><a href="#example-Regexp.ExpandString" class="js-exampleHref">Regexp.ExpandString</a></li>
+<li><a href="#example-Regexp.Find" class="js-exampleHref">Regexp.Find</a></li>
+<li><a href="#example-Regexp.FindAll" class="js-exampleHref">Regexp.FindAll</a></li>
+<li><a href="#example-Regexp.FindAllIndex" class="js-exampleHref">Regexp.FindAllIndex</a></li>
+<li><a href="#example-Regexp.FindAllString" class="js-exampleHref">Regexp.FindAllString</a></li>
+<li><a href="#example-Regexp.FindAllStringSubmatch" class="js-exampleHref">Regexp.FindAllStringSubmatch</a></li>
+<li><a href="#example-Regexp.FindAllStringSubmatchIndex" class="js-exampleHref">Regexp.FindAllStringSubmatchIndex</a></li>
+<li><a href="#example-Regexp.FindAllSubmatch" class="js-exampleHref">Regexp.FindAllSubmatch</a></li>
+<li><a href="#example-Regexp.FindAllSubmatchIndex" class="js-exampleHref">Regexp.FindAllSubmatchIndex</a></li>
+<li><a href="#example-Regexp.FindIndex" class="js-exampleHref">Regexp.FindIndex</a></li>
+<li><a href="#example-Regexp.FindString" class="js-exampleHref">Regexp.FindString</a></li>
+<li><a href="#example-Regexp.FindStringIndex" class="js-exampleHref">Regexp.FindStringIndex</a></li>
+<li><a href="#example-Regexp.FindStringSubmatch" class="js-exampleHref">Regexp.FindStringSubmatch</a></li>
+<li><a href="#example-Regexp.FindSubmatch" class="js-exampleHref">Regexp.FindSubmatch</a></li>
+<li><a href="#example-Regexp.FindSubmatchIndex" class="js-exampleHref">Regexp.FindSubmatchIndex</a></li>
+<li><a href="#example-Regexp.Longest" class="js-exampleHref">Regexp.Longest</a></li>
+<li><a href="#example-Regexp.Match" class="js-exampleHref">Regexp.Match</a></li>
+<li><a href="#example-Regexp.MatchString" class="js-exampleHref">Regexp.MatchString</a></li>
+<li><a href="#example-Regexp.NumSubexp" class="js-exampleHref">Regexp.NumSubexp</a></li>
+<li><a href="#example-Regexp.ReplaceAll" class="js-exampleHref">Regexp.ReplaceAll</a></li>
+<li><a href="#example-Regexp.ReplaceAllLiteralString" class="js-exampleHref">Regexp.ReplaceAllLiteralString</a></li>
+<li><a href="#example-Regexp.ReplaceAllString" class="js-exampleHref">Regexp.ReplaceAllString</a></li>
+<li><a href="#example-Regexp.ReplaceAllStringFunc" class="js-exampleHref">Regexp.ReplaceAllStringFunc</a></li>
+<li><a href="#example-Regexp.Split" class="js-exampleHref">Regexp.Split</a></li>
+<li><a href="#example-Regexp.SubexpIndex" class="js-exampleHref">Regexp.SubexpIndex</a></li>
+<li><a href="#example-Regexp.SubexpNames" class="js-exampleHref">Regexp.SubexpNames</a></li>
+</ul>
+</section><h3 tabindex="-1" id="pkg-constants" class="Documentation-constantsHeader">Constants <a href="#pkg-constants" title="Go to Constants" aria-label="Go to Constants">¶</a></h3>
+
+  <section class="Documentation-constants"><p class="Documentation-empty">This section is empty.</p></section>
+
+  <h3 tabindex="-1" id="pkg-variables" class="Documentation-variablesHeader">Variables <a href="#pkg-variables" title="Go to Variables" aria-label="Go to Variables">¶</a></h3>
+
+  <section class="Documentation-variables"><p class="Documentation-empty">This section is empty.</p></section>
+
+  <h3 tabindex="-1" id="pkg-functions" class="Documentation-functionsHeader">Functions <a href="#pkg-functions" title="Go to Functions" aria-label="Go to Functions">¶</a></h3>
+
+  <section class="Documentation-functions"><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="Match" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=561">Match</a> <a class="Documentation-idLink" href="#Match" title="Go to Match" aria-label="Go to Match">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func Match(pattern <a href="/builtin#string">string</a>, b []<a href="/builtin#byte">byte</a>) (matched <a href="/builtin#bool">bool</a>, err <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>Match reports whether the byte slice b
+contains any match of the regular expression pattern.
+More complicated queries need to use <a href="#Compile">Compile</a> and the full <a href="#Regexp">Regexp</a> interface.
+</p>
+<details tabindex="-1" id="example-Match" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Match" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	matched, err := regexp.Match(`foo.*`, []byte(`seafood`))
+	fmt.Println(matched, err)
+	matched, err = regexp.Match(`bar.*`, []byte(`seafood`))
+	fmt.Println(matched, err)
+	matched, err = regexp.Match(`a(b`, []byte(`seafood`))
+	fmt.Println(matched, err)
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">true &lt;nil&gt;
+false &lt;nil&gt;
+false error parsing regexp: missing closing ): `a(b`
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+        </div><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="MatchReader" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=539">MatchReader</a> <a class="Documentation-idLink" href="#MatchReader" title="Go to MatchReader" aria-label="Go to MatchReader">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func MatchReader(pattern <a href="/builtin#string">string</a>, r <a href="/io">io</a>.<a href="/io#RuneReader">RuneReader</a>) (matched <a href="/builtin#bool">bool</a>, err <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>MatchReader reports whether the text returned by the <a href="/io#RuneReader">io.RuneReader</a>
+contains any match of the regular expression pattern.
+More complicated queries need to use <a href="#Compile">Compile</a> and the full <a href="#Regexp">Regexp</a> interface.
+</p>
+
+  
+
+        </div><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="MatchString" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=550">MatchString</a> <a class="Documentation-idLink" href="#MatchString" title="Go to MatchString" aria-label="Go to MatchString">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func MatchString(pattern <a href="/builtin#string">string</a>, s <a href="/builtin#string">string</a>) (matched <a href="/builtin#bool">bool</a>, err <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>MatchString reports whether the string s
+contains any match of the regular expression pattern.
+More complicated queries need to use <a href="#Compile">Compile</a> and the full <a href="#Regexp">Regexp</a> interface.
+</p>
+<details tabindex="-1" id="example-MatchString" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-MatchString" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	matched, err := regexp.MatchString(`foo.*`, &#34;seafood&#34;)
+	fmt.Println(matched, err)
+	matched, err = regexp.MatchString(`bar.*`, &#34;seafood&#34;)
+	fmt.Println(matched, err)
+	matched, err = regexp.MatchString(`a(b`, &#34;seafood&#34;)
+	fmt.Println(matched, err)
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">true &lt;nil&gt;
+false &lt;nil&gt;
+false error parsing regexp: missing closing ): `a(b`
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+        </div><div class="Documentation-function">
+	  
+  
+  
+    <h4 tabindex="-1" id="QuoteMeta" data-kind="function" class="Documentation-functionHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=722">QuoteMeta</a> <a class="Documentation-idLink" href="#QuoteMeta" title="Go to QuoteMeta" aria-label="Go to QuoteMeta">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func QuoteMeta(s <a href="/builtin#string">string</a>) <a href="/builtin#string">string</a></pre>
+    </div>
+  <p>QuoteMeta returns a string that escapes all regular expression metacharacters
+inside the argument text; the returned string is a regular expression matching
+the literal text.
+</p>
+<details tabindex="-1" id="example-QuoteMeta" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-QuoteMeta" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	fmt.Println(regexp.QuoteMeta(`Escaping symbols like: .+*?()|[]{}^$`))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">Escaping symbols like: \.\+\*\?\(\)\|\[\]\{\}\^\$
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+        </div></section>
+
+  <h3 tabindex="-1" id="pkg-types" class="Documentation-typesHeader">Types <a href="#pkg-types" title="Go to Types" aria-label="Go to Types">¶</a></h3>
+
+  <section class="Documentation-types"><div class="Documentation-type">
+      
+  
+  
+    <h4 tabindex="-1" id="Regexp" data-kind="type" class="Documentation-typeHeader">
+      <span>type <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=80">Regexp</a> <a class="Documentation-idLink" href="#Regexp" title="Go to Regexp" aria-label="Go to Regexp">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>type Regexp struct {
+	<span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+    </div>
+  <p>Regexp is the representation of a compiled regular expression.
+A Regexp is safe for concurrent use by multiple goroutines,
+except for configuration methods, such as <a href="#Regexp.Longest">Regexp.Longest</a>.
+</p>
+<div class="Documentation-typeFunc">
+    
+  
+  
+    <h4 tabindex="-1" id="Compile" data-kind="function" class="Documentation-typeFuncHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=130">Compile</a> <a class="Documentation-idLink" href="#Compile" title="Go to Compile" aria-label="Go to Compile">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func Compile(expr <a href="/builtin#string">string</a>) (*<a href="#Regexp">Regexp</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>Compile parses a regular expression and returns, if successful,
+a <a href="#Regexp">Regexp</a> object that can be used to match against text.
+</p><p>When matching against text, the regexp returns a match that
+begins as early as possible in the input (leftmost), and among those
+it chooses the one that a backtracking search would have found first.
+This so-called leftmost-first matching is the same semantics
+that Perl, Python, and other implementations use, although this
+package implements it without the expense of backtracking.
+For POSIX leftmost-longest matching, see <a href="#CompilePOSIX">CompilePOSIX</a>.
+</p>
+
+  
+
+  </div><div class="Documentation-typeFunc">
+    
+  
+  
+    <h4 tabindex="-1" id="CompilePOSIX" data-kind="function" class="Documentation-typeFuncHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=153">CompilePOSIX</a> <a class="Documentation-idLink" href="#CompilePOSIX" title="Go to CompilePOSIX" aria-label="Go to CompilePOSIX">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func CompilePOSIX(expr <a href="/builtin#string">string</a>) (*<a href="#Regexp">Regexp</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>CompilePOSIX is like <a href="#Compile">Compile</a> but restricts the regular expression
+to POSIX ERE (egrep) syntax and changes the match semantics to
+leftmost-longest.
+</p><p>That is, when matching against text, the regexp returns a match that
+begins as early as possible in the input (leftmost), and among those
+it chooses a match that is as long as possible.
+This so-called leftmost-longest matching is the same semantics
+that early regular expression implementations used and that POSIX
+specifies.
+</p><p>However, there can be multiple leftmost-longest matches, with different
+submatch choices, and here this package diverges from POSIX.
+Among the possible leftmost-longest matches, this package chooses
+the one that a backtracking search would have found first, while POSIX
+specifies that the match be chosen to maximize the length of the first
+subexpression, then the second, and so on from left to right.
+The POSIX rule is computationally prohibitive and not even well-defined.
+See <a href="https://swtch.com/~rsc/regexp/regexp2.html#posix">https://swtch.com/~rsc/regexp/regexp2.html#posix</a> for details.
+</p>
+
+  
+
+  </div><div class="Documentation-typeFunc">
+    
+  
+  
+    <h4 tabindex="-1" id="MustCompile" data-kind="function" class="Documentation-typeFuncHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=310">MustCompile</a> <a class="Documentation-idLink" href="#MustCompile" title="Go to MustCompile" aria-label="Go to MustCompile">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func MustCompile(str <a href="/builtin#string">string</a>) *<a href="#Regexp">Regexp</a></pre>
+    </div>
+  <p>MustCompile is like <a href="#Compile">Compile</a> but panics if the expression cannot be parsed.
+It simplifies safe initialization of global variables holding compiled regular
+expressions.
+</p>
+
+  
+
+  </div><div class="Documentation-typeFunc">
+    
+  
+  
+    <h4 tabindex="-1" id="MustCompilePOSIX" data-kind="function" class="Documentation-typeFuncHeader">
+      <span>func <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=321">MustCompilePOSIX</a> <a class="Documentation-idLink" href="#MustCompilePOSIX" title="Go to MustCompilePOSIX" aria-label="Go to MustCompilePOSIX">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func MustCompilePOSIX(str <a href="/builtin#string">string</a>) *<a href="#Regexp">Regexp</a></pre>
+    </div>
+  <p>MustCompilePOSIX is like <a href="#CompilePOSIX">CompilePOSIX</a> but panics if the expression cannot be parsed.
+It simplifies safe initialization of global variables holding compiled regular
+expressions.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.AppendText" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1286">AppendText</a> <a class="Documentation-idLink" href="#Regexp.AppendText" title="Go to Regexp.AppendText" aria-label="Go to Regexp.AppendText">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.24.0</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) AppendText(b []<a href="/builtin#byte">byte</a>) ([]<a href="/builtin#byte">byte</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>AppendText implements <a href="/encoding#TextAppender">encoding.TextAppender</a>. The output
+matches that of calling the <a href="#Regexp.String">Regexp.String</a> method.
+</p><p>Note that the output is lossy in some cases: This method does not indicate
+POSIX regular expressions (i.e. those compiled by calling <a href="#CompilePOSIX">CompilePOSIX</a>), or
+those for which the <a href="#Regexp.Longest">Regexp.Longest</a> method has been called.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <details class="Documentation-deprecatedDetails js-deprecatedDetails">
+      <summary>
+        <h4 tabindex="-1" id="Regexp.Copy" data-kind="method" class="Documentation-typeMethodHeader">
+          <span class="Documentation-deprecatedTitle">
+            func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=115">Copy</a>
+            <span class="Documentation-deprecatedTag">deprecated</span>
+            <span class="Documentation-deprecatedBody"></span>
+          </span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.6</span>
+    
+  </span>
+</h4>
+
+      </summary>
+      <div class="go-Message go-Message--warning Documentation-deprecatedItemBody">
+        
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) Copy() *<a href="#Regexp">Regexp</a></pre>
+    </div>
+  <p>Copy returns a new <a href="#Regexp">Regexp</a> object copied from re.
+Calling <a href="#Regexp.Longest">Regexp.Longest</a> on one copy does not affect another.
+</p><p>Deprecated: In earlier releases, when using a <a href="#Regexp">Regexp</a> in multiple goroutines,
+giving each goroutine its own copy helped to avoid lock contention.
+As of Go 1.12, using Copy is no longer necessary to avoid lock contention.
+Copy may still be appropriate if the reason for its use is to make
+two copies with different <a href="#Regexp.Longest">Regexp.Longest</a> settings.
+</p>
+
+      </div>
+    </details>
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.Expand" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=915">Expand</a> <a class="Documentation-idLink" href="#Regexp.Expand" title="Go to Regexp.Expand" aria-label="Go to Regexp.Expand">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) Expand(dst []<a href="/builtin#byte">byte</a>, template []<a href="/builtin#byte">byte</a>, src []<a href="/builtin#byte">byte</a>, match []<a href="/builtin#int">int</a>) []<a href="/builtin#byte">byte</a></pre>
+    </div>
+  <p>Expand appends template to dst and returns the result; during the
+append, Expand replaces variables in the template with corresponding
+matches drawn from src. The match slice should have been returned by
+<a href="#Regexp.FindSubmatchIndex">Regexp.FindSubmatchIndex</a>.
+</p><p>In the template, a variable is denoted by a substring of the form
+$name or ${name}, where name is a non-empty sequence of letters,
+digits, and underscores. A purely numeric name like $1 refers to
+the submatch with the corresponding index; other names refer to
+capturing parentheses named with the (?P&lt;name&gt;...) syntax. A
+reference to an out of range or unmatched index or a name that is not
+present in the regular expression is replaced with an empty slice.
+</p><p>In the $name form, name is taken to be as long as possible: $1x is
+equivalent to ${1x}, not ${1}x, and, $10 is equivalent to ${10}, not ${1}0.
+</p><p>To insert a literal $ in the output, use $$ in the template.
+</p>
+<details tabindex="-1" id="example-Regexp.Expand" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.Expand" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	content := []byte(`
+	# comment line
+	option1: value1
+	option2: value2
+
+	# another comment line
+	option3: value3
+`)
+
+	// Regex pattern captures &#34;key: value&#34; pair from the content.
+	pattern := regexp.MustCompile(`(?m)(?P&lt;key&gt;\w+):\s+(?P&lt;value&gt;\w+)$`)
+
+	// Template to convert &#34;key: value&#34; to &#34;key=value&#34; by
+	// referencing the values captured by the regex pattern.
+	template := []byte(&#34;$key=$value\n&#34;)
+
+	result := []byte{}
+
+	// For each match of the regex in the content.
+	for _, submatches := range pattern.FindAllSubmatchIndex(content, -1) {
+		// Apply the captured submatches to the template and append the output
+		// to the result.
+		result = pattern.Expand(result, template, content, submatches)
+	}
+	fmt.Println(string(result))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">option1=value1
+option2=value2
+option3=value3
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.ExpandString" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=922">ExpandString</a> <a class="Documentation-idLink" href="#Regexp.ExpandString" title="Go to Regexp.ExpandString" aria-label="Go to Regexp.ExpandString">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) ExpandString(dst []<a href="/builtin#byte">byte</a>, template <a href="/builtin#string">string</a>, src <a href="/builtin#string">string</a>, match []<a href="/builtin#int">int</a>) []<a href="/builtin#byte">byte</a></pre>
+    </div>
+  <p>ExpandString is like <a href="#Regexp.Expand">Regexp.Expand</a> but the template and source are strings.
+It appends to and returns a byte slice in order to give the calling
+code control over allocation.
+</p>
+<details tabindex="-1" id="example-Regexp.ExpandString" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.ExpandString" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	content := `
+	# comment line
+	option1: value1
+	option2: value2
+
+	# another comment line
+	option3: value3
+`
+
+	// Regex pattern captures &#34;key: value&#34; pair from the content.
+	pattern := regexp.MustCompile(`(?m)(?P&lt;key&gt;\w+):\s+(?P&lt;value&gt;\w+)$`)
+
+	// Template to convert &#34;key: value&#34; to &#34;key=value&#34; by
+	// referencing the values captured by the regex pattern.
+	template := &#34;$key=$value\n&#34;
+
+	result := []byte{}
+
+	// For each match of the regex in the content.
+	for _, submatches := range pattern.FindAllStringSubmatchIndex(content, -1) {
+		// Apply the captured submatches to the template and append the output
+		// to the result.
+		result = pattern.ExpandString(result, template, content, submatches)
+	}
+	fmt.Println(string(result))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">option1=value1
+option2=value2
+option3=value3
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.Find" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=818">Find</a> <a class="Documentation-idLink" href="#Regexp.Find" title="Go to Regexp.Find" aria-label="Go to Regexp.Find">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) Find(b []<a href="/builtin#byte">byte</a>) []<a href="/builtin#byte">byte</a></pre>
+    </div>
+  <p>Find returns a slice holding the text of the leftmost match in b of the regular expression.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.Find" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.Find" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`foo.?`)
+	fmt.Printf(&#34;%q\n&#34;, re.Find([]byte(`seafood fool`)))
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">&#34;food&#34;
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindAll" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1077">FindAll</a> <a class="Documentation-idLink" href="#Regexp.FindAll" title="Go to Regexp.FindAll" aria-label="Go to Regexp.FindAll">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindAll(b []<a href="/builtin#byte">byte</a>, n <a href="/builtin#int">int</a>) [][]<a href="/builtin#byte">byte</a></pre>
+    </div>
+  <p>FindAll is the &#39;All&#39; version of <a href="#Regexp.Find">Regexp.Find</a>; it returns a slice of all successive
+matches of the expression, as defined by the &#39;All&#39; description in the
+package comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindAll" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindAll" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`foo.?`)
+	fmt.Printf(&#34;%q\n&#34;, re.FindAll([]byte(`seafood fool`), -1))
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[&#34;food&#34; &#34;fool&#34;]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindAllIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1095">FindAllIndex</a> <a class="Documentation-idLink" href="#Regexp.FindAllIndex" title="Go to Regexp.FindAllIndex" aria-label="Go to Regexp.FindAllIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindAllIndex(b []<a href="/builtin#byte">byte</a>, n <a href="/builtin#int">int</a>) [][]<a href="/builtin#int">int</a></pre>
+    </div>
+  <p>FindAllIndex is the &#39;All&#39; version of <a href="#Regexp.FindIndex">Regexp.FindIndex</a>; it returns a slice of all
+successive matches of the expression, as defined by the &#39;All&#39; description
+in the package comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindAllIndex" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindAllIndex" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	content := []byte(&#34;London&#34;)
+	re := regexp.MustCompile(`o.`)
+	fmt.Println(re.FindAllIndex(content, 1))
+	fmt.Println(re.FindAllIndex(content, -1))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[[1 3]]
+[[1 3] [4 6]]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindAllString" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1113">FindAllString</a> <a class="Documentation-idLink" href="#Regexp.FindAllString" title="Go to Regexp.FindAllString" aria-label="Go to Regexp.FindAllString">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindAllString(s <a href="/builtin#string">string</a>, n <a href="/builtin#int">int</a>) []<a href="/builtin#string">string</a></pre>
+    </div>
+  <p>FindAllString is the &#39;All&#39; version of <a href="#Regexp.FindString">Regexp.FindString</a>; it returns a slice of all
+successive matches of the expression, as defined by the &#39;All&#39; description
+in the package comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindAllString" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindAllString" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`a.`)
+	fmt.Println(re.FindAllString(&#34;paranormal&#34;, -1))
+	fmt.Println(re.FindAllString(&#34;paranormal&#34;, 2))
+	fmt.Println(re.FindAllString(&#34;graal&#34;, -1))
+	fmt.Println(re.FindAllString(&#34;none&#34;, -1))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[ar an al]
+[ar an]
+[aa]
+[]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindAllStringIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1131">FindAllStringIndex</a> <a class="Documentation-idLink" href="#Regexp.FindAllStringIndex" title="Go to Regexp.FindAllStringIndex" aria-label="Go to Regexp.FindAllStringIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindAllStringIndex(s <a href="/builtin#string">string</a>, n <a href="/builtin#int">int</a>) [][]<a href="/builtin#int">int</a></pre>
+    </div>
+  <p>FindAllStringIndex is the &#39;All&#39; version of <a href="#Regexp.FindStringIndex">Regexp.FindStringIndex</a>; it returns a
+slice of all successive matches of the expression, as defined by the &#39;All&#39;
+description in the package comment.
+A return value of nil indicates no match.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindAllStringSubmatch" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1191">FindAllStringSubmatch</a> <a class="Documentation-idLink" href="#Regexp.FindAllStringSubmatch" title="Go to Regexp.FindAllStringSubmatch" aria-label="Go to Regexp.FindAllStringSubmatch">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindAllStringSubmatch(s <a href="/builtin#string">string</a>, n <a href="/builtin#int">int</a>) [][]<a href="/builtin#string">string</a></pre>
+    </div>
+  <p>FindAllStringSubmatch is the &#39;All&#39; version of <a href="#Regexp.FindStringSubmatch">Regexp.FindStringSubmatch</a>; it
+returns a slice of all successive matches of the expression, as defined by
+the &#39;All&#39; description in the package comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindAllStringSubmatch" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindAllStringSubmatch" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`a(x*)b`)
+	fmt.Printf(&#34;%q\n&#34;, re.FindAllStringSubmatch(&#34;-ab-&#34;, -1))
+	fmt.Printf(&#34;%q\n&#34;, re.FindAllStringSubmatch(&#34;-axxb-&#34;, -1))
+	fmt.Printf(&#34;%q\n&#34;, re.FindAllStringSubmatch(&#34;-ab-axb-&#34;, -1))
+	fmt.Printf(&#34;%q\n&#34;, re.FindAllStringSubmatch(&#34;-axxb-ab-&#34;, -1))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[[&#34;ab&#34; &#34;&#34;]]
+[[&#34;axxb&#34; &#34;xx&#34;]]
+[[&#34;ab&#34; &#34;&#34;] [&#34;axb&#34; &#34;x&#34;]]
+[[&#34;axxb&#34; &#34;xx&#34;] [&#34;ab&#34; &#34;&#34;]]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindAllStringSubmatchIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1216">FindAllStringSubmatchIndex</a> <a class="Documentation-idLink" href="#Regexp.FindAllStringSubmatchIndex" title="Go to Regexp.FindAllStringSubmatchIndex" aria-label="Go to Regexp.FindAllStringSubmatchIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindAllStringSubmatchIndex(s <a href="/builtin#string">string</a>, n <a href="/builtin#int">int</a>) [][]<a href="/builtin#int">int</a></pre>
+    </div>
+  <p>FindAllStringSubmatchIndex is the &#39;All&#39; version of
+<a href="#Regexp.FindStringSubmatchIndex">Regexp.FindStringSubmatchIndex</a>; it returns a slice of all successive matches of
+the expression, as defined by the &#39;All&#39; description in the package
+comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindAllStringSubmatchIndex" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindAllStringSubmatchIndex" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`a(x*)b`)
+	// Indices:
+	//    01234567   012345678
+	//    -ab-axb-   -axxb-ab-
+	fmt.Println(re.FindAllStringSubmatchIndex(&#34;-ab-&#34;, -1))
+	fmt.Println(re.FindAllStringSubmatchIndex(&#34;-axxb-&#34;, -1))
+	fmt.Println(re.FindAllStringSubmatchIndex(&#34;-ab-axb-&#34;, -1))
+	fmt.Println(re.FindAllStringSubmatchIndex(&#34;-axxb-ab-&#34;, -1))
+	fmt.Println(re.FindAllStringSubmatchIndex(&#34;-foo-&#34;, -1))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[[1 3 2 2]]
+[[1 5 2 4]]
+[[1 3 2 2] [4 7 5 6]]
+[[1 5 2 4] [6 8 7 7]]
+[]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindAllSubmatch" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1149">FindAllSubmatch</a> <a class="Documentation-idLink" href="#Regexp.FindAllSubmatch" title="Go to Regexp.FindAllSubmatch" aria-label="Go to Regexp.FindAllSubmatch">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindAllSubmatch(b []<a href="/builtin#byte">byte</a>, n <a href="/builtin#int">int</a>) [][][]<a href="/builtin#byte">byte</a></pre>
+    </div>
+  <p>FindAllSubmatch is the &#39;All&#39; version of <a href="#Regexp.FindSubmatch">Regexp.FindSubmatch</a>; it returns a slice
+of all successive matches of the expression, as defined by the &#39;All&#39;
+description in the package comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindAllSubmatch" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindAllSubmatch" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`foo(.?)`)
+	fmt.Printf(&#34;%q\n&#34;, re.FindAllSubmatch([]byte(`seafood fool`), -1))
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[[&#34;food&#34; &#34;d&#34;] [&#34;fool&#34; &#34;l&#34;]]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindAllSubmatchIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1173">FindAllSubmatchIndex</a> <a class="Documentation-idLink" href="#Regexp.FindAllSubmatchIndex" title="Go to Regexp.FindAllSubmatchIndex" aria-label="Go to Regexp.FindAllSubmatchIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindAllSubmatchIndex(b []<a href="/builtin#byte">byte</a>, n <a href="/builtin#int">int</a>) [][]<a href="/builtin#int">int</a></pre>
+    </div>
+  <p>FindAllSubmatchIndex is the &#39;All&#39; version of <a href="#Regexp.FindSubmatchIndex">Regexp.FindSubmatchIndex</a>; it returns
+a slice of all successive matches of the expression, as defined by the
+&#39;All&#39; description in the package comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindAllSubmatchIndex" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindAllSubmatchIndex" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	content := []byte(`
+	# comment line
+	option1: value1
+	option2: value2
+`)
+	// Regex pattern captures &#34;key: value&#34; pair from the content.
+	pattern := regexp.MustCompile(`(?m)(?P&lt;key&gt;\w+):\s+(?P&lt;value&gt;\w+)$`)
+	allIndexes := pattern.FindAllSubmatchIndex(content, -1)
+	for _, loc := range allIndexes {
+		fmt.Println(loc)
+		fmt.Println(string(content[loc[0]:loc[1]]))
+		fmt.Println(string(content[loc[2]:loc[3]]))
+		fmt.Println(string(content[loc[4]:loc[5]]))
+	}
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[18 33 18 25 27 33]
+option1: value1
+option1
+value1
+[35 50 35 42 44 50]
+option2: value2
+option2
+value2
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=831">FindIndex</a> <a class="Documentation-idLink" href="#Regexp.FindIndex" title="Go to Regexp.FindIndex" aria-label="Go to Regexp.FindIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindIndex(b []<a href="/builtin#byte">byte</a>) (loc []<a href="/builtin#int">int</a>)</pre>
+    </div>
+  <p>FindIndex returns a two-element slice of integers defining the location of
+the leftmost match in b of the regular expression. The match itself is at
+b[loc[0]:loc[1]].
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindIndex" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindIndex" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	content := []byte(`
+	# comment line
+	option1: value1
+	option2: value2
+`)
+	// Regex pattern captures &#34;key: value&#34; pair from the content.
+	pattern := regexp.MustCompile(`(?m)(?P&lt;key&gt;\w+):\s+(?P&lt;value&gt;\w+)$`)
+
+	loc := pattern.FindIndex(content)
+	fmt.Println(loc)
+	fmt.Println(string(content[loc[0]:loc[1]]))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[18 33]
+option1: value1
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindReaderIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=870">FindReaderIndex</a> <a class="Documentation-idLink" href="#Regexp.FindReaderIndex" title="Go to Regexp.FindReaderIndex" aria-label="Go to Regexp.FindReaderIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindReaderIndex(r <a href="/io">io</a>.<a href="/io#RuneReader">RuneReader</a>) (loc []<a href="/builtin#int">int</a>)</pre>
+    </div>
+  <p>FindReaderIndex returns a two-element slice of integers defining the
+location of the leftmost match of the regular expression in text read from
+the <a href="/io#RuneReader">io.RuneReader</a>. The match text was found in the input stream at
+byte offset loc[0] through loc[1]-1.
+A return value of nil indicates no match.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindReaderSubmatchIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1067">FindReaderSubmatchIndex</a> <a class="Documentation-idLink" href="#Regexp.FindReaderSubmatchIndex" title="Go to Regexp.FindReaderSubmatchIndex" aria-label="Go to Regexp.FindReaderSubmatchIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindReaderSubmatchIndex(r <a href="/io">io</a>.<a href="/io#RuneReader">RuneReader</a>) []<a href="/builtin#int">int</a></pre>
+    </div>
+  <p>FindReaderSubmatchIndex returns a slice holding the index pairs
+identifying the leftmost match of the regular expression of text read by
+the <a href="/io#RuneReader">io.RuneReader</a>, and the matches, if any, of its subexpressions, as defined
+by the &#39;Submatch&#39; and &#39;Index&#39; descriptions in the package comment. A
+return value of nil indicates no match.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindString" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=844">FindString</a> <a class="Documentation-idLink" href="#Regexp.FindString" title="Go to Regexp.FindString" aria-label="Go to Regexp.FindString">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindString(s <a href="/builtin#string">string</a>) <a href="/builtin#string">string</a></pre>
+    </div>
+  <p>FindString returns a string holding the text of the leftmost match in s of the regular
+expression. If there is no match, the return value is an empty string,
+but it will also be empty if the regular expression successfully matches
+an empty string. Use <a href="#Regexp.FindStringIndex">Regexp.FindStringIndex</a> or <a href="#Regexp.FindStringSubmatch">Regexp.FindStringSubmatch</a> if it is
+necessary to distinguish these cases.
+</p>
+<details tabindex="-1" id="example-Regexp.FindString" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindString" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`foo.?`)
+	fmt.Printf(&#34;%q\n&#34;, re.FindString(&#34;seafood fool&#34;))
+	fmt.Printf(&#34;%q\n&#34;, re.FindString(&#34;meat&#34;))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">&#34;food&#34;
+&#34;&#34;
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindStringIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=857">FindStringIndex</a> <a class="Documentation-idLink" href="#Regexp.FindStringIndex" title="Go to Regexp.FindStringIndex" aria-label="Go to Regexp.FindStringIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindStringIndex(s <a href="/builtin#string">string</a>) (loc []<a href="/builtin#int">int</a>)</pre>
+    </div>
+  <p>FindStringIndex returns a two-element slice of integers defining the
+location of the leftmost match in s of the regular expression. The match
+itself is at s[loc[0]:loc[1]].
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindStringIndex" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindStringIndex" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`ab?`)
+	fmt.Println(re.FindStringIndex(&#34;tablett&#34;))
+	fmt.Println(re.FindStringIndex(&#34;foo&#34;) == nil)
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[1 3]
+true
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindStringSubmatch" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1038">FindStringSubmatch</a> <a class="Documentation-idLink" href="#Regexp.FindStringSubmatch" title="Go to Regexp.FindStringSubmatch" aria-label="Go to Regexp.FindStringSubmatch">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindStringSubmatch(s <a href="/builtin#string">string</a>) []<a href="/builtin#string">string</a></pre>
+    </div>
+  <p>FindStringSubmatch returns a slice of strings holding the text of the
+leftmost match of the regular expression in s and the matches, if any, of
+its subexpressions, as defined by the &#39;Submatch&#39; description in the
+package comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindStringSubmatch" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindStringSubmatch" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`a(x*)b(y|z)c`)
+	fmt.Printf(&#34;%q\n&#34;, re.FindStringSubmatch(&#34;-axxxbyc-&#34;))
+	fmt.Printf(&#34;%q\n&#34;, re.FindStringSubmatch(&#34;-abzc-&#34;))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[&#34;axxxbyc&#34; &#34;xxx&#34; &#34;y&#34;]
+[&#34;abzc&#34; &#34;&#34; &#34;z&#34;]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindStringSubmatchIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1058">FindStringSubmatchIndex</a> <a class="Documentation-idLink" href="#Regexp.FindStringSubmatchIndex" title="Go to Regexp.FindStringSubmatchIndex" aria-label="Go to Regexp.FindStringSubmatchIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindStringSubmatchIndex(s <a href="/builtin#string">string</a>) []<a href="/builtin#int">int</a></pre>
+    </div>
+  <p>FindStringSubmatchIndex returns a slice holding the index pairs
+identifying the leftmost match of the regular expression in s and the
+matches, if any, of its subexpressions, as defined by the &#39;Submatch&#39; and
+&#39;Index&#39; descriptions in the package comment.
+A return value of nil indicates no match.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindSubmatch" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=883">FindSubmatch</a> <a class="Documentation-idLink" href="#Regexp.FindSubmatch" title="Go to Regexp.FindSubmatch" aria-label="Go to Regexp.FindSubmatch">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindSubmatch(b []<a href="/builtin#byte">byte</a>) [][]<a href="/builtin#byte">byte</a></pre>
+    </div>
+  <p>FindSubmatch returns a slice of slices holding the text of the leftmost
+match of the regular expression in b and the matches, if any, of its
+subexpressions, as defined by the &#39;Submatch&#39; descriptions in the package
+comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindSubmatch" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindSubmatch" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`foo(.?)`)
+	fmt.Printf(&#34;%q\n&#34;, re.FindSubmatch([]byte(`seafood fool`)))
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[&#34;food&#34; &#34;d&#34;]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.FindSubmatchIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1029">FindSubmatchIndex</a> <a class="Documentation-idLink" href="#Regexp.FindSubmatchIndex" title="Go to Regexp.FindSubmatchIndex" aria-label="Go to Regexp.FindSubmatchIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) FindSubmatchIndex(b []<a href="/builtin#byte">byte</a>) []<a href="/builtin#int">int</a></pre>
+    </div>
+  <p>FindSubmatchIndex returns a slice holding the index pairs identifying the
+leftmost match of the regular expression in b and the matches, if any, of
+its subexpressions, as defined by the &#39;Submatch&#39; and &#39;Index&#39; descriptions
+in the package comment.
+A return value of nil indicates no match.
+</p>
+<details tabindex="-1" id="example-Regexp.FindSubmatchIndex" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.FindSubmatchIndex" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`a(x*)b`)
+	// Indices:
+	//    01234567   012345678
+	//    -ab-axb-   -axxb-ab-
+	fmt.Println(re.FindSubmatchIndex([]byte(&#34;-ab-&#34;)))
+	fmt.Println(re.FindSubmatchIndex([]byte(&#34;-axxb-&#34;)))
+	fmt.Println(re.FindSubmatchIndex([]byte(&#34;-ab-axb-&#34;)))
+	fmt.Println(re.FindSubmatchIndex([]byte(&#34;-axxb-ab-&#34;)))
+	fmt.Println(re.FindSubmatchIndex([]byte(&#34;-foo-&#34;)))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[1 3 2 2]
+[1 5 2 4]
+[1 3 2 2]
+[1 5 2 4]
+[]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.LiteralPrefix" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=514">LiteralPrefix</a> <a class="Documentation-idLink" href="#Regexp.LiteralPrefix" title="Go to Regexp.LiteralPrefix" aria-label="Go to Regexp.LiteralPrefix">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) LiteralPrefix() (prefix <a href="/builtin#string">string</a>, complete <a href="/builtin#bool">bool</a>)</pre>
+    </div>
+  <p>LiteralPrefix returns a literal string that must begin any match
+of the regular expression re. It returns the boolean true if the
+literal string comprises the entire regular expression.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.Longest" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=163">Longest</a> <a class="Documentation-idLink" href="#Regexp.Longest" title="Go to Regexp.Longest" aria-label="Go to Regexp.Longest">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.1</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) Longest()</pre>
+    </div>
+  <p>Longest makes future searches prefer the leftmost-longest match.
+That is, when matching against text, the regexp returns a match that
+begins as early as possible in the input (leftmost), and among those
+it chooses a match that is as long as possible.
+This method modifies the <a href="#Regexp">Regexp</a> and may not be called concurrently
+with any other methods.
+</p>
+<details tabindex="-1" id="example-Regexp.Longest" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.Longest" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`a(|b)`)
+	fmt.Println(re.FindString(&#34;ab&#34;))
+	re.Longest()
+	fmt.Println(re.FindString(&#34;ab&#34;))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">a
+ab
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.MarshalText" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1294">MarshalText</a> <a class="Documentation-idLink" href="#Regexp.MarshalText" title="Go to Regexp.MarshalText" aria-label="Go to Regexp.MarshalText">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.21.0</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) MarshalText() ([]<a href="/builtin#byte">byte</a>, <a href="/builtin#error">error</a>)</pre>
+    </div>
+  <p>MarshalText implements <a href="/encoding#TextMarshaler">encoding.TextMarshaler</a>. The output
+matches that of calling the <a href="#Regexp.AppendText">Regexp.AppendText</a> method.
+</p><p>See <a href="#Regexp.AppendText">Regexp.AppendText</a> for more information.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.Match" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=532">Match</a> <a class="Documentation-idLink" href="#Regexp.Match" title="Go to Regexp.Match" aria-label="Go to Regexp.Match">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) Match(b []<a href="/builtin#byte">byte</a>) <a href="/builtin#bool">bool</a></pre>
+    </div>
+  <p>Match reports whether the byte slice b
+contains any match of the regular expression re.
+</p>
+<details tabindex="-1" id="example-Regexp.Match" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.Match" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`foo.?`)
+	fmt.Println(re.Match([]byte(`seafood fool`)))
+	fmt.Println(re.Match([]byte(`something else`)))
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">true
+false
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.MatchReader" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=520">MatchReader</a> <a class="Documentation-idLink" href="#Regexp.MatchReader" title="Go to Regexp.MatchReader" aria-label="Go to Regexp.MatchReader">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) MatchReader(r <a href="/io">io</a>.<a href="/io#RuneReader">RuneReader</a>) <a href="/builtin#bool">bool</a></pre>
+    </div>
+  <p>MatchReader reports whether the text returned by the <a href="/io#RuneReader">io.RuneReader</a>
+contains any match of the regular expression re.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.MatchString" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=526">MatchString</a> <a class="Documentation-idLink" href="#Regexp.MatchString" title="Go to Regexp.MatchString" aria-label="Go to Regexp.MatchString">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) MatchString(s <a href="/builtin#string">string</a>) <a href="/builtin#bool">bool</a></pre>
+    </div>
+  <p>MatchString reports whether the string s
+contains any match of the regular expression re.
+</p>
+<details tabindex="-1" id="example-Regexp.MatchString" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.MatchString" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`(gopher){2}`)
+	fmt.Println(re.MatchString(&#34;gopher&#34;))
+	fmt.Println(re.MatchString(&#34;gophergopher&#34;))
+	fmt.Println(re.MatchString(&#34;gophergophergopher&#34;))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">false
+true
+true
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.NumSubexp" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=337">NumSubexp</a> <a class="Documentation-idLink" href="#Regexp.NumSubexp" title="Go to Regexp.NumSubexp" aria-label="Go to Regexp.NumSubexp">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) NumSubexp() <a href="/builtin#int">int</a></pre>
+    </div>
+  <p>NumSubexp returns the number of parenthesized subexpressions in this <a href="#Regexp">Regexp</a>.
+</p>
+<details tabindex="-1" id="example-Regexp.NumSubexp" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.NumSubexp" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re0 := regexp.MustCompile(`a.`)
+	fmt.Printf(&#34;%d\n&#34;, re0.NumSubexp())
+
+	re := regexp.MustCompile(`(.*)((a)b)(.*)a`)
+	fmt.Println(re.NumSubexp())
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">0
+4
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.ReplaceAll" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=671">ReplaceAll</a> <a class="Documentation-idLink" href="#Regexp.ReplaceAll" title="Go to Regexp.ReplaceAll" aria-label="Go to Regexp.ReplaceAll">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) ReplaceAll(src, repl []<a href="/builtin#byte">byte</a>) []<a href="/builtin#byte">byte</a></pre>
+    </div>
+  <p>ReplaceAll returns a copy of src, replacing matches of the <a href="#Regexp">Regexp</a>
+with the replacement text repl.
+Inside repl, $ signs are interpreted as in <a href="#Regexp.Expand">Regexp.Expand</a>.
+</p>
+<details tabindex="-1" id="example-Regexp.ReplaceAll" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.ReplaceAll" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`a(x*)b`)
+	fmt.Printf(&#34;%s\n&#34;, re.ReplaceAll([]byte(&#34;-ab-axxb-&#34;), []byte(&#34;T&#34;)))
+	fmt.Printf(&#34;%s\n&#34;, re.ReplaceAll([]byte(&#34;-ab-axxb-&#34;), []byte(&#34;$1&#34;)))
+	fmt.Printf(&#34;%s\n&#34;, re.ReplaceAll([]byte(&#34;-ab-axxb-&#34;), []byte(&#34;$1W&#34;)))
+	fmt.Printf(&#34;%s\n&#34;, re.ReplaceAll([]byte(&#34;-ab-axxb-&#34;), []byte(&#34;${1}W&#34;)))
+
+	re2 := regexp.MustCompile(`a(?P&lt;1W&gt;x*)b`)
+	fmt.Printf(&#34;%s\n&#34;, re2.ReplaceAll([]byte(&#34;-ab-axxb-&#34;), []byte(&#34;$1W&#34;)))
+	fmt.Printf(&#34;%s\n&#34;, re2.ReplaceAll([]byte(&#34;-ab-axxb-&#34;), []byte(&#34;${1}W&#34;)))
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">-T-T-
+--xx-
+---
+-W-xxW-
+--xx-
+-W-xxW-
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.ReplaceAllFunc" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=699">ReplaceAllFunc</a> <a class="Documentation-idLink" href="#Regexp.ReplaceAllFunc" title="Go to Regexp.ReplaceAllFunc" aria-label="Go to Regexp.ReplaceAllFunc">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) ReplaceAllFunc(src []<a href="/builtin#byte">byte</a>, repl func([]<a href="/builtin#byte">byte</a>) []<a href="/builtin#byte">byte</a>) []<a href="/builtin#byte">byte</a></pre>
+    </div>
+  <p>ReplaceAllFunc returns a copy of src in which all matches of the
+<a href="#Regexp">Regexp</a> have been replaced by the return value of function repl applied
+to the matched byte slice. The replacement returned by repl is substituted
+directly, without using <a href="#Regexp.Expand">Regexp.Expand</a>.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.ReplaceAllLiteral" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=689">ReplaceAllLiteral</a> <a class="Documentation-idLink" href="#Regexp.ReplaceAllLiteral" title="Go to Regexp.ReplaceAllLiteral" aria-label="Go to Regexp.ReplaceAllLiteral">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) ReplaceAllLiteral(src, repl []<a href="/builtin#byte">byte</a>) []<a href="/builtin#byte">byte</a></pre>
+    </div>
+  <p>ReplaceAllLiteral returns a copy of src, replacing matches of the <a href="#Regexp">Regexp</a>
+with the replacement bytes repl. The replacement repl is substituted directly,
+without using <a href="#Regexp.Expand">Regexp.Expand</a>.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.ReplaceAllLiteralString" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=586">ReplaceAllLiteralString</a> <a class="Documentation-idLink" href="#Regexp.ReplaceAllLiteralString" title="Go to Regexp.ReplaceAllLiteralString" aria-label="Go to Regexp.ReplaceAllLiteralString">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) ReplaceAllLiteralString(src, repl <a href="/builtin#string">string</a>) <a href="/builtin#string">string</a></pre>
+    </div>
+  <p>ReplaceAllLiteralString returns a copy of src, replacing matches of the <a href="#Regexp">Regexp</a>
+with the replacement string repl. The replacement repl is substituted directly,
+without using <a href="#Regexp.Expand">Regexp.Expand</a>.
+</p>
+<details tabindex="-1" id="example-Regexp.ReplaceAllLiteralString" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.ReplaceAllLiteralString" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`a(x*)b`)
+	fmt.Println(re.ReplaceAllLiteralString(&#34;-ab-axxb-&#34;, &#34;T&#34;))
+	fmt.Println(re.ReplaceAllLiteralString(&#34;-ab-axxb-&#34;, &#34;$1&#34;))
+	fmt.Println(re.ReplaceAllLiteralString(&#34;-ab-axxb-&#34;, &#34;${1}&#34;))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">-T-T-
+-$1-$1-
+-${1}-${1}-
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.ReplaceAllString" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=572">ReplaceAllString</a> <a class="Documentation-idLink" href="#Regexp.ReplaceAllString" title="Go to Regexp.ReplaceAllString" aria-label="Go to Regexp.ReplaceAllString">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) ReplaceAllString(src, repl <a href="/builtin#string">string</a>) <a href="/builtin#string">string</a></pre>
+    </div>
+  <p>ReplaceAllString returns a copy of src, replacing matches of the <a href="#Regexp">Regexp</a>
+with the replacement string repl.
+Inside repl, $ signs are interpreted as in <a href="#Regexp.Expand">Regexp.Expand</a>.
+</p>
+<details tabindex="-1" id="example-Regexp.ReplaceAllString" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.ReplaceAllString" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`a(x*)b`)
+	fmt.Println(re.ReplaceAllString(&#34;-ab-axxb-&#34;, &#34;T&#34;))
+	fmt.Println(re.ReplaceAllString(&#34;-ab-axxb-&#34;, &#34;$1&#34;))
+	fmt.Println(re.ReplaceAllString(&#34;-ab-axxb-&#34;, &#34;$1W&#34;))
+	fmt.Println(re.ReplaceAllString(&#34;-ab-axxb-&#34;, &#34;${1}W&#34;))
+
+	re2 := regexp.MustCompile(`a(?P&lt;1W&gt;x*)b`)
+	fmt.Printf(&#34;%s\n&#34;, re2.ReplaceAllString(&#34;-ab-axxb-&#34;, &#34;$1W&#34;))
+	fmt.Println(re.ReplaceAllString(&#34;-ab-axxb-&#34;, &#34;${1}W&#34;))
+
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">-T-T-
+--xx-
+---
+-W-xxW-
+--xx-
+-W-xxW-
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.ReplaceAllStringFunc" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=596">ReplaceAllStringFunc</a> <a class="Documentation-idLink" href="#Regexp.ReplaceAllStringFunc" title="Go to Regexp.ReplaceAllStringFunc" aria-label="Go to Regexp.ReplaceAllStringFunc">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) ReplaceAllStringFunc(src <a href="/builtin#string">string</a>, repl func(<a href="/builtin#string">string</a>) <a href="/builtin#string">string</a>) <a href="/builtin#string">string</a></pre>
+    </div>
+  <p>ReplaceAllStringFunc returns a copy of src in which all matches of the
+<a href="#Regexp">Regexp</a> have been replaced by the return value of function repl applied
+to the matched substring. The replacement returned by repl is substituted
+directly, without using <a href="#Regexp.Expand">Regexp.Expand</a>.
+</p>
+<details tabindex="-1" id="example-Regexp.ReplaceAllStringFunc" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.ReplaceAllStringFunc" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`[^aeiou]`)
+	fmt.Println(re.ReplaceAllStringFunc(&#34;seafood fool&#34;, strings.ToUpper))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">SeaFooD FooL
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.Split" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1246">Split</a> <a class="Documentation-idLink" href="#Regexp.Split" title="Go to Regexp.Split" aria-label="Go to Regexp.Split">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.1</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) Split(s <a href="/builtin#string">string</a>, n <a href="/builtin#int">int</a>) []<a href="/builtin#string">string</a></pre>
+    </div>
+  <p>Split slices s into substrings separated by the expression and returns a slice of
+the substrings between those expression matches.
+</p><p>The slice returned by this method consists of all the substrings of s
+not contained in the slice returned by <a href="#Regexp.FindAllString">Regexp.FindAllString</a>. When called on an expression
+that contains no metacharacters, it is equivalent to <a href="/strings#SplitN">strings.SplitN</a>.
+</p><p>Example:
+</p><pre>s := regexp.MustCompile(&#34;a*&#34;).Split(&#34;abaabaccadaaae&#34;, 5)
+// s: [&#34;&#34;, &#34;b&#34;, &#34;b&#34;, &#34;c&#34;, &#34;cadaaae&#34;]
+</pre><p>The count determines the number of substrings to return:
+</p><ul class="Documentation-bulletList">
+  <li>n &gt; 0: at most n substrings; the last substring will be the unsplit remainder;</li>
+  <li>n == 0: the result is nil (zero substrings);</li>
+  <li>n &lt; 0: all substrings.</li>
+</ul>
+<details tabindex="-1" id="example-Regexp.Split" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.Split" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	a := regexp.MustCompile(`a`)
+	fmt.Println(a.Split(&#34;banana&#34;, -1))
+	fmt.Println(a.Split(&#34;banana&#34;, 0))
+	fmt.Println(a.Split(&#34;banana&#34;, 1))
+	fmt.Println(a.Split(&#34;banana&#34;, 2))
+	zp := regexp.MustCompile(`z+`)
+	fmt.Println(zp.Split(&#34;pizza&#34;, -1))
+	fmt.Println(zp.Split(&#34;pizza&#34;, 0))
+	fmt.Println(zp.Split(&#34;pizza&#34;, 1))
+	fmt.Println(zp.Split(&#34;pizza&#34;, 2))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">[b n n ]
+[]
+[banana]
+[b nana]
+[pi a]
+[]
+[pizza]
+[pi a]
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.String" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=103">String</a> <a class="Documentation-idLink" href="#Regexp.String" title="Go to Regexp.String" aria-label="Go to Regexp.String">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) String() <a href="/builtin#string">string</a></pre>
+    </div>
+  <p>String returns the source text used to compile the regular expression.
+</p>
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.SubexpIndex" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=357">SubexpIndex</a> <a class="Documentation-idLink" href="#Regexp.SubexpIndex" title="Go to Regexp.SubexpIndex" aria-label="Go to Regexp.SubexpIndex">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.15</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) SubexpIndex(name <a href="/builtin#string">string</a>) <a href="/builtin#int">int</a></pre>
+    </div>
+  <p>SubexpIndex returns the index of the first subexpression with the given name,
+or -1 if there is no subexpression with that name.
+</p><p>Note that multiple subexpressions can be written using the same name, as in
+(?P&lt;bob&gt;a+)(?P&lt;bob&gt;b+), which declares two subexpressions named &#34;bob&#34;.
+In this case, SubexpIndex returns the index of the leftmost such subexpression
+in the regular expression.
+</p>
+<details tabindex="-1" id="example-Regexp.SubexpIndex" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.SubexpIndex" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`(?P&lt;first&gt;[a-zA-Z]+) (?P&lt;last&gt;[a-zA-Z]+)`)
+	fmt.Println(re.MatchString(&#34;Alan Turing&#34;))
+	matches := re.FindStringSubmatch(&#34;Alan Turing&#34;)
+	lastIndex := re.SubexpIndex(&#34;last&#34;)
+	fmt.Printf(&#34;last =&gt; %d\n&#34;, lastIndex)
+	fmt.Println(matches[lastIndex])
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">true
+last =&gt; 2
+Turing
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.SubexpNames" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=346">SubexpNames</a> <a class="Documentation-idLink" href="#Regexp.SubexpNames" title="Go to Regexp.SubexpNames" aria-label="Go to Regexp.SubexpNames">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) SubexpNames() []<a href="/builtin#string">string</a></pre>
+    </div>
+  <p>SubexpNames returns the names of the parenthesized subexpressions
+in this <a href="#Regexp">Regexp</a>. The name for the first sub-expression is names[1],
+so that if m is a match slice, the name for m[i] is SubexpNames()[i].
+Since the Regexp as a whole cannot be named, names[0] is always
+the empty string. The slice should not be modified.
+</p>
+<details tabindex="-1" id="example-Regexp.SubexpNames" class="Documentation-exampleDetails js-exampleContainer">
+<summary class="Documentation-exampleDetailsHeader">Example <a href="#example-Regexp.SubexpNames" title="Go to Example" aria-label="Go to Example">¶</a></summary>
+<div class="Documentation-exampleDetailsBody">
+
+<pre class="Documentation-exampleCode">
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;regexp&#34;
+)
+
+func main() {
+	re := regexp.MustCompile(`(?P&lt;first&gt;[a-zA-Z]+) (?P&lt;last&gt;[a-zA-Z]+)`)
+	fmt.Println(re.MatchString(&#34;Alan Turing&#34;))
+	fmt.Printf(&#34;%q\n&#34;, re.SubexpNames())
+	reversed := fmt.Sprintf(&#34;${%s} ${%s}&#34;, re.SubexpNames()[2], re.SubexpNames()[1])
+	fmt.Println(reversed)
+	fmt.Println(re.ReplaceAllString(&#34;Alan Turing&#34;, reversed))
+}
+</pre>
+
+<pre><span class="Documentation-exampleOutputLabel">Output:</span>
+
+<span class="Documentation-exampleOutput">true
+[&#34;&#34; &#34;first&#34; &#34;last&#34;]
+${last} ${first}
+Turing Alan
+</span></pre>
+</div>
+<div class="Documentation-exampleButtonsContainer">
+        <p class="Documentation-exampleError" role="alert" aria-atomic="true"></p>
+        <button class="Documentation-exampleShareButton" aria-label="Share Code">Share</button>
+        <button class="Documentation-exampleFormatButton" aria-label="Format Code">Format</button>
+        <button class="Documentation-exampleRunButton" aria-label="Run Code">Run</button>
+      </div></details>
+
+
+  
+
+  </div><div class="Documentation-typeMethod">
+    
+  
+  
+    <h4 tabindex="-1" id="Regexp.UnmarshalText" data-kind="method" class="Documentation-typeMethodHeader">
+      <span>func (*Regexp) <a class="Documentation-source" href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go;l=1300">UnmarshalText</a> <a class="Documentation-idLink" href="#Regexp.UnmarshalText" title="Go to Regexp.UnmarshalText" aria-label="Go to Regexp.UnmarshalText">¶</a></span>
+  <span class="Documentation-sinceVersion">
+    
+      <span class="Documentation-sinceVersionLabel">added in</span>
+      <span class="Documentation-sinceVersionVersion">go1.21.0</span>
+    
+  </span>
+</h4>
+
+    
+    <div class="Documentation-declaration">
+      <pre>func (re *<a href="#Regexp">Regexp</a>) UnmarshalText(text []<a href="/builtin#byte">byte</a>) <a href="/builtin#error">error</a></pre>
+    </div>
+  <p>UnmarshalText implements <a href="/encoding#TextUnmarshaler">encoding.TextUnmarshaler</a> by calling
+<a href="#Compile">Compile</a> on the encoded value.
+</p>
+
+  
+
+  </div>
+  
+
+    </div></section></div> 
+
+
+
+
+
+
+
+      
+    </div>
+  </div>
+
+        
+      
+      
+        
+  <div class="UnitFiles js-unitFiles">
+    <h2 class="UnitFiles-title" id="section-sourcefiles">
+      <img class="go-Icon" height="24" width="24" src="/static/shared/icon/insert_drive_file_gm_grey_24dp.svg" alt="">
+      Source Files
+      <a class="UnitFiles-idLink" href="#section-sourcefiles" title="Go to Source Files" aria-label="Go to Source Files">¶</a>
+    </h2><div class="UnitFiles-titleLink">
+      <a href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp" target="_blank" rel="noopener">View all Source files</a>
+    </div><div>
+      <ul class="UnitFiles-fileList"><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/backtrack.go" target="_blank" rel="noopener" title="backtrack.go">backtrack.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/exec.go" target="_blank" rel="noopener" title="exec.go">exec.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/onepass.go" target="_blank" rel="noopener" title="onepass.go">onepass.go</a></li><li><a href="https://cs.opensource.google/go/go/+/go1.25.7:src/regexp/regexp.go" target="_blank" rel="noopener" title="regexp.go">regexp.go</a></li></ul>
+    </div>
+  </div>
+
+      
+      
+        
+  <div class="UnitDirectories js-unitDirectories">
+    <h2 class="UnitDirectories-title" id="section-directories">
+      <img class="go-Icon" height="24" width="24" src="/static/shared/icon/folder_gm_grey_24dp.svg" alt="">
+      Directories
+      <a class="UnitDirectories-idLink" href="#section-directories" title="Go to Directories" aria-label="Go to Directories">¶</a>
+    </h2>
+    <div class="UnitDirectories-toggles">
+      <div class="UnitDirectories-toggleButtons">
+        <button class="js-showInternalDirectories" data-test-id="internal-directories-toggle"
+            data-gtmc="directories button" aria-label="Show Internal Directories">
+          Show internal
+        </button>
+        <button class="js-expandAllDirectories" data-test-id="directories-toggle"
+            data-gtmc="directories button" aria-label="Expand All Directories">
+          Expand all
+        </button>
+      </div>
+    </div>
+    <table class="UnitDirectories-table UnitDirectories-table--tree js-expandableTable"
+          data-test-id="UnitDirectories-table">
+      <tr class="UnitDirectories-tableHeader UnitDirectories-tableHeader--tree">
+        <th>Path</th>
+        <th class="UnitDirectories-desktopSynopsis">Synopsis</th>
+      </tr>
+      
+          
+  
+  <tr
+      class="">
+    <td data-id="syntax" data-aria-owns="">
+      <div class="UnitDirectories-pathCell">
+        <div><a href="/regexp/syntax@go1.25.7">syntax</a>
+            
+          </div>
+          <div class="UnitDirectories-mobileSynopsis">Package syntax parses regular expressions into parse trees and compiles parse trees into programs.</div>
+        </div>
+      </td>
+      <td class="UnitDirectories-desktopSynopsis">Package syntax parses regular expressions into parse trees and compiles parse trees into programs.</td></tr></tr>
+
+      
+    </table>
+  </div>
+
+      
+    </div>
+  </div>
+  <div id="showInternal-description" hidden> Click to show internal directories. </div>
+  <div id="hideInternal-description" hidden> Click to hide internal directories. </div>
+</article>
+    <footer class="go-Main-footer"></footer>
+  </main>
+
+    
+  <footer class="go-Footer">
+    
+    <div class="go-Footer-links">
+      <div class="go-Footer-linkColumn">
+        <a href="https://go.dev/solutions" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Why Go
+        </a>
+        <a href="https://go.dev/solutions#use-cases" class="go-Footer-link"
+            data-gtmc="footer link">
+          Use Cases
+        </a>
+        <a href="https://go.dev/solutions#case-studies" class="go-Footer-link"
+            data-gtmc="footer link">
+          Case Studies
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://learn.go.dev/" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Get Started
+        </a>
+        <a href="https://play.golang.org" class="go-Footer-link" data-gtmc="footer link">
+          Playground
+        </a>
+        <a href="https://tour.golang.org" class="go-Footer-link" data-gtmc="footer link">
+          Tour
+        </a>
+        <a href="https://stackoverflow.com/questions/tagged/go?tab=Newest" class="go-Footer-link"
+            data-gtmc="footer link">
+          Stack Overflow
+        </a>
+        <a href="https://go.dev/help" class="go-Footer-link"
+            data-gtmc="footer link">
+          Help
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://pkg.go.dev" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Packages
+        </a>
+        <a href="/std" class="go-Footer-link" data-gtmc="footer link">
+          Standard Library
+        </a>
+        <a href="/golang.org/x" class="go-Footer-link" data-gtmc="footer link">
+          Sub-repositories
+        </a>
+        <a href="https://pkg.go.dev/about" class="go-Footer-link" data-gtmc="footer link">
+          About Go Packages
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://go.dev/project" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          About
+        </a>
+        <a href="https://go.dev/dl/" class="go-Footer-link" data-gtmc="footer link">Download</a>
+        <a href="https://go.dev/blog" class="go-Footer-link" data-gtmc="footer link">Blog</a>
+        <a href="https://github.com/golang/go/issues" class="go-Footer-link" data-gtmc="footer link">
+          Issue Tracker
+        </a>
+        <a href="https://go.dev/doc/devel/release.html" class="go-Footer-link"
+            data-gtmc="footer link">
+          Release Notes
+        </a>
+        <a href="https://go.dev/brand" class="go-Footer-link" data-gtmc="footer link">
+          Brand Guidelines
+        </a>
+        <a href="https://go.dev/conduct" class="go-Footer-link" data-gtmc="footer link">
+          Code of Conduct
+        </a>
+      </div>
+      <div class="go-Footer-linkColumn">
+        <a href="https://www.twitter.com/golang" class="go-Footer-link go-Footer-link--primary"
+            data-gtmc="footer link">
+          Connect
+        </a>
+        <a href="https://www.twitter.com/golang" class="go-Footer-link" data-gtmc="footer link">
+          Twitter
+        </a>
+        <a href="https://github.com/golang" class="go-Footer-link" data-gtmc="footer link">GitHub</a>
+        <a href="https://invite.slack.golangbridge.org/" class="go-Footer-link"
+            data-gtmc="footer link">
+          Slack
+        </a>
+        <a href="https://reddit.com/r/golang" class="go-Footer-link" data-gtmc="footer link">
+          r/golang
+        </a>
+        <a href="https://www.meetup.com/pro/go" class="go-Footer-link" data-gtmc="footer link">
+          Meetup
+        </a>
+        <a href="https://golangweekly.com/" class="go-Footer-link" data-gtmc="footer link">
+          Golang Weekly
+        </a>
+      </div>
+    </div>
+    <div class="go-Footer-bottom">
+      <img class="go-Footer-gopher"  width="1431" height="901"
+          src="/static/shared/gopher/pilot-bust-1431x901.svg" alt="Gopher in flight goggles">
+      <ul class="go-Footer-listRow">
+        <li class="go-Footer-listItem">
+          <a href="https://go.dev/copyright" data-gtmc="footer link">Copyright</a>
+        </li>
+        <li class="go-Footer-listItem">
+          <a href="https://go.dev/tos" data-gtmc="footer link">Terms of Service</a>
+        </li>
+        <li class="go-Footer-listItem">
+          <a href="http://www.google.com/intl/en/policies/privacy/" data-gtmc="footer link"
+              target="_blank" rel="noopener">
+            Privacy Policy
+          </a>
+        </li>
+        <li class="go-Footer-listItem">
+          <a href="https://go.dev/s/pkgsite-feedback" target="_blank" rel="noopener"
+              data-gtmc="footer link">
+            Report an Issue
+          </a>
+        </li>
+        <li class="go-Footer-listItem">
+          <button class="go-Button go-Button--text go-Footer-toggleTheme js-toggleTheme" aria-label="Theme Toggle">
+            <img data-value="auto" class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/brightness_6_gm_grey_24dp.svg" alt="System theme">
+            <img data-value="dark" class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/brightness_2_gm_grey_24dp.svg" alt="Dark theme">
+            <img data-value="light" class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/light_mode_gm_grey_24dp.svg" alt="Light theme">
+            <p> Theme Toggle </p>
+          </button>
+        </li>
+        <li class="go-Footer-listItem">
+          <button class="go-Button go-Button--text go-Footer-keyboard js-openShortcuts" aria-label="Shorcuts Modal">
+            <img class="go-Icon go-Icon--inverted" height="24" width="24" src="/static/shared/icon/keyboard_grey_24dp.svg" alt="">
+            <p> Shortcuts Modal </p>
+          </button>
+        </li>
+      </ul>
+      <a class="go-Footer-googleLogo" href="https://google.com" target="_blank"rel="noopener"
+          data-gtmc="footer link">
+        <img class="go-Footer-googleLogoImg" height="24" width="72"
+            src="/static/shared/logo/google-white.svg" alt="Google logo">
+      </a>
+    </div>
+  </footer>
+
+    
+  <dialog id="jump-to-modal" class="JumpDialog go-Modal go-Modal--md js-modal">
+    <form method="dialog" data-gmtc="jump to form" aria-label="Jump to Identifier">
+      <div class="Dialog-title go-Modal-header">
+        <h2>Jump to</h2>
+        <button
+          class="go-Button go-Button--inline"
+          type="button"
+          data-modal-close
+          data-gtmc="modal button"
+          aria-label="Close"
+        >
+          <img
+            class="go-Icon"
+            height="24"
+            width="24"
+            src="/static/shared/icon/close_gm_grey_24dp.svg"
+            alt=""
+          />
+        </button>
+      </div>
+      <div class="JumpDialog-filter">
+        <input class="JumpDialog-input go-Input" autocomplete="off" type="text">
+      </div>
+      <div class="JumpDialog-body go-Modal-body">
+        <div class="JumpDialog-list"></div>
+      </div>
+      <div class="go-Modal-actions">
+        <button class="go-Button" data-test-id="close-dialog">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="ShortcutsDialog go-Modal go-Modal--sm js-modal">
+    <form method="dialog">
+      <div class="go-Modal-header">
+        <h2>Keyboard shortcuts</h2>
+        <button
+          class="go-Button go-Button--inline"
+          type="button"
+          data-modal-close
+          data-gtmc="modal button"
+          aria-label="Close"
+        >
+          <img
+            class="go-Icon"
+            height="24"
+            width="24"
+            src="/static/shared/icon/close_gm_grey_24dp.svg"
+            alt=""
+          />
+        </button>
+      </div>
+      <div class="go-Modal-body">
+        <table>
+          <tbody>
+            <tr><td class="ShortcutsDialog-key">
+              <strong>?</strong></td><td> : This menu</td>
+            </tr>
+            <tr><td class="ShortcutsDialog-key">
+              <strong>/</strong></td><td> : Search site</td>
+            </tr>
+            <tr><td class="ShortcutsDialog-key">
+              <strong>f</strong> or <strong>F</strong></td><td> : Jump to</td>
+            </tr>
+            <tr>
+              <td class="ShortcutsDialog-key"><strong>y</strong> or <strong>Y</strong></td>
+              <td> : Canonical URL</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="go-Modal-actions">
+        <button class="go-Button" data-test-id="close-dialog">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+    
+      <section class="Cookie-notice js-cookieNotice">
+        <div>go.dev uses cookies from Google to deliver and enhance the quality of its services and to
+        analyze traffic. <a target=_blank href="https://policies.google.com/technologies/cookies">Learn more.</a></div>
+        <div><button class="go-Button">Okay</button></div>
+      </section>
+    
+    
+      <script>
+        // this will throw if the querySelector can’t find the element
+        const gtmId = document.querySelector('.js-gtmID').dataset.gtmid;
+        if (!gtmId) {
+          throw new Error('Google Tag Manager ID not found');
+        }
+        loadScript(`https://www.googletagmanager.com/gtm.js?id=${gtmId}`);
+      </script>
+      <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8MVQXG"
+                height="0" width="0" style="display:none;visibility:hidden">
+        </iframe>
+      </noscript>
+    
+    
+  
+  <div class="js-canonicalURLPath" data-canonical-url-path="/regexp@go1.25.7" hidden></div>
+  <div class="js-playgroundVars" data-modulepath="std" data-version="v1.25.7" hidden></div>
+  <script>
+    loadScript('/static/frontend/unit/main/main.js')
+  </script>
+
+  <script>
+    loadScript('/static/frontend/unit/unit.js')
+  </script>
+
+  </body>
+</html>

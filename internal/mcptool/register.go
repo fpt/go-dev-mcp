@@ -116,10 +116,11 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Code search query (e.g., 'function main', 'import context')"),
 		),
 		mcp.WithString("language",
-			mcp.Required(), // Just for safety.
-			mcp.DefaultString("go"),
-			mcp.Enum("go", "go module", "yaml", "markdown", "makefile"),
-			mcp.Description("Programming language to filter results (Default: 'go')"),
+			mcp.Required(),
+			mcp.Description(
+				"Programming language to filter results"+
+					" (e.g., 'go', 'python', 'rust', 'typescript', 'c++', 'arduino', 'yaml', 'makefile')",
+			),
 		),
 		mcp.WithString("repo",
 			mcp.Description("GitHub repository in 'owner/repo' format to limit search scope"),
@@ -199,8 +200,11 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Text to search for in file contents (case-sensitive exact match)"),
 		),
 		mcp.WithString("extension",
-			mcp.DefaultString("go"),
-			mcp.Description("File extension to search (e.g., 'go', 'py', 'js', 'txt')"),
+			mcp.Required(),
+			mcp.Description(
+				"File extension to search without dot"+
+					" (e.g., 'go', 'py', 'rs', 'ts', 'js', 'ino', 'c', 'h', 'txt', 'yaml')",
+			),
 		),
 		mcp.WithNumber("max_matches",
 			mcp.DefaultNumber(10),
@@ -209,49 +213,33 @@ func Register(s *server.MCPServer, workdir string) error {
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchLocalFiles))
 
-	// Add Extract Declarations tool
+	// Add Go Package Outline tool
 	tool = mcp.NewTool(
-		"extract_declarations",
+		"outline_go_package",
 		mcp.WithDescription(
-			"Extract all exported declarations (functions, types, interfaces, structs, constants, variables) "+
-				"from Go source files in the specified directory.",
+			"Get a comprehensive outline of a Go package:"+
+				" dependencies, exported declarations, and call graph."+
+				" Analyzes all Go source files in the specified directory."+
+				" Use skip_* flags to omit sections and reduce output size.",
 		),
 		mcp.WithString("directory",
-			mcp.DefaultString(""),
 			mcp.Required(),
-			mcp.Description("Directory to search for Go source files"),
+			mcp.Description("Directory containing Go source files to analyze"),
+		),
+		mcp.WithBoolean("skip_dependencies",
+			mcp.DefaultBool(false),
+			mcp.Description("Skip the dependencies section"),
+		),
+		mcp.WithBoolean("skip_declarations",
+			mcp.DefaultBool(false),
+			mcp.Description("Skip the declarations section"),
+		),
+		mcp.WithBoolean("skip_call_graph",
+			mcp.DefaultBool(false),
+			mcp.Description("Skip the call graph section (largest section)"),
 		),
 	)
-	s.AddTool(tool, mcp.NewTypedToolHandler(extractDeclarations))
-
-	// Add Extract Call Graph tool
-	tool = mcp.NewTool(
-		"extract_call_graph",
-		mcp.WithDescription(
-			"Extract function call graph from a single Go file."+
-				" Shows which functions call which other functions, including external package calls.",
-		),
-		mcp.WithString("file_path",
-			mcp.Required(),
-			mcp.Description("Path to the Go source file to analyze"),
-		),
-	)
-	s.AddTool(tool, mcp.NewTypedToolHandler(extractCallGraph))
-
-	// Add Extract Package Dependencies tool
-	tool = mcp.NewTool(
-		"extract_package_dependencies",
-		mcp.WithDescription(
-			"Extract package-level import dependencies from Go source files in a directory. "+
-				"Analyzes imports and categorizes them as local, external, or standard library dependencies.",
-		),
-		mcp.WithString("directory",
-			mcp.DefaultString(""),
-			mcp.Required(),
-			mcp.Description("Directory to analyze for package dependencies"),
-		),
-	)
-	s.AddTool(tool, mcp.NewTypedToolHandler(extractPackageDependencies))
+	s.AddTool(tool, mcp.NewTypedToolHandler(outlineGoPackage))
 
 	// Add Scan Markdown tool
 	tool = mcp.NewTool(
@@ -284,6 +272,142 @@ func Register(s *server.MCPServer, workdir string) error {
 		),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(validateGoCode))
+
+	// Add Rust documentation search tool
+	tool = mcp.NewTool("search_rustdoc",
+		mcp.WithDescription("Search for Rust crates on docs.rs"),
+		mcp.WithString(
+			"query",
+			mcp.Required(),
+			mcp.Description("Search text for crate name or description"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(searchRustDoc))
+
+	// Add Rust documentation read tool
+	tool = mcp.NewTool(
+		"read_rustdoc",
+		mcp.WithDescription(
+			"Read Rust crate documentation from docs.rs with line-based paging and caching."+
+				" Supports offset/limit for efficient exploration of large docs."+
+				" Cached for 30min to speed up subsequent requests.",
+		),
+		mcp.WithString(
+			"crate_url",
+			mcp.Required(),
+			mcp.Description(
+				"Crate name or path (e.g., 'serde', 'serde/de', 'tokio/runtime')",
+			),
+		),
+		mcp.WithNumber("offset",
+			mcp.DefaultNumber(0),
+			mcp.Description("Line number to start reading from (0-based)"),
+		),
+		mcp.WithNumber(
+			"limit",
+			mcp.DefaultNumber(app.DefaultLinesPerPage),
+			mcp.Description(
+				fmt.Sprintf("Number of lines to read (default: %d)", app.DefaultLinesPerPage),
+			),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(readRustDoc))
+
+	// Add Rust documentation search within tool
+	tool = mcp.NewTool(
+		"search_within_rustdoc",
+		mcp.WithDescription(
+			"Search for keywords within a specific Rust crate documentation."+
+				" Returns all matching lines with line numbers, similar to search_local_files.",
+		),
+		mcp.WithString(
+			"crate_url",
+			mcp.Required(),
+			mcp.Description(
+				"Crate name or path (e.g., 'serde', 'tokio/runtime')",
+			),
+		),
+		mcp.WithString(
+			"keyword",
+			mcp.Required(),
+			mcp.Description("Keyword to search for within the documentation"),
+		),
+		mcp.WithNumber("max_matches",
+			mcp.DefaultNumber(10),
+			mcp.Description("Maximum number of matches to return (default: 10)"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(searchWithinRustDoc))
+
+	// Add Python documentation search tool
+	tool = mcp.NewTool("search_pydoc",
+		mcp.WithDescription(
+			"Search Python standard library modules on docs.python.org."+
+				" Searches the module index by name and description.",
+		),
+		mcp.WithString(
+			"query",
+			mcp.Required(),
+			mcp.Description("Search text to match against module names and descriptions"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(searchPyDoc))
+
+	// Add Python documentation read tool
+	tool = mcp.NewTool(
+		"read_pydoc",
+		mcp.WithDescription(
+			"Read Python standard library module documentation from docs.python.org"+
+				" with line-based paging and caching."+
+				" Supports offset/limit for efficient exploration of large docs."+
+				" Cached for 30min to speed up subsequent requests.",
+		),
+		mcp.WithString(
+			"module_name",
+			mcp.Required(),
+			mcp.Description(
+				"Python module name as used in imports (e.g., 'json', 'os.path', 'collections.abc')",
+			),
+		),
+		mcp.WithNumber("offset",
+			mcp.DefaultNumber(0),
+			mcp.Description("Line number to start reading from (0-based)"),
+		),
+		mcp.WithNumber(
+			"limit",
+			mcp.DefaultNumber(app.DefaultLinesPerPage),
+			mcp.Description(
+				fmt.Sprintf("Number of lines to read (default: %d)", app.DefaultLinesPerPage),
+			),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(readPyDoc))
+
+	// Add Python documentation search within tool
+	tool = mcp.NewTool(
+		"search_within_pydoc",
+		mcp.WithDescription(
+			"Search for keywords within a specific Python module documentation."+
+				" Returns all matching lines with line numbers, similar to search_local_files.",
+		),
+		mcp.WithString(
+			"module_name",
+			mcp.Required(),
+			mcp.Description(
+				"Python module name (e.g., 'json', 'os.path')",
+			),
+		),
+		mcp.WithString(
+			"keyword",
+			mcp.Required(),
+			mcp.Description("Keyword to search for within the documentation"),
+		),
+		mcp.WithNumber("max_matches",
+			mcp.DefaultNumber(10),
+			mcp.Description("Maximum number of matches to return (default: 10)"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(searchWithinPyDoc))
 
 	return nil
 }

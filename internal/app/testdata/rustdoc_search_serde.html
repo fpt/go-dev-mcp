@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="docs.rs 0.0.0 (3600254d 2026-02-10 )"><link rel="stylesheet" href="/-/static/vendored.css?0-0-0-3600254d-2026-02-10" media="all" />
+        <link rel="stylesheet" href="/-/static/style.css?0-0-0-3600254d-2026-02-10" media="all" />
+        <link rel="stylesheet" href="/-/static/font-awesome.css?0-0-0-3600254d-2026-02-10" media="all" />
+
+        <link rel="search" href="/-/static/opensearch.xml" type="application/opensearchdescription+xml" title="Docs.rs" />
+
+        <title>Releases - Docs.rs</title><script nonce="UZtEkLnKNnmsIC6oNLXDA/PQmW4MET7AqoQPUFyLmuKprISM">(function() {
+    function applyTheme(theme) {
+        if (theme) {
+            document.documentElement.dataset.docsRsTheme = theme;
+        }
+    }
+
+    window.addEventListener("storage", ev => {
+        if (ev.key === "rustdoc-theme") {
+            applyTheme(ev.newValue);
+        }
+    });
+
+    // see ./storage-change-detection.html for details
+    window.addEventListener("message", ev => {
+        if (ev.data && ev.data.storage && ev.data.storage.key === "rustdoc-theme") {
+            applyTheme(ev.data.storage.value);
+        }
+    });
+
+    applyTheme(window.localStorage.getItem("rustdoc-theme"));
+})();</script><script defer type="text/javascript" nonce="UZtEkLnKNnmsIC6oNLXDA/PQmW4MET7AqoQPUFyLmuKprISM" src="/-/static/menu.js?0-0-0-3600254d-2026-02-10"></script>
+        <script defer type="text/javascript" nonce="UZtEkLnKNnmsIC6oNLXDA/PQmW4MET7AqoQPUFyLmuKprISM" src="/-/static/index.js?0-0-0-3600254d-2026-02-10"></script>
+    </head>
+
+    <body class="centered">
+<div class="nav-container">
+    <div class="container">
+        <div class="pure-menu pure-menu-horizontal" role="navigation" aria-label="Main navigation">
+            <form action="/releases/search"
+                  method="GET"
+                  id="nav-search-form"
+                  class="landing-search-form-nav  ">
+
+                
+                <a href="/" class="pure-menu-heading pure-menu-link docsrs-logo" aria-label="Docs.rs">
+                    <span title="Docs.rs"><span class="fa fa-solid fa-cubes " aria-hidden="true"></span></span>
+                    <span class="title">Docs.rs</span>
+                </a><div class="spacer"></div>
+                
+                
+
+<ul class="pure-menu-list">
+                    <li class="pure-menu-item pure-menu-has-children">
+                        <a href="#" class="pure-menu-link" aria-label="docs.rs">docs.rs</a>
+                        <ul class="pure-menu-children aligned-icons"><li class="pure-menu-item"><a class="pure-menu-link" href="/about"><span class="fa fa-solid fa-circle-info " aria-hidden="true"></span> About docs.rs</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/badges"><span class="fa fa-brands fa-fonticons " aria-hidden="true"></span> Badges</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/builds"><span class="fa fa-solid fa-gears " aria-hidden="true"></span> Builds</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/metadata"><span class="fa fa-solid fa-table " aria-hidden="true"></span> Metadata</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/redirections"><span class="fa fa-solid fa-road " aria-hidden="true"></span> Shorthand URLs</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/download"><span class="fa fa-solid fa-download " aria-hidden="true"></span> Download</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/rustdoc-json"><span class="fa fa-solid fa-file-code " aria-hidden="true"></span> Rustdoc JSON</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/releases/queue"><span class="fa fa-solid fa-gears " aria-hidden="true"></span> Build queue</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="https://foundation.rust-lang.org/policies/privacy-policy/#docs.rs" target="_blank"><span class="fa fa-solid fa-shield-halved " aria-hidden="true"></span> Privacy policy</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="pure-menu-list"><li class="pure-menu-item pure-menu-has-children">
+                        <a href="#" class="pure-menu-link" aria-label="Rust">Rust</a>
+                        <ul class="pure-menu-children">
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://www.rust-lang.org/" target="_blank">Rust website</a></li>
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/book/" target="_blank">The Book</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/std/" target="_blank">Standard Library API Reference</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/rust-by-example/" target="_blank">Rust by Example</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/cargo/guide/" target="_blank">The Cargo Guide</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/nightly/clippy" target="_blank">Clippy Documentation</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div id="search-input-nav">
+                    <label for="nav-search">
+                        <span class="fa fa-solid fa-magnifying-glass " aria-hidden="true"></span>
+                    </label>
+
+                    
+                    
+                    <input id="nav-search" name="query" type="text" aria-label="Find crate by search query" tabindex="-1"
+                        placeholder="Find crate"
+                        
+                                    value="serde">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <div class="docsrs-package-container">
+        <div class="container">
+            <div class="description-container">
+                <h1 id="crate-title">Search results for &#39;serde&#39;</h1>
+            </div>
+        </div>
+    </div>
+<div class="container">
+        <div class="recent-releases-container">
+<div id="search-select-nav">
+    <div class="item-end">
+        <span>Sort by</span>
+        <label for="nav-sort">
+            <span class="fa fa-solid fa-list " aria-hidden="true"></span>
+        </label>
+        
+        <select form="nav-search-form" name="sort" id="nav-sort" aria-label="Find crate by the sort by select-box" tabindex="-1">
+            <option value="relevance" selected="selected">Relevance</option>
+            <option value="downloads">All-Time Downloads</option>
+            <option value="recent-downloads">Recent Downloads</option>
+            <option value="recent-updates">Recent Updates</option>
+            <option value="new">Newly Added</option>
+        </select>
+    </div>
+</div>
+<ul>
+                <li><a href="/serde/latest/serde/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde-1.0.228</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A generic serialization/deserialization framework</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-09-27T16:53:06Z">Sep 27, 2025</div></div></a></li><li><a href="/crate/serde_yml/latest" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_yml-0.0.12</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A robust Rust library that simplifies the serialization and deserialization of Rust data structures to and from YAML format using the widely-used Serde framework.
+</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2024-08-25T16:07:37Z">Aug 25, 2024</div></div></a></li><li><a href="/serde-saphyr/latest/serde_saphyr/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde-saphyr-0.0.18</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">YAML (de)serializer for Serde, emphasizing panic-free parsing and good error reporting</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2026-02-09T23:21:19Z">4 hours ago</div></div></a></li><li><a href="/clickhouse/latest/clickhouse/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">clickhouse-0.14.2</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">Official Rust client for ClickHouse DB</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2026-01-14T20:49:03Z">Jan 14, 2026</div></div></a></li><li><a href="/sideko_postman_api/latest/postman_api/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">sideko_postman_api-1.0.0</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">Rust API bindings - spostman_api</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-10-26T07:50:08Z">Oct 26, 2025</div></div></a></li><li><a href="/serde_ext_duration/latest/serde_ext_duration/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_ext_duration-0.2.0</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">Serde (de)serializer for std::time::Duration from int/float/string with multiple output formats</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-10-27T23:07:24Z">Oct 27, 2025</div></div></a></li><li><a href="/discord_typed_interactions/latest/discord_typed_interactions/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">discord_typed_interactions-0.1.0</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">suppose you&#39;re working with discord slash commands and you want statically typed request types</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-09-02T01:34:55Z">Sep 02, 2025</div></div></a></li><li><a href="/serde_valid/latest/serde_valid/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_valid-2.0.1</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">JSON Schema based validation tool using serde.</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-12-18T02:25:31Z">Dec 18, 2025</div></div></a></li><li><a href="/serde_json_untagged/latest/serde_json_untagged/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_json_untagged-1.0.145</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A JSON serialization file format</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-12-03T11:36:05Z">Dec 03, 2025</div></div></a></li><li><a href="/serde_toon_format/latest/serde_toon/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_toon_format-0.1.2</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">Serde-compatible TOON v3.0 encoder/decoder</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2026-02-04T15:32:15Z">5 days ago</div></div></a></li><li><a href="/sciformats_serde_json/latest/sciformats_serde_json/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">sciformats_serde_json-1.0.148</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A JSON serialization file format</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2026-01-06T16:18:37Z">Jan 06, 2026</div></div></a></li><li><a href="/serde_json_experimental/1.0.29-rc1/serde_json/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_json_experimental-1.0.29-rc1
+<span class="yanked" title="all releases of serde_json_experimental have been yanked"><span class="fa fa-solid fa-trash " aria-hidden="true"></span>
+Yanked
+                                            </span></div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A JSON serialization file format</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2026-01-03T12:28:34Z">Jan 03, 2026</div></div></a></li><li><a href="/alt_serde_json/latest/alt_serde_json/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">alt_serde_json-1.0.61</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A JSON serialization file format</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-08-28T01:09:07Z">Aug 28, 2025</div></div></a></li><li><a href="/hc_serde_json/latest/serde_json/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">hc_serde_json-1.0.141</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A JSON serialization file format</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-09-29T07:19:51Z">Sep 29, 2025</div></div></a></li><li><a href="/serde_json/latest/serde_json/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_json-1.0.149</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A JSON serialization file format</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2026-01-06T16:44:29Z">Jan 06, 2026</div></div></a></li><li><a href="/serde_jsonc/latest/serde_jsonc/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_jsonc-1.0.108</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A JSON serialization file format</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-10-30T06:58:44Z">Oct 30, 2025</div></div></a></li><li><a href="/serde_partiql/latest/serde_partiql/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_partiql-1.1.65</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A PartiQL data model serialization file format</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-08-31T21:40:47Z">Aug 31, 2025</div></div></a></li><li><a href="/serde-devo/latest/serde_devo/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde-devo-0.1.0</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A shared type compatibility helper</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2026-01-03T12:23:08Z">Jan 03, 2026</div></div></a></li><li><a href="/serde-devo-derive/latest/serde_devo_derive/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde-devo-derive-0.1.0</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A derive macro for shared type compatibility</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2026-01-03T11:41:43Z">Jan 03, 2026</div></div></a></li><li><a href="/serde_jsonc2/latest/serde_jsonc2/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_jsonc2-0.1.2</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A JSON(C) serialization file format (fork of serde_json)</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-09-15T01:16:43Z">Sep 15, 2025</div></div></a></li><li><a href="/serde_rson/latest/serde_rson/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_rson-1.0.0</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">Serde integration for RSON</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-08-25T04:40:20Z">Aug 25, 2025</div></div></a></li><li><a href="/serde_molecule/latest/serde_molecule/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_molecule-1.1.2</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">Implementation of Molecule using Serde.</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-08-31T17:05:12Z">Aug 31, 2025</div></div></a></li><li><a href="/serde_mosaic/latest/serde_mosaic/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde_mosaic-0.1.0</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">Composable serialization and deserialization for Rust structs.</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2026-02-07T13:13:01Z">2 days ago</div></div></a></li><li><a href="/configurable_serde/latest/configurable_serde/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">configurable_serde-0.1.1</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A proc-macro to apply reusable serde configurations.</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-12-12T14:07:26Z">Dec 12, 2025</div></div></a></li><li><a href="/configurable_serde_macros/latest/configurable_serde_macros/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">configurable_serde_macros-0.1.1</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A proc-macro to apply reusable serde configurations - macros.</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-12-12T14:07:04Z">Dec 12, 2025</div></div></a></li><li><a href="/serde-versioning/latest/serde_versioning/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde-versioning-1.0.219</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">Add versioning support to `serde`&#39;s `Deserialize` derive macro.</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-10-04T10:08:27Z">Oct 04, 2025</div></div></a></li><li><a href="/serde-xml-fast/latest/serde_xml/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">serde-xml-fast-0.1.2</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A fast, 100% Serde-compatible XML serialization and deserialization library</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-12-31T05:59:17Z">Dec 31, 2025</div></div></a></li><li><a href="/supply-chain-trust-crate-000019/1.0.140/supply_chain_trust_crate_000019/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">supply-chain-trust-crate-000019-1.0.140
+<span class="yanked" title="all releases of supply-chain-trust-crate-000019 have been yanked"><span class="fa fa-solid fa-trash " aria-hidden="true"></span>
+Yanked
+                                            </span></div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A JSON serialization file format</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-10-14T00:25:28Z">Oct 14, 2025</div></div></a></li><li><a href="/supply-chain-trust-example-crate-000019/2.6.1/supply_chain_trust_example_crate_000019/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">supply-chain-trust-example-crate-000019-2.6.1
+<span class="yanked" title="all releases of supply-chain-trust-example-crate-000019 have been yanked"><span class="fa fa-solid fa-trash " aria-hidden="true"></span>
+Yanked
+                                            </span></div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">A hash table with consistent order and fast iteration.</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-12-28T18:24:13Z">Dec 28, 2025</div></div></a></li><li><a href="/adtp/latest/adtp/" class="release"><div class="pure-g"><div class="pure-u-1 pure-u-sm-6-24 pure-u-md-5-24 name">adtp-1.0.5</div><div class="pure-u-1 pure-u-sm-14-24 pure-u-md-16-24 description">Alula&#39;s Data Transfer Protocol</div><div class="pure-u-1 pure-u-sm-4-24 pure-u-md-3-24 date" title="2025-12-27T12:54:49Z">Dec 27, 2025</div></div></a></li></ul><div class="pagination">
+                <a class="pure-button pure-button-normal" href="/releases/search?paginate=P3E9c2VyZGUmc29ydD1yZWxldmFuY2UmcGVyX3BhZ2U9MzAmc2Vlaz1XMlpoYkhObExEUXVPQ3d4Tmpjek5EVTJYUQ==">
+            Next Page <span class="fa fa-solid fa-arrow-right " aria-hidden="true"></span>
+        </a>
+            </div>
+        </div>
+    </div><script nonce="UZtEkLnKNnmsIC6oNLXDA/PQmW4MET7AqoQPUFyLmuKprISM" type="text/javascript" src="/-/static/keyboard.js?0-0-0-3600254d-2026-02-10"></script></body>
+</html>

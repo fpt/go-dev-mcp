@@ -1,0 +1,55 @@
+Summary: Showing 16 modules with matching packages. Search help
+* mcp-go (github.com/ks6088ts-labs/mcp-go)
+	URL: github.com/ks6088ts-labs/mcp-go
+	Version: v0.0.1
+* mcpgo (github.com/DataDog/dd-trace-go/contrib/mark3labs/mcp-go/v2)
+	URL: github.com/DataDog/dd-trace-go/contrib/mark3labs/mcp-go/v2
+	Version: v2.5.0
+* agnost (github.com/agnostai/agnost-go/agnost)
+	URL: github.com/agnostai/agnost-go/agnost
+	Description: Package agnost provides analytics tracking for MCP servers built with mcp-go
+	Version: v0.1.2
+* mcp (github.com/XiaoConstantine/mcp-go)
+	URL: github.com/XiaoConstantine/mcp-go
+	Description: Package mcp provides a comprehensive Go implementation of the Model Context Protocol (MCP), a standardized protocol for communication between Large Language Models (LLMs) and context providers.
+	Version: v0.3.1
+* mcp (github.com/cavernouskina/mcp-go)
+	URL: github.com/cavernouskina/mcp-go
+	Version: v0.0.0-...-0672bd6
+* mcp (github.com/dentaku7/mcp-go-sdk)
+	URL: github.com/dentaku7/mcp-go-sdk
+	Version: v0.1.2
+* mcp (gitlab.flexinfer.ai/libs/mcp-go)
+	URL: gitlab.flexinfer.ai/libs/mcp-go
+	Description: Package mcp implements the Model Context Protocol (MCP) for building AI tool servers.
+	Version: v0.1.0
+* x402 (github.com/mark3labs/mcp-go-x402)
+	URL: github.com/mark3labs/mcp-go-x402
+	Version: v0.8.2
+* mcpprobego (github.com/edmondfrank/mcp-probe-go)
+	URL: github.com/edmondfrank/mcp-probe-go
+	Version: v0.0.2
+* mcp (github.com/felixgeelhaar/mcp-go)
+	URL: github.com/felixgeelhaar/mcp-go
+	Description: Package mcp provides a framework for building MCP (Model Context Protocol) servers.
+	Version: v1.6.4
+* mcpgo (github.com/DR1N0/mcp-go)
+	URL: github.com/DR1N0/mcp-go
+	Version: v0.0.2
+* mcp (github.com/go-kratos/kratos/contrib/transport/mcp/v2)
+	URL: github.com/go-kratos/kratos/contrib/transport/mcp/v2
+	Version: v2.0.0-...-c7a58ff
+* mcp (github.com/vllm-project/semantic-router/dashboard/backend/mcp)
+	URL: github.com/vllm-project/semantic-router/dashboard/backend/mcp
+	Description: Package mcp provides MCP (Model Context Protocol) client implementation using the official mcp-go SDK (github.com/mark3labs/mcp-go).
+	Version: v0.0.0-...-cdd0ca1
+* mcp (github.com/fredcamaral/gomcp-sdk)
+	URL: github.com/fredcamaral/gomcp-sdk
+	Description: Package mcp provides a high-level interface for the Model Context Protocol.
+	Version: v1.2.0
+* mcps-go (github.com/landmaster135/mcps-go)
+	URL: github.com/landmaster135/mcps-go
+	Version: v0.0.0-...-55730a4
+* mcp-taskfile-server (github.com/rsclarke/mcp-taskfile-server)
+	URL: github.com/rsclarke/mcp-taskfile-server
+	Version: v0.0.0-...-1e04259
