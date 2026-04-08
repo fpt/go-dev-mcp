@@ -92,6 +92,7 @@ func (c *PyDocReadCmd) Name() string { return "read" }
 func (c *PyDocReadCmd) Synopsis() string {
 	return "Read Python module documentation from docs.python.org."
 }
+
 func (c *PyDocReadCmd) Usage() string {
 	return `pydoc read <module_name>:
   Read Python module documentation from docs.python.org.

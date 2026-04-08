@@ -65,7 +65,14 @@ func ValidateGoCode(ctx context.Context, directory string) (*ValidationReport, e
 
 	// Run each check
 	for _, check := range checks {
-		result := runValidationCheck(ctx, directory, check.name, check.cmd, check.args, check.description)
+		result := runValidationCheck(
+			ctx,
+			directory,
+			check.name,
+			check.cmd,
+			check.args,
+			check.description,
+		)
 		report.Results = append(report.Results, result)
 	}
 
@@ -85,9 +92,18 @@ func ValidateGoCode(ctx context.Context, directory string) (*ValidationReport, e
 	}
 
 	if errors > 0 {
-		report.Summary = fmt.Sprintf("Validation completed with %d errors, %d failures, %d passed", errors, failed, passed)
+		report.Summary = fmt.Sprintf(
+			"Validation completed with %d errors, %d failures, %d passed",
+			errors,
+			failed,
+			passed,
+		)
 	} else if failed > 0 {
-		report.Summary = fmt.Sprintf("Validation failed: %d checks failed, %d passed", failed, passed)
+		report.Summary = fmt.Sprintf(
+			"Validation failed: %d checks failed, %d passed",
+			failed,
+			passed,
+		)
 	} else {
 		report.Summary = fmt.Sprintf("All %d validation checks passed ✓", passed)
 	}
@@ -95,7 +111,12 @@ func ValidateGoCode(ctx context.Context, directory string) (*ValidationReport, e
 	return report, nil
 }
 
-func runValidationCheck(ctx context.Context, workDir, name, cmdName string, args []string, description string) ValidationResult {
+func runValidationCheck(
+	ctx context.Context,
+	workDir, name, cmdName string,
+	args []string,
+	description string,
+) ValidationResult {
 	result := ValidationResult{
 		Check: fmt.Sprintf("%s - %s", name, description),
 	}
@@ -122,7 +143,10 @@ func runValidationCheck(ctx context.Context, workDir, name, cmdName string, args
 		switch name {
 		case "gofmt check":
 			if stdout != "" {
-				result.Summary = fmt.Sprintf("Files need formatting: %s", strings.ReplaceAll(stdout, "\n", ", "))
+				result.Summary = fmt.Sprintf(
+					"Files need formatting: %s",
+					strings.ReplaceAll(stdout, "\n", ", "),
+				)
 			} else {
 				result.Summary = "Files need formatting"
 			}
@@ -155,7 +179,10 @@ func runValidationCheck(ctx context.Context, workDir, name, cmdName string, args
 			if stdout != "" {
 				result.Status = "fail"
 				result.Output = stdout
-				result.Summary = fmt.Sprintf("Files need formatting: %s", strings.ReplaceAll(stdout, "\n", ", "))
+				result.Summary = fmt.Sprintf(
+					"Files need formatting: %s",
+					strings.ReplaceAll(stdout, "\n", ", "),
+				)
 			} else {
 				result.Summary = "All files are properly formatted"
 			}

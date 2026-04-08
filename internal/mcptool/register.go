@@ -139,6 +139,13 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Path to the file in the repository"),
 		),
+		mcp.WithString(
+			"ref",
+			mcp.DefaultString(""),
+			mcp.Description(
+				"Git ref to fetch at: branch name, tag, or commit SHA (e.g., 'main', 'v1.2.0', 'abc1234'). Defaults to the repository's default branch.",
+			),
+		),
 		mcp.WithNumber("offset",
 			mcp.DefaultNumber(0),
 			mcp.Description("Line number to start reading from (0-based)"),
@@ -149,6 +156,148 @@ func Register(s *server.MCPServer, workdir string) error {
 		),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubContent))
+
+	// Add GitHub diff tool
+	tool = mcp.NewTool(
+		"get_github_diff",
+		mcp.WithDescription(
+			"Get a unified diff between two git refs (commits, branches, or tags) in a GitHub repository.",
+		),
+		mcp.WithString(
+			"repo",
+			mcp.Required(),
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
+		mcp.WithString(
+			"base",
+			mcp.Required(),
+			mcp.Description("Base ref (commit SHA, branch, or tag)"),
+		),
+		mcp.WithString(
+			"head",
+			mcp.Required(),
+			mcp.Description("Head ref (commit SHA, branch, or tag)"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubDiff))
+
+	// Add GitHub list issues tool
+	tool = mcp.NewTool(
+		"list_github_issues",
+		mcp.WithDescription("List issues for a GitHub repository."),
+		mcp.WithString(
+			"repo",
+			mcp.Required(),
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
+		mcp.WithString(
+			"state",
+			mcp.DefaultString("open"),
+			mcp.Description("Filter by state: open, closed, all (default: open)"),
+		),
+		mcp.WithString(
+			"labels",
+			mcp.DefaultString(""),
+			mcp.Description("Comma-separated label names to filter by"),
+		),
+		mcp.WithNumber(
+			"limit",
+			mcp.DefaultNumber(30),
+			mcp.Description("Maximum number of issues to return (default: 30, max: 100)"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(listGitHubIssues))
+
+	// Add GitHub get issue tool
+	tool = mcp.NewTool(
+		"get_github_issue",
+		mcp.WithDescription("Get a single GitHub issue with its body and comments."),
+		mcp.WithString(
+			"repo",
+			mcp.Required(),
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
+		mcp.WithNumber("number", mcp.Required(), mcp.Description("Issue number")),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubIssue))
+
+	// Add GitHub list pull requests tool
+	tool = mcp.NewTool(
+		"list_github_pulls",
+		mcp.WithDescription("List pull requests for a GitHub repository."),
+		mcp.WithString(
+			"repo",
+			mcp.Required(),
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
+		mcp.WithString(
+			"state",
+			mcp.DefaultString("open"),
+			mcp.Description("Filter by state: open, closed, all (default: open)"),
+		),
+		mcp.WithString(
+			"base",
+			mcp.DefaultString(""),
+			mcp.Description("Filter by base branch name"),
+		),
+		mcp.WithNumber(
+			"limit",
+			mcp.DefaultNumber(30),
+			mcp.Description("Maximum number of PRs to return (default: 30, max: 100)"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(listGitHubPulls))
+
+	// Add GitHub get pull request tool
+	tool = mcp.NewTool(
+		"get_github_pull",
+		mcp.WithDescription("Get a single GitHub pull request with its body and changed files."),
+		mcp.WithString(
+			"repo",
+			mcp.Required(),
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
+		mcp.WithNumber("number", mcp.Required(), mcp.Description("Pull request number")),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubPull))
+
+	// Add GitHub list workflow runs tool
+	tool = mcp.NewTool(
+		"list_github_workflow_runs",
+		mcp.WithDescription("List GitHub Actions workflow runs for a repository."),
+		mcp.WithString(
+			"repo",
+			mcp.Required(),
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
+		mcp.WithString("branch", mcp.DefaultString(""), mcp.Description("Filter by branch name")),
+		mcp.WithString(
+			"status",
+			mcp.DefaultString(""),
+			mcp.Description("Filter by status: success, failure, in_progress, queued, etc."),
+		),
+		mcp.WithNumber(
+			"limit",
+			mcp.DefaultNumber(20),
+			mcp.Description("Maximum number of runs to return (default: 20, max: 100)"),
+		),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(listGitHubWorkflowRuns))
+
+	// Add GitHub get workflow run tool
+	tool = mcp.NewTool(
+		"get_github_workflow_run",
+		mcp.WithDescription(
+			"Get details of a specific GitHub Actions workflow run including jobs and step results.",
+		),
+		mcp.WithString(
+			"repo",
+			mcp.Required(),
+			mcp.Description("GitHub repository in 'owner/repo' format"),
+		),
+		mcp.WithNumber("run_id", mcp.Required(), mcp.Description("Workflow run ID")),
+	)
+	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubWorkflowRun))
 
 	// Add GitHub tree tool
 	tool = mcp.NewTool(

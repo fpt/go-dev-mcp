@@ -133,7 +133,7 @@ func (*GetContentCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subc
 		return subcommands.ExitFailure
 	}
 
-	content, err := gh.GetContent(context.Background(), owner, repo, path)
+	content, err := gh.GetContent(context.Background(), owner, repo, path, "")
 	if err != nil {
 		fmt.Println("Error:", err)
 		return subcommands.ExitFailure
@@ -202,7 +202,16 @@ func (c *TreeRepoCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subc
 
 	// Generate the tree using our new function
 	ctx := context.Background()
-	if err := app.PrintGitHubTree(ctx, &b, gh, owner, repo, path, c.ignoreDot, c.maxDepth); err != nil {
+	if err := app.PrintGitHubTree(
+		ctx,
+		&b,
+		gh,
+		owner,
+		repo,
+		path,
+		c.ignoreDot,
+		c.maxDepth,
+	); err != nil {
 		fmt.Printf("Error generating tree: %v\n", err)
 		return subcommands.ExitFailure
 	}

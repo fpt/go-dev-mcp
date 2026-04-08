@@ -60,7 +60,11 @@ func TestPrintTree(t *testing.T) {
 	if err := os.Mkdir(gitDir, 0o755); err != nil {
 		t.Fatalf("Failed to create .git directory: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(gitDir, "config"), []byte("git config"), 0o600); err != nil {
+	if err := os.WriteFile(
+		filepath.Join(gitDir, "config"),
+		[]byte("git config"),
+		0o600,
+	); err != nil {
 		t.Fatalf("Failed to create git config file: %v", err)
 	}
 
@@ -69,7 +73,11 @@ func TestPrintTree(t *testing.T) {
 	if err := os.Mkdir(dotDir, 0o755); err != nil {
 		t.Fatalf("Failed to create dot directory: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(dotDir, "hidden.txt"), []byte("hidden"), 0o600); err != nil {
+	if err := os.WriteFile(
+		filepath.Join(dotDir, "hidden.txt"),
+		[]byte("hidden"),
+		0o600,
+	); err != nil {
 		t.Fatalf("Failed to create file in dot directory: %v", err)
 	}
 

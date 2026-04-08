@@ -520,9 +520,9 @@ func isLocalImport(importPath, moduleName string) bool {
 
 // OutlineGoPackageOptions controls which sections are included in the outline.
 type OutlineGoPackageOptions struct {
-	SkipDependencies  bool
-	SkipDeclarations  bool
-	SkipCallGraph     bool
+	SkipDependencies bool
+	SkipDeclarations bool
+	SkipCallGraph    bool
 }
 
 // OutlineGoPackage produces a comprehensive outline of a Go package:
@@ -566,7 +566,9 @@ func OutlineGoPackage(
 							decl.Type, decl.Name, decl.Info, decl.Line,
 						))
 					} else {
-						sb.WriteString(fmt.Sprintf("- %s: %s [line %d]\n", decl.Type, decl.Name, decl.Line))
+						sb.WriteString(
+							fmt.Sprintf("- %s: %s [line %d]\n", decl.Type, decl.Name, decl.Line),
+						)
 					}
 				}
 			}

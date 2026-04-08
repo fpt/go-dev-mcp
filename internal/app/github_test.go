@@ -24,7 +24,7 @@ func (m *MockGitHubClient) SearchCode(
 
 func (m *MockGitHubClient) GetContent(
 	ctx context.Context,
-	owner, repo, path string,
+	owner, repo, path, ref string,
 ) (string, error) {
 	return "", nil // Not used in this test
 }

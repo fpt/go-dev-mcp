@@ -21,5 +21,5 @@ type SearchCodeItem struct {
 
 type GitHubClient interface {
 	SearchCode(ctx context.Context, query string, opt *SearchCodeOption) (SearchCodeResult, error)
-	GetContent(ctx context.Context, owner, repo, path string) (string, error)
+	GetContent(ctx context.Context, owner, repo, path, ref string) (string, error)
 }

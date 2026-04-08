@@ -15,7 +15,8 @@ type ValidateCmd struct {
 	directory string
 }
 
-func (*ValidateCmd) Name() string     { return "validate" }
+func (*ValidateCmd) Name() string { return "validate" }
+
 func (*ValidateCmd) Synopsis() string { return "Validate Go code using multiple static analysis tools" }
 func (*ValidateCmd) Usage() string {
 	return `validate [-directory <path>]:
@@ -28,7 +29,11 @@ func (p *ValidateCmd) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&p.directory, "directory", ".", "Directory containing Go code to validate")
 }
 
-func (p *ValidateCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (p *ValidateCmd) Execute(
+	ctx context.Context,
+	f *flag.FlagSet,
+	_ ...interface{},
+) subcommands.ExitStatus {
 	// Convert to absolute path
 	absPath, err := filepath.Abs(p.directory)
 	if err != nil {

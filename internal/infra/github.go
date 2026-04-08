@@ -85,8 +85,22 @@ func (c *GitHubClient) SearchCode(
 // GetContent retrieves the content of a file or directory in a GitHub repository using the GitHub API.
 // If path points to a file, it returns the file content.
 // If path points to a directory, it returns a formatted directory listing.
-func (c *GitHubClient) GetContent(ctx context.Context, owner, repo, path string) (string, error) {
-	fileContent, directoryContent, _, err := c.Repositories.GetContents(ctx, owner, repo, path, nil)
+// ref is optional; if empty, the repository's default branch is used.
+func (c *GitHubClient) GetContent(
+	ctx context.Context,
+	owner, repo, path, ref string,
+) (string, error) {
+	var opts *github.RepositoryContentGetOptions
+	if ref != "" {
+		opts = &github.RepositoryContentGetOptions{Ref: ref}
+	}
+	fileContent, directoryContent, _, err := c.Repositories.GetContents(
+		ctx,
+		owner,
+		repo,
+		path,
+		opts,
+	)
 	if err != nil {
 		return "", err
 	}
@@ -133,6 +147,21 @@ func (c *GitHubClient) GetContent(ctx context.Context, owner, repo, path string)
 	}
 
 	return "", errors.New("no content found (both file and directory content are nil)")
+}
+
+// CompareRefs returns the unified diff between two git refs (commits, branches, or tags).
+func (c *GitHubClient) CompareRefs(
+	ctx context.Context,
+	owner, repo, base, head string,
+) (string, error) {
+	diff, _, err := c.Repositories.CompareCommitsRaw(
+		ctx, owner, repo, base, head,
+		github.RawOptions{Type: github.Diff},
+	)
+	if err != nil {
+		return "", err
+	}
+	return diff, nil
 }
 
 // WalkContentsFunc is the function called for each file or directory visited by WalkContents.
