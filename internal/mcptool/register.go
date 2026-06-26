@@ -32,6 +32,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(4),
 			mcp.Description("Maximum directory depth to traverse (default: 4 levels)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithTitleAnnotation("Tree Directory"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(treeDir))
 
@@ -45,6 +48,9 @@ func Register(s *server.MCPServer, workdir string) error {
 				"Search text which occurs in the package name, package path, synopsis, or README",
 			),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Search Go Documentation"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchGoDoc))
 
@@ -74,6 +80,9 @@ func Register(s *server.MCPServer, workdir string) error {
 				fmt.Sprintf("Number of lines to read (default: %d)", app.DefaultLinesPerPage),
 			),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Read Go Documentation"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(readGoDoc))
 
@@ -100,6 +109,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(10),
 			mcp.Description("Maximum number of matches to return (default: 10)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Search Within Go Documentation"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchWithinGoDoc))
 
@@ -125,6 +137,9 @@ func Register(s *server.MCPServer, workdir string) error {
 		mcp.WithString("repo",
 			mcp.Description("GitHub repository in 'owner/repo' format to limit search scope"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Search GitHub Code"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchCodeGitHub))
 
@@ -154,6 +169,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(100),
 			mcp.Description("Number of lines to read (default: 100, 0 for all lines)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Get GitHub Content"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubContent))
 
@@ -178,6 +196,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Head ref (commit SHA, branch, or tag)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Get GitHub Diff"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubDiff))
 
@@ -205,6 +226,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(30),
 			mcp.Description("Maximum number of issues to return (default: 30, max: 100)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("List GitHub Issues"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(listGitHubIssues))
 
@@ -218,6 +242,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("GitHub repository in 'owner/repo' format"),
 		),
 		mcp.WithNumber("number", mcp.Required(), mcp.Description("Issue number")),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Get GitHub Issue"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubIssue))
 
@@ -245,6 +272,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(30),
 			mcp.Description("Maximum number of PRs to return (default: 30, max: 100)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("List GitHub Pull Requests"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(listGitHubPulls))
 
@@ -258,6 +288,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("GitHub repository in 'owner/repo' format"),
 		),
 		mcp.WithNumber("number", mcp.Required(), mcp.Description("Pull request number")),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Get GitHub Pull Request"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubPull))
 
@@ -281,6 +314,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(20),
 			mcp.Description("Maximum number of runs to return (default: 20, max: 100)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("List GitHub Workflow Runs"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(listGitHubWorkflowRuns))
 
@@ -296,6 +332,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("GitHub repository in 'owner/repo' format"),
 		),
 		mcp.WithNumber("run_id", mcp.Required(), mcp.Description("Workflow run ID")),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Get GitHub Workflow Run"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubWorkflowRun))
 
@@ -329,6 +368,9 @@ func Register(s *server.MCPServer, workdir string) error {
 				"Maximum directory depth to traverse (default: 3 levels for network efficiency)",
 			),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Tree GitHub Repository"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(getGitHubTree))
 
@@ -359,6 +401,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(10),
 			mcp.Description("Maximum number of matches to show per file (default: 10)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithTitleAnnotation("Search Local Files"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchLocalFiles))
 
@@ -387,6 +432,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultBool(false),
 			mcp.Description("Skip the call graph section (largest section)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithTitleAnnotation("Outline Go Package"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(outlineGoPackage))
 
@@ -404,6 +452,9 @@ func Register(s *server.MCPServer, workdir string) error {
 				"Directory path to scan for markdown files or path to a single markdown file (absolute path)",
 			),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithTitleAnnotation("Scan Markdown"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(scanMarkdown))
 
@@ -419,6 +470,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Directory containing Go code to validate (absolute path)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithTitleAnnotation("Validate Go Code"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(validateGoCode))
 
@@ -430,6 +484,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Search text for crate name or description"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Search Rust Documentation"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchRustDoc))
 
@@ -459,6 +516,9 @@ func Register(s *server.MCPServer, workdir string) error {
 				fmt.Sprintf("Number of lines to read (default: %d)", app.DefaultLinesPerPage),
 			),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Read Rust Documentation"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(readRustDoc))
 
@@ -485,6 +545,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(10),
 			mcp.Description("Maximum number of matches to return (default: 10)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Search Within Rust Documentation"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchWithinRustDoc))
 
@@ -499,6 +562,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Search text to match against module names and descriptions"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Search Python Documentation"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchPyDoc))
 
@@ -529,6 +595,9 @@ func Register(s *server.MCPServer, workdir string) error {
 				fmt.Sprintf("Number of lines to read (default: %d)", app.DefaultLinesPerPage),
 			),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Read Python Documentation"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(readPyDoc))
 
@@ -555,6 +624,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.DefaultNumber(10),
 			mcp.Description("Maximum number of matches to return (default: 10)"),
 		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(true),
+		mcp.WithTitleAnnotation("Search Within Python Documentation"),
 	)
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchWithinPyDoc))
 
