@@ -8,12 +8,19 @@ import (
 )
 
 func Run(workdir, cmd string, args ...string) (string, string, int, error) {
+	return RunEnv(workdir, nil, cmd, args...)
+}
+
+// RunEnv is like Run but lets the caller override the subprocess environment.
+// A nil env inherits the current process environment.
+func RunEnv(workdir string, env []string, cmd string, args ...string) (string, string, int, error) {
 	stdout := strings.Builder{}
 	stderr := strings.Builder{}
 
 	// Create the command
 	command := exec.Command(cmd, args...)
 	command.Dir = workdir
+	command.Env = env
 	command.Stdout = &stdout
 	command.Stderr = &stderr
 	err := command.Run()

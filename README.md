@@ -8,7 +8,13 @@ GoDevMCP is a Model Context Protocol (MCP) server that provides development tool
 
 ### Prerequisites
 
-- GitHub `gh` command is required.
+- GitHub authentication is required **only for the GitHub tools** (code search, content,
+  diffs, issues, pull requests, workflow runs). The other tools (Go/Rust/Python docs,
+  directory tree, local search, outline, markdown, validation) work without it.
+- The server resolves a GitHub token in this order:
+  1. The `GITHUB_TOKEN` or `GH_TOKEN` environment variable, if set.
+  2. Otherwise, the locally-installed and authenticated [`gh` CLI](https://cli.github.com/)
+     (`gh auth login`).
 
 ### Using go install
 
