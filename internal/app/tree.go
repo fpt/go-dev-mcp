@@ -42,7 +42,8 @@ func PrintTree(
 		"",
 		path,
 		ignoreDot,
-		maxDepth)
+		maxDepth,
+	)
 	if err != nil {
 		return errors.Wrap(err, "failed to walk directory")
 	}

@@ -18,6 +18,7 @@ type ValidateCmd struct {
 func (*ValidateCmd) Name() string { return "validate" }
 
 func (*ValidateCmd) Synopsis() string { return "Validate Go code using multiple static analysis tools" }
+
 func (*ValidateCmd) Usage() string {
 	return `validate [-directory <path>]:
   Validate Go code using go vet, build checks, formatting validation, and module tidiness.

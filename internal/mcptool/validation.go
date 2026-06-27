@@ -33,9 +33,10 @@ func validateGoCode(
 	for _, validationResult := range report.Results {
 		// Add check header
 		statusEmoji := "✓"
-		if validationResult.Status == "fail" {
+		switch validationResult.Status {
+		case "fail":
 			statusEmoji = "✗"
-		} else if validationResult.Status == "error" {
+		case "error":
 			statusEmoji = "⚠"
 		}
 

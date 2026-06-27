@@ -17,7 +17,8 @@ func Register(s *server.MCPServer, workdir string) error {
 				" (default: 4 levels) to reduce token usage by 60-80%."+
 				" Perfect for project exploration and understanding codebase structure.",
 		),
-		mcp.WithString("root_dir",
+		mcp.WithString(
+			"root_dir",
 			mcp.Required(),
 			mcp.Description("Root directory to scan (absolute path)"),
 		),
@@ -28,7 +29,8 @@ func Register(s *server.MCPServer, workdir string) error {
 				"Ignore dot files and directories (except .git which is always ignored)",
 			),
 		),
-		mcp.WithNumber("max_depth",
+		mcp.WithNumber(
+			"max_depth",
 			mcp.DefaultNumber(4),
 			mcp.Description("Maximum directory depth to traverse (default: 4 levels)"),
 		),
@@ -41,7 +43,8 @@ func Register(s *server.MCPServer, workdir string) error {
 	s.AddTool(tool, mcp.NewTypedToolHandler(treeDir))
 
 	// Add GoDoc search tool
-	tool = mcp.NewTool("search_godoc",
+	tool = mcp.NewTool(
+		"search_godoc",
 		mcp.WithDescription("Search for Go package in pkg.go.dev"),
 		mcp.WithString(
 			"query",
@@ -73,7 +76,8 @@ func Register(s *server.MCPServer, workdir string) error {
 				"Go package URL (e.g., 'golang.org/x/net/html', 'github.com/user/repo')",
 			),
 		),
-		mcp.WithNumber("offset",
+		mcp.WithNumber(
+			"offset",
 			mcp.DefaultNumber(0),
 			mcp.Description("Line number to start reading from (0-based)"),
 		),
@@ -111,7 +115,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Keyword to search for within the documentation"),
 		),
-		mcp.WithNumber("max_matches",
+		mcp.WithNumber(
+			"max_matches",
 			mcp.DefaultNumber(10),
 			mcp.Description("Maximum number of matches to return (default: 10)"),
 		),
@@ -131,18 +136,21 @@ func Register(s *server.MCPServer, workdir string) error {
 				" (30-40% token reduction)."+
 				" Returns repository/path format instead of verbose labels for efficient scanning.",
 		),
-		mcp.WithString("query",
+		mcp.WithString(
+			"query",
 			mcp.Required(),
 			mcp.Description("Code search query (e.g., 'function main', 'import context')"),
 		),
-		mcp.WithString("language",
+		mcp.WithString(
+			"language",
 			mcp.Required(),
 			mcp.Description(
 				"Programming language to filter results"+
 					" (e.g., 'go', 'python', 'rust', 'typescript', 'c++', 'arduino', 'yaml', 'makefile')",
 			),
 		),
-		mcp.WithString("repo",
+		mcp.WithString(
+			"repo",
 			mcp.Description("GitHub repository in 'owner/repo' format to limit search scope"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
@@ -154,13 +162,16 @@ func Register(s *server.MCPServer, workdir string) error {
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchCodeGitHub))
 
 	// Add GitHub get content tool
-	tool = mcp.NewTool("get_github_content",
+	tool = mcp.NewTool(
+		"get_github_content",
 		mcp.WithDescription("Get content from GitHub with line-based paging for large files"),
-		mcp.WithString("repo",
+		mcp.WithString(
+			"repo",
 			mcp.Required(),
 			mcp.Description("GitHub repository in 'owner/repo' format"),
 		),
-		mcp.WithString("path",
+		mcp.WithString(
+			"path",
 			mcp.Required(),
 			mcp.Description("Path to the file in the repository"),
 		),
@@ -168,14 +179,18 @@ func Register(s *server.MCPServer, workdir string) error {
 			"ref",
 			mcp.DefaultString(""),
 			mcp.Description(
-				"Git ref to fetch at: branch name, tag, or commit SHA (e.g., 'main', 'v1.2.0', 'abc1234'). Defaults to the repository's default branch.",
+				"Git ref to fetch at: branch name, tag, or commit SHA"+
+					" (e.g., 'main', 'v1.2.0', 'abc1234')."+
+					" Defaults to the repository's default branch.",
 			),
 		),
-		mcp.WithNumber("offset",
+		mcp.WithNumber(
+			"offset",
 			mcp.DefaultNumber(0),
 			mcp.Description("Line number to start reading from (0-based)"),
 		),
-		mcp.WithNumber("limit",
+		mcp.WithNumber(
+			"limit",
 			mcp.DefaultNumber(100),
 			mcp.Description("Number of lines to read (default: 100, 0 for all lines)"),
 		),
@@ -372,11 +387,13 @@ func Register(s *server.MCPServer, workdir string) error {
 				" (default: 3 levels for network efficiency)."+
 				" Conservative token usage for remote repository exploration.",
 		),
-		mcp.WithString("repo",
+		mcp.WithString(
+			"repo",
 			mcp.Required(),
 			mcp.Description("GitHub repository in 'owner/repo' format"),
 		),
-		mcp.WithString("path",
+		mcp.WithString(
+			"path",
 			mcp.DefaultString(""),
 			mcp.Description("Path in the repository (defaults to root)"),
 		),
@@ -410,22 +427,26 @@ func Register(s *server.MCPServer, workdir string) error {
 				" (default: 10 matches per file) to reduce token usage by 50-70%."+
 				" Shows line numbers and truncation indicators.",
 		),
-		mcp.WithString("path",
+		mcp.WithString(
+			"path",
 			mcp.Required(),
 			mcp.Description("Directory path to search in (absolute path)"),
 		),
-		mcp.WithString("query",
+		mcp.WithString(
+			"query",
 			mcp.Required(),
 			mcp.Description("Text to search for in file contents (case-sensitive exact match)"),
 		),
-		mcp.WithString("extension",
+		mcp.WithString(
+			"extension",
 			mcp.Required(),
 			mcp.Description(
 				"File extension to search without dot"+
 					" (e.g., 'go', 'py', 'rs', 'ts', 'js', 'ino', 'c', 'h', 'txt', 'yaml')",
 			),
 		),
-		mcp.WithNumber("max_matches",
+		mcp.WithNumber(
+			"max_matches",
 			mcp.DefaultNumber(10),
 			mcp.Description("Maximum number of matches to show per file (default: 10)"),
 		),
@@ -446,19 +467,23 @@ func Register(s *server.MCPServer, workdir string) error {
 				" Analyzes all Go source files in the specified directory."+
 				" Use skip_* flags to omit sections and reduce output size.",
 		),
-		mcp.WithString("directory",
+		mcp.WithString(
+			"directory",
 			mcp.Required(),
 			mcp.Description("Directory containing Go source files to analyze"),
 		),
-		mcp.WithBoolean("skip_dependencies",
+		mcp.WithBoolean(
+			"skip_dependencies",
 			mcp.DefaultBool(false),
 			mcp.Description("Skip the dependencies section"),
 		),
-		mcp.WithBoolean("skip_declarations",
+		mcp.WithBoolean(
+			"skip_declarations",
 			mcp.DefaultBool(false),
 			mcp.Description("Skip the declarations section"),
 		),
-		mcp.WithBoolean("skip_call_graph",
+		mcp.WithBoolean(
+			"skip_call_graph",
 			mcp.DefaultBool(false),
 			mcp.Description("Skip the call graph section (largest section)"),
 		),
@@ -513,7 +538,8 @@ func Register(s *server.MCPServer, workdir string) error {
 	s.AddTool(tool, mcp.NewTypedToolHandler(validateGoCode))
 
 	// Add Rust documentation search tool
-	tool = mcp.NewTool("search_rustdoc",
+	tool = mcp.NewTool(
+		"search_rustdoc",
 		mcp.WithDescription("Search for Rust crates on docs.rs"),
 		mcp.WithString(
 			"query",
@@ -543,7 +569,8 @@ func Register(s *server.MCPServer, workdir string) error {
 				"Crate name or path (e.g., 'serde', 'serde/de', 'tokio/runtime')",
 			),
 		),
-		mcp.WithNumber("offset",
+		mcp.WithNumber(
+			"offset",
 			mcp.DefaultNumber(0),
 			mcp.Description("Line number to start reading from (0-based)"),
 		),
@@ -581,7 +608,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Keyword to search for within the documentation"),
 		),
-		mcp.WithNumber("max_matches",
+		mcp.WithNumber(
+			"max_matches",
 			mcp.DefaultNumber(10),
 			mcp.Description("Maximum number of matches to return (default: 10)"),
 		),
@@ -594,7 +622,8 @@ func Register(s *server.MCPServer, workdir string) error {
 	s.AddTool(tool, mcp.NewTypedToolHandler(searchWithinRustDoc))
 
 	// Add Python documentation search tool
-	tool = mcp.NewTool("search_pydoc",
+	tool = mcp.NewTool(
+		"search_pydoc",
 		mcp.WithDescription(
 			"Search Python standard library modules on docs.python.org."+
 				" Searches the module index by name and description.",
@@ -628,7 +657,8 @@ func Register(s *server.MCPServer, workdir string) error {
 				"Python module name as used in imports (e.g., 'json', 'os.path', 'collections.abc')",
 			),
 		),
-		mcp.WithNumber("offset",
+		mcp.WithNumber(
+			"offset",
 			mcp.DefaultNumber(0),
 			mcp.Description("Line number to start reading from (0-based)"),
 		),
@@ -666,7 +696,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Required(),
 			mcp.Description("Keyword to search for within the documentation"),
 		),
-		mcp.WithNumber("max_matches",
+		mcp.WithNumber(
+			"max_matches",
 			mcp.DefaultNumber(10),
 			mcp.Description("Maximum number of matches to return (default: 10)"),
 		),

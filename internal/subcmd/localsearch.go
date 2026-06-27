@@ -77,7 +77,8 @@ func (p *LocalSearchCmd) Execute(
 	}
 	for _, result := range results {
 		for _, match := range result.Matches {
-			fmt.Printf("Found file: %s\nMatch: %s (Line: %d)\n",
+			fmt.Printf(
+				"Found file: %s\nMatch: %s (Line: %d)\n",
 				result.Filename, match.Text, match.LineNo,
 			)
 		}

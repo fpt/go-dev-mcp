@@ -106,7 +106,7 @@ func readGolden(t *testing.T, path string) string {
 func writeGolden(t *testing.T, path, content string) {
 	t.Helper()
 
-	err := os.WriteFile(path, []byte(content), 0o644)
+	err := os.WriteFile(path, []byte(content), 0o600)
 	require.NoError(t, err, "failed to write golden file %s", path)
 
 	t.Logf("updated golden file: %s", path)

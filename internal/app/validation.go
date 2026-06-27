@@ -8,10 +8,25 @@ import (
 	"github.com/fpt/go-dev-mcp/internal/infra"
 )
 
+// Validation check names.
+const (
+	checkGoVet     = "go vet"
+	checkGoBuild   = "go build (dry-run)"
+	checkGoModTidy = "go mod tidy (check)"
+	checkGofmt     = "gofmt check"
+)
+
+// Validation result statuses.
+const (
+	statusPass  = "pass"
+	statusFail  = "fail"
+	statusError = "error"
+)
+
 // ValidationResult represents the result of a single validation check
 type ValidationResult struct {
 	Check   string `json:"check"`
-	Status  string `json:"status"` // "pass", "fail", "error"
+	Status  string `json:"status"` // pass, fail, or error
 	Output  string `json:"output,omitempty"`
 	Summary string `json:"summary"`
 }
@@ -38,25 +53,25 @@ func ValidateGoCode(ctx context.Context, directory string) (*ValidationReport, e
 		description string
 	}{
 		{
-			name:        "go vet",
+			name:        checkGoVet,
 			cmd:         "go",
 			args:        []string{"vet", "./..."},
 			description: "Static analysis to find suspicious constructs",
 		},
 		{
-			name:        "go build (dry-run)",
+			name:        checkGoBuild,
 			cmd:         "go",
 			args:        []string{"build", "-n", "./..."},
 			description: "Check if code compiles without building",
 		},
 		{
-			name:        "go mod tidy (check)",
+			name:        checkGoModTidy,
 			cmd:         "go",
 			args:        []string{"mod", "tidy", "-diff"},
 			description: "Check if go.mod is tidy",
 		},
 		{
-			name:        "gofmt check",
+			name:        checkGofmt,
 			cmd:         "gofmt",
 			args:        []string{"-l", "."},
 			description: "Check if code is properly formatted",
@@ -82,11 +97,11 @@ func ValidateGoCode(ctx context.Context, directory string) (*ValidationReport, e
 	errors := 0
 	for _, result := range report.Results {
 		switch result.Status {
-		case "pass":
+		case statusPass:
 			passed++
-		case "fail":
+		case statusFail:
 			failed++
-		case "error":
+		case statusError:
 			errors++
 		}
 	}
@@ -112,7 +127,7 @@ func ValidateGoCode(ctx context.Context, directory string) (*ValidationReport, e
 }
 
 func runValidationCheck(
-	ctx context.Context,
+	_ context.Context,
 	workDir, name, cmdName string,
 	args []string,
 	description string,
@@ -126,12 +141,12 @@ func runValidationCheck(
 
 	if err != nil {
 		// Command couldn't run at all
-		result.Status = "error"
+		result.Status = statusError
 		result.Output = err.Error()
 		result.Summary = fmt.Sprintf("Could not run %s: %v", name, err)
 	} else if exitCode != 0 {
 		// Command ran but returned non-zero exit code
-		result.Status = "fail"
+		result.Status = statusFail
 
 		// Use stderr for error information, stdout for normal output
 		if stderr != "" {
@@ -141,7 +156,7 @@ func runValidationCheck(
 		}
 
 		switch name {
-		case "gofmt check":
+		case checkGofmt:
 			if stdout != "" {
 				result.Summary = fmt.Sprintf(
 					"Files need formatting: %s",
@@ -150,9 +165,9 @@ func runValidationCheck(
 			} else {
 				result.Summary = "Files need formatting"
 			}
-		case "go mod tidy (check)":
+		case checkGoModTidy:
 			result.Summary = "go.mod needs tidying"
-		case "go vet":
+		case checkGoVet:
 			// go vet typically outputs to stderr
 			issues := stderr
 			if issues == "" {
@@ -164,20 +179,20 @@ func runValidationCheck(
 			} else {
 				result.Summary = "Vet found issues"
 			}
-		case "go build (dry-run)":
+		case checkGoBuild:
 			result.Summary = "Build would fail - compilation errors found"
 		default:
 			result.Summary = fmt.Sprintf("Check failed: %s", name)
 		}
 	} else {
 		// Command succeeded (exit code 0)
-		result.Status = "pass"
+		result.Status = statusPass
 
 		switch name {
-		case "gofmt check":
+		case checkGofmt:
 			// gofmt -l returns 0 even when files need formatting, but lists files to stdout
 			if stdout != "" {
-				result.Status = "fail"
+				result.Status = statusFail
 				result.Output = stdout
 				result.Summary = fmt.Sprintf(
 					"Files need formatting: %s",
@@ -186,12 +201,12 @@ func runValidationCheck(
 			} else {
 				result.Summary = "All files are properly formatted"
 			}
-		case "go vet":
+		case checkGoVet:
 			result.Summary = "No vet issues found"
-		case "go build (dry-run)":
+		case checkGoBuild:
 			// Don't include verbose build output when successful
 			result.Summary = "Code compiles successfully"
-		case "go mod tidy (check)":
+		case checkGoModTidy:
 			result.Summary = "go.mod is tidy"
 		default:
 			if stdout != "" {
