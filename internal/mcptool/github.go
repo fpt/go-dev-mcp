@@ -320,7 +320,8 @@ func getGitHubIssue(
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting issue: %v", err)), nil
 	}
 
-	comments, _, err := gh.Issues.ListComments(ctx, owner, repo, args.Number,
+	comments, _, err := gh.Issues.ListComments(
+		ctx, owner, repo, args.Number,
 		&github.IssueListCommentsOptions{ListOptions: github.ListOptions{PerPage: 100}},
 	)
 	if err != nil {
@@ -460,7 +461,8 @@ func getGitHubPull(
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting pull request: %v", err)), nil
 	}
 
-	files, _, err := gh.PullRequests.ListFiles(ctx, owner, repo, args.Number,
+	files, _, err := gh.PullRequests.ListFiles(
+		ctx, owner, repo, args.Number,
 		&github.ListOptions{PerPage: 100},
 	)
 	if err != nil {
@@ -623,7 +625,8 @@ func getGitHubWorkflowRun(
 		return mcp.NewToolResultError(fmt.Sprintf("Error getting workflow run: %v", err)), nil
 	}
 
-	jobs, _, err := gh.Actions.ListWorkflowJobs(ctx, owner, repo, args.RunID,
+	jobs, _, err := gh.Actions.ListWorkflowJobs(
+		ctx, owner, repo, args.RunID,
 		&github.ListWorkflowJobsOptions{
 			Filter:      "latest",
 			ListOptions: github.ListOptions{PerPage: 100},

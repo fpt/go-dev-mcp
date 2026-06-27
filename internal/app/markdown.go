@@ -181,7 +181,8 @@ func FormatMarkdownScanResult(files []MarkdownFile) string {
 
 		for _, heading := range file.Headings {
 			indent := strings.Repeat("  ", heading.Level-1)
-			result.WriteString(fmt.Sprintf("%s%s %s (line %d)\n",
+			result.WriteString(fmt.Sprintf(
+				"%s%s %s (line %d)\n",
 				indent,
 				strings.Repeat("#", heading.Level),
 				heading.Title,

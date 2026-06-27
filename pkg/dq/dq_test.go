@@ -314,7 +314,8 @@ func TestInnerTextWithFilter(t *testing.T) {
 
 	t.Run("InnerText uses default filter", func(t *testing.T) {
 		// InnerText and InnerTextWithFilter(DefaultNodeFilter) produce same result
-		assert.Equal(t,
+		assert.Equal(
+			t,
 			dq.InnerText(div, true),
 			dq.InnerTextWithFilter(div, true, dq.DefaultNodeFilter),
 		)
