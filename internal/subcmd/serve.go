@@ -55,7 +55,9 @@ func (p *ServeCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...any) subcomm
 		defer f.Close()
 		slog.SetDefault(slog.New(slog.NewTextHandler(f, nil)))
 	} else {
-		slog.SetDefault(slog.New(slog.NewTextHandler(os.Stdout, nil)))
+		// In stdio mode, stdout carries the MCP JSON-RPC stream, so logs must go
+		// to stderr to avoid corrupting the protocol.
+		slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, nil)))
 	}
 
 	if err := tool.Register(s, p.workdir); err != nil {
