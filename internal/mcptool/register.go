@@ -33,6 +33,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Maximum directory depth to traverse (default: 4 levels)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(false),
 		mcp.WithTitleAnnotation("Tree Directory"),
 	)
@@ -49,6 +51,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Search Go Documentation"),
 	)
@@ -81,6 +85,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Read Go Documentation"),
 	)
@@ -110,6 +116,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Maximum number of matches to return (default: 10)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Search Within Go Documentation"),
 	)
@@ -138,6 +146,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("GitHub repository in 'owner/repo' format to limit search scope"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Search GitHub Code"),
 	)
@@ -170,6 +180,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Number of lines to read (default: 100, 0 for all lines)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Get GitHub Content"),
 	)
@@ -197,6 +209,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Head ref (commit SHA, branch, or tag)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Get GitHub Diff"),
 	)
@@ -227,6 +241,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Maximum number of issues to return (default: 30, max: 100)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("List GitHub Issues"),
 	)
@@ -243,6 +259,8 @@ func Register(s *server.MCPServer, workdir string) error {
 		),
 		mcp.WithNumber("number", mcp.Required(), mcp.Description("Issue number")),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Get GitHub Issue"),
 	)
@@ -273,6 +291,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Maximum number of PRs to return (default: 30, max: 100)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("List GitHub Pull Requests"),
 	)
@@ -289,6 +309,8 @@ func Register(s *server.MCPServer, workdir string) error {
 		),
 		mcp.WithNumber("number", mcp.Required(), mcp.Description("Pull request number")),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Get GitHub Pull Request"),
 	)
@@ -315,6 +337,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Maximum number of runs to return (default: 20, max: 100)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("List GitHub Workflow Runs"),
 	)
@@ -333,6 +357,8 @@ func Register(s *server.MCPServer, workdir string) error {
 		),
 		mcp.WithNumber("run_id", mcp.Required(), mcp.Description("Workflow run ID")),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Get GitHub Workflow Run"),
 	)
@@ -369,6 +395,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Tree GitHub Repository"),
 	)
@@ -402,6 +430,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Maximum number of matches to show per file (default: 10)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(false),
 		mcp.WithTitleAnnotation("Search Local Files"),
 	)
@@ -433,6 +463,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Skip the call graph section (largest section)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(false),
 		mcp.WithTitleAnnotation("Outline Go Package"),
 	)
@@ -453,6 +485,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(false),
 		mcp.WithTitleAnnotation("Scan Markdown"),
 	)
@@ -471,6 +505,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Directory containing Go code to validate (absolute path)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(false),
 		mcp.WithTitleAnnotation("Validate Go Code"),
 	)
@@ -485,6 +521,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Search text for crate name or description"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Search Rust Documentation"),
 	)
@@ -517,6 +555,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Read Rust Documentation"),
 	)
@@ -546,6 +586,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Maximum number of matches to return (default: 10)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Search Within Rust Documentation"),
 	)
@@ -563,6 +605,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Search text to match against module names and descriptions"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Search Python Documentation"),
 	)
@@ -596,6 +640,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Read Python Documentation"),
 	)
@@ -625,6 +671,8 @@ func Register(s *server.MCPServer, workdir string) error {
 			mcp.Description("Maximum number of matches to return (default: 10)"),
 		),
 		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithTitleAnnotation("Search Within Python Documentation"),
 	)

@@ -33,5 +33,9 @@ vscext/out/
 vscext/server/
 *.vsix
 
+# MCPB bundle build artifacts
+mcpb/server/
+*.mcpb
+
 .DS_Store
 

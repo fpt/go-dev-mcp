@@ -44,6 +44,18 @@ vscode-package: vscode-build vscode-check ## Build and package VSCode extension
 vscode-publish: vscode-build vscode-check ## Build and publish VSCode extension
 	cd vscext && vsce publish
 
+mcpb-build: ## Cross-compile binaries for the MCPB bundle (macOS universal + Windows)
+	mkdir -p mcpb/server
+	CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -o mcpb/server/godevmcp-darwin-arm64 godevmcp/main.go
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o mcpb/server/godevmcp-darwin-amd64 godevmcp/main.go
+	lipo -create -output mcpb/server/godevmcp-darwin mcpb/server/godevmcp-darwin-arm64 mcpb/server/godevmcp-darwin-amd64
+	rm -f mcpb/server/godevmcp-darwin-arm64 mcpb/server/godevmcp-darwin-amd64
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o mcpb/server/godevmcp-win32.exe godevmcp/main.go
+
+mcpb-pack: mcpb-build ## Build binaries and pack the .mcpb bundle
+	mkdir -p output
+	npx -y @anthropic-ai/mcpb pack mcpb output/go-dev-mcp.mcpb
+
 help: ## Display this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "%-20s %s\n", $$1, $$2}'

@@ -3,6 +3,7 @@ package infra
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/fpt/go-dev-mcp/internal/repository"
@@ -17,25 +18,67 @@ type GitHubClient struct {
 }
 
 func NewGitHubClient() (*GitHubClient, error) {
-	stdout, _, exitCode, err := Run(".", "gh", "auth", "token")
+	token, err := resolveGitHubToken()
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to authenticate with GitHub")
-	}
-	if exitCode < 0 {
-		return nil, errors.New("failed to run gh command")
-	}
-	if exitCode != 0 {
-		return nil, errors.New("failed to authenticate with GitHub")
-	}
-
-	token := strings.TrimSpace(stdout)
-	if token == "" {
-		return nil, errors.New("no token found")
+		return nil, err
 	}
 
 	// Create a new GitHub client with the token
 	client := github.NewClient(nil).WithAuthToken(token)
 	return &GitHubClient{Client: client}, nil
+}
+
+// resolveGitHubToken finds a GitHub token, preferring explicit environment
+// variables (which work without any external dependency) and falling back to
+// the locally-installed `gh` CLI. The env-var path is what makes the packaged
+// MCPB usable on machines that don't have `gh` installed or on PATH.
+func resolveGitHubToken() (string, error) {
+	for _, key := range []string{"GITHUB_TOKEN", "GH_TOKEN"} {
+		token := strings.TrimSpace(os.Getenv(key))
+		// An optional, unset MCPB user_config value may arrive as an
+		// unexpanded "${...}" placeholder; treat that as absent so we still
+		// fall back to gh.
+		if token != "" && !strings.Contains(token, "${") {
+			return token, nil
+		}
+	}
+
+	// Run gh with GITHUB_TOKEN/GH_TOKEN stripped from its environment: gh
+	// honors those vars itself, so an inherited empty or placeholder value
+	// would shadow the user's real gh credentials. Stripping them forces gh
+	// to use its own stored authentication.
+	stdout, _, exitCode, err := RunEnv(".", ghEnv(), "gh", "auth", "token")
+	if err != nil {
+		return "", errors.Wrap(
+			err,
+			"no GITHUB_TOKEN/GH_TOKEN set and failed to run gh; install and authenticate the gh CLI or set a token",
+		)
+	}
+	if exitCode != 0 {
+		return "", errors.New(
+			"no GITHUB_TOKEN/GH_TOKEN set and gh is not authenticated; run `gh auth login` or set a token",
+		)
+	}
+
+	token := strings.TrimSpace(stdout)
+	if token == "" {
+		return "", errors.New("no token found")
+	}
+	return token, nil
+}
+
+// ghEnv returns the current environment with GITHUB_TOKEN and GH_TOKEN removed,
+// so a delegated gh invocation falls back to its own stored credentials.
+func ghEnv() []string {
+	env := os.Environ()
+	filtered := make([]string, 0, len(env))
+	for _, kv := range env {
+		if strings.HasPrefix(kv, "GITHUB_TOKEN=") || strings.HasPrefix(kv, "GH_TOKEN=") {
+			continue
+		}
+		filtered = append(filtered, kv)
+	}
+	return filtered
 }
 
 // SearchCode searches for code in a GitHub repository using the GitHub API.
