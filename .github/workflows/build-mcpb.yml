@@ -1,0 +1,53 @@
+name: Build and publish MCPB
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    # macOS runner is required: `make mcpb-build` uses `lipo` to fuse the
+    # macOS universal binary. Go still cross-compiles the Windows .exe here.
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: 'stable'
+
+      - name: Build binaries and pack MCPB
+        id: package
+        run: |
+          # Cross-compile the macOS universal binary + Windows .exe and pack the bundle
+          make mcpb-pack
+          MCPB_PATH=output/go-dev-mcp.mcpb
+          if [ ! -f "$MCPB_PATH" ]; then
+            echo "No .mcpb produced at $MCPB_PATH" >&2
+            exit 1
+          fi
+          echo "MCPB_PATH=$MCPB_PATH" >> $GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcpb
+          path: ${{ steps.package.outputs.MCPB_PATH }}
+
+      - name: Attach to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ steps.package.outputs.MCPB_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
