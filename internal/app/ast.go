@@ -13,6 +13,9 @@ import (
 	"github.com/fpt/go-dev-mcp/internal/repository"
 )
 
+// declTypeFunction is the Declaration.Type value for functions and methods.
+const declTypeFunction = "function"
+
 type Declaration struct {
 	Name string
 	Type string // "function", "type", "interface", "struct", "const", "var"
@@ -101,7 +104,7 @@ func ExtractFunctionNames(
 	for _, result := range results {
 		var functionDeclarations []Declaration
 		for _, decl := range result.Declarations {
-			if decl.Type == "function" {
+			if decl.Type == declTypeFunction {
 				functionDeclarations = append(functionDeclarations, decl)
 			}
 		}
@@ -178,11 +181,11 @@ func extractDeclarationsFromFile(filePath string) []Declaration {
 					name = receiverType + "." + d.Name.Name
 					info = "method on " + receiverType
 				} else {
-					info = "function"
+					info = declTypeFunction
 				}
 				decl := Declaration{
 					Name: name,
-					Type: "function",
+					Type: declTypeFunction,
 					Info: info,
 					Line: fset.Position(d.Pos()).Line,
 				}

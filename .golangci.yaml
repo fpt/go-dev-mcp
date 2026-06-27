@@ -24,6 +24,24 @@ linters:
       - common-false-positives
       - legacy
       - std-error-handling
+    rules:
+      # QF1012 (Fprintf over WriteString(Sprintf(...))) is an opinionated style
+      # quickfix; this codebase uses strings.Builder.WriteString consistently.
+      - linters:
+          - staticcheck
+        text: QF1012
+      # Test files routinely repeat small literals; constants add noise there.
+      - path: _test\.go
+        linters:
+          - goconst
+          - dupl
+      # The per-language doc integrations (godoc/rustdoc/pydoc) are
+      # intentionally parallel implementations of the same pattern, so the
+      # structural duplication and repeated command literals are by design.
+      - path: internal/(subcmd|mcptool|app)/(godoc|rustdoc|pydoc)\.go
+        linters:
+          - dupl
+          - goconst
     paths:
       - third_party$
       - builtin$

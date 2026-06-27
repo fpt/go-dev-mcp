@@ -168,7 +168,9 @@ func Register(s *server.MCPServer, workdir string) error {
 			"ref",
 			mcp.DefaultString(""),
 			mcp.Description(
-				"Git ref to fetch at: branch name, tag, or commit SHA (e.g., 'main', 'v1.2.0', 'abc1234'). Defaults to the repository's default branch.",
+				"Git ref to fetch at: branch name, tag, or commit SHA"+
+					" (e.g., 'main', 'v1.2.0', 'abc1234')."+
+					" Defaults to the repository's default branch.",
 			),
 		),
 		mcp.WithNumber("offset",
