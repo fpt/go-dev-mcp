@@ -103,7 +103,13 @@ func ReadGoDocPaged(
 
 		// If no documentation found, try to parse the README section
 		if !matched {
-			_, parsedDoc = parseReadme(doc)
+			matched, parsedDoc = parseReadme(doc)
+		}
+
+		// Nothing parsed: treat as not found instead of caching and returning
+		// an empty document, which would mask pkg.go.dev markup drift.
+		if !matched || strings.TrimSpace(parsedDoc) == "" {
+			return "", 0, false, ErrNotFound
 		}
 
 		document = parsedDoc
@@ -178,7 +184,13 @@ func SearchWithinGoDoc(
 
 		// If no documentation found, try to parse the README section
 		if !matched {
-			_, parsedDoc = parseReadme(doc)
+			matched, parsedDoc = parseReadme(doc)
+		}
+
+		// Nothing parsed: treat as not found instead of caching and returning
+		// an empty document, which would mask pkg.go.dev markup drift.
+		if !matched || strings.TrimSpace(parsedDoc) == "" {
+			return nil, ErrNotFound
 		}
 
 		document = parsedDoc

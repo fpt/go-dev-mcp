@@ -71,7 +71,13 @@ func ReadRustDocPaged(
 			return "", 0, false, errors.Wrap(err, "failed to parse HTML")
 		}
 
-		_, document = parseDocsRsDocument(doc)
+		matched, parsed := parseDocsRsDocument(doc)
+		// Nothing parsed: treat as not found instead of caching and returning
+		// an empty document, which would mask docs.rs markup drift.
+		if !matched || strings.TrimSpace(parsed) == "" {
+			return "", 0, false, ErrNotFound
+		}
+		document = parsed
 
 		docCache.Set(cacheKey, document, cache.DefaultExpiration)
 	}
@@ -129,7 +135,13 @@ func SearchWithinRustDoc(
 			return nil, errors.Wrap(err, "failed to parse HTML")
 		}
 
-		_, document = parseDocsRsDocument(doc)
+		matched, parsed := parseDocsRsDocument(doc)
+		// Nothing parsed: treat as not found instead of caching and returning
+		// an empty document, which would mask docs.rs markup drift.
+		if !matched || strings.TrimSpace(parsed) == "" {
+			return nil, ErrNotFound
+		}
+		document = parsed
 
 		docCache.Set(cacheKey, document, cache.DefaultExpiration)
 	}
