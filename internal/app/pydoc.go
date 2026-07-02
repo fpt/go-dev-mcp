@@ -103,7 +103,13 @@ func ReadPyDocPaged(
 			return "", 0, false, errors.Wrap(err, "failed to parse HTML")
 		}
 
-		_, document = parsePyDocPage(doc)
+		matched, parsed := parsePyDocPage(doc)
+		// Nothing parsed: treat as not found instead of caching and returning
+		// an empty document, which would mask docs.python.org markup drift.
+		if !matched || strings.TrimSpace(parsed) == "" {
+			return "", 0, false, ErrNotFound
+		}
+		document = parsed
 
 		docCache.Set(cacheKey, document, cache.DefaultExpiration)
 	}
@@ -161,7 +167,13 @@ func SearchWithinPyDoc(
 			return nil, errors.Wrap(err, "failed to parse HTML")
 		}
 
-		_, document = parsePyDocPage(doc)
+		matched, parsed := parsePyDocPage(doc)
+		// Nothing parsed: treat as not found instead of caching and returning
+		// an empty document, which would mask docs.python.org markup drift.
+		if !matched || strings.TrimSpace(parsed) == "" {
+			return nil, ErrNotFound
+		}
+		document = parsed
 
 		docCache.Set(cacheKey, document, cache.DefaultExpiration)
 	}
