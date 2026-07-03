@@ -51,6 +51,9 @@ mcpb-build: ## Cross-compile binaries for the MCPB bundle (macOS universal + Win
 	lipo -create -output mcpb/server/godevmcp-darwin mcpb/server/godevmcp-darwin-arm64 mcpb/server/godevmcp-darwin-amd64
 	rm -f mcpb/server/godevmcp-darwin-arm64 mcpb/server/godevmcp-darwin-amd64
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o mcpb/server/godevmcp-win32.exe godevmcp/main.go
+	# Ensure the executable bit is set so mcpb pack stores it in the archive;
+	# Claude Desktop requires the extracted macOS server binary to be executable.
+	chmod +x mcpb/server/godevmcp-darwin
 
 mcpb-pack: mcpb-build ## Build binaries and pack the .mcpb bundle
 	mkdir -p output
