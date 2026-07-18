@@ -24,6 +24,22 @@ func TestGolden_parseDocsRsDocument(t *testing.T) {
 		{"serde", "rustdoc_doc_serde.html", "rustdoc_doc_serde.golden"},
 		{"tokio", "rustdoc_doc_tokio.html", "rustdoc_doc_tokio.golden"},
 		{"regex", "rustdoc_doc_regex.html", "rustdoc_doc_regex.golden"},
+		{"serdejson_map", "rustdoc_doc_serdejson_map.html", "rustdoc_doc_serdejson_map.golden"},
+		{
+			"httparse_request",
+			"rustdoc_doc_httparse_request.html",
+			"rustdoc_doc_httparse_request.golden",
+		},
+		{
+			"serdejson_value",
+			"rustdoc_doc_serdejson_value.html",
+			"rustdoc_doc_serdejson_value.golden",
+		},
+		{
+			"serdejson_tostring",
+			"rustdoc_doc_serdejson_tostring.html",
+			"rustdoc_doc_serdejson_tostring.golden",
+		},
 	}
 
 	for _, tt := range tests {

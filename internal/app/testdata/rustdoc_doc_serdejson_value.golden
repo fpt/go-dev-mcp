@@ -1,0 +1,612 @@
+# Enum Value
+```rust
+pub enum Value {
+    Null,
+    Bool(bool),
+    Number(Number),
+    String(String),
+    Array(Vec<Value>),
+    Object(Map<String, Value>),
+}
+```
+Represents any valid JSON value.
+See the serde_json::value module documentation for usage examples.
+
+## Variants
+- `Null`
+  Represents a JSON null value.
+- `Bool(bool)`
+  Represents a JSON boolean.
+- `Number(Number)`
+  Represents a JSON number, whether integer or floating point.
+- `String(String)`
+  Represents a JSON string.
+- `Array(Vec<Value>)`
+  Represents a JSON array.
+- `Object(Map<String, Value>)`
+  Represents a JSON object.
+  By default the map is backed by a BTreeMap. Enable the preserve_order feature of serde_json to use IndexMap instead, which preserves
+entries in the order they are inserted into the map. In particular, this
+allows JSON data to be deserialized into a Value and serialized to a
+string while retaining the order of map keys in the input.
+
+## Implementations
+
+### impl Value
+- `pub fn get<I: Index>(&self, index: I) -> Option<&Value>`
+  Index into a JSON array or map. A string index can be used to access a
+value in a map, and a usize index can be used to access an element of an
+array.
+  Returns None if the type of self does not match the type of the
+index, for example if the index is a string and self is an array or a
+number. Also returns None if the given key does not exist in the map
+or the given index is not within the bounds of the array.
+  Square brackets can also be used to index into a value in a more concise
+way. This returns Value::Null in cases where get would have returned None .
+- `pub fn get_mut<I: Index>(&mut self, index: I) -> Option<&mut Value>`
+  Mutably index into a JSON array or map. A string index can be used to
+access a value in a map, and a usize index can be used to access an
+element of an array.
+  Returns None if the type of self does not match the type of the
+index, for example if the index is a string and self is an array or a
+number. Also returns None if the given key does not exist in the map
+or the given index is not within the bounds of the array.
+- `pub fn is_object(&self) -> bool`
+  Returns true if the Value is an Object. Returns false otherwise.
+  For any Value on which is_object returns true, as_object and as_object_mut are guaranteed to return the map representation of the
+object.
+- `pub fn as_object(&self) -> Option<&Map<String, Value>>`
+  If the Value is an Object, returns the associated Map. Returns None
+otherwise.
+- `pub fn as_object_mut(&mut self) -> Option<&mut Map<String, Value>>`
+  If the Value is an Object, returns the associated mutable Map.
+Returns None otherwise.
+- `pub fn is_array(&self) -> bool`
+  Returns true if the Value is an Array. Returns false otherwise.
+  For any Value on which is_array returns true, as_array and as_array_mut are guaranteed to return the vector representing the
+array.
+- `pub fn as_array(&self) -> Option<&Vec<Value>>`
+  If the Value is an Array, returns the associated vector. Returns None
+otherwise.
+- `pub fn as_array_mut(&mut self) -> Option<&mut Vec<Value>>`
+  If the Value is an Array, returns the associated mutable vector.
+Returns None otherwise.
+- `pub fn is_string(&self) -> bool`
+  Returns true if the Value is a String. Returns false otherwise.
+  For any Value on which is_string returns true, as_str is guaranteed
+to return the string slice.
+- `pub fn as_str(&self) -> Option<&str>`
+  If the Value is a String, returns the associated str. Returns None
+otherwise.
+- `pub fn is_number(&self) -> bool`
+  Returns true if the Value is a Number. Returns false otherwise.
+- `pub fn as_number(&self) -> Option<&Number>`
+  If the Value is a Number, returns the associated Number . Returns
+None otherwise.
+- `pub fn is_i64(&self) -> bool`
+  Returns true if the Value is an integer between i64::MIN and i64::MAX .
+  For any Value on which is_i64 returns true, as_i64 is guaranteed to
+return the integer value.
+- `pub fn is_u64(&self) -> bool`
+  Returns true if the Value is an integer between zero and u64::MAX .
+  For any Value on which is_u64 returns true, as_u64 is guaranteed to
+return the integer value.
+- `pub fn is_f64(&self) -> bool`
+  Returns true if the Value is a number that can be represented by f64.
+  For any Value on which is_f64 returns true, as_f64 is guaranteed to
+return the floating point value.
+  Currently this function returns true if and only if both is_i64 and is_u64 return false but this is not a guarantee in the future.
+- `pub fn as_i64(&self) -> Option<i64>`
+  If the Value is an integer, represent it as i64 if possible. Returns
+None otherwise.
+- `pub fn as_u64(&self) -> Option<u64>`
+  If the Value is an integer, represent it as u64 if possible. Returns
+None otherwise.
+- `pub fn as_f64(&self) -> Option<f64>`
+  If the Value is a number, represent it as f64 if possible. Returns
+None otherwise.
+- `pub fn is_boolean(&self) -> bool`
+  Returns true if the Value is a Boolean. Returns false otherwise.
+  For any Value on which is_boolean returns true, as_bool is
+guaranteed to return the boolean value.
+- `pub fn as_bool(&self) -> Option<bool>`
+  If the Value is a Boolean, returns the associated bool. Returns None
+otherwise.
+- `pub fn is_null(&self) -> bool`
+  Returns true if the Value is a Null. Returns false otherwise.
+  For any Value on which is_null returns true, as_null is guaranteed
+to return Some(()) .
+- `pub fn as_null(&self) -> Option<()>`
+  If the Value is a Null, returns (). Returns None otherwise.
+- `pub fn pointer(&self, pointer: &str) -> Option<&Value>`
+  Looks up a value by a JSON Pointer.
+  JSON Pointer defines a string syntax for identifying a specific value
+within a JavaScript Object Notation (JSON) document.
+  A Pointer is a Unicode string with the reference tokens separated by / .
+Inside tokens / is replaced by ~1 and ~ is replaced by ~0 . The
+addressed value is returned and if there is no such value None is
+returned.
+  For more information read RFC6901 .
+- `pub fn pointer_mut(&mut self, pointer: &str) -> Option<&mut Value>`
+  Looks up a value by a JSON Pointer and returns a mutable reference to
+that value.
+  JSON Pointer defines a string syntax for identifying a specific value
+within a JavaScript Object Notation (JSON) document.
+  A Pointer is a Unicode string with the reference tokens separated by / .
+Inside tokens / is replaced by ~1 and ~ is replaced by ~0 . The
+addressed value is returned and if there is no such value None is
+returned.
+  For more information read RFC6901 .
+- `pub fn take(&mut self) -> Value`
+  Takes the value out of the Value , leaving a Null in its place.
+- `pub fn sort_all_objects(&mut self)`
+  Reorders the entries of all Value::Object nested within this JSON
+value according to str ’s usual ordering.
+  If serde_json’s “preserve_order” feature is not enabled, this method
+does no work because all JSON maps are always kept in a sorted state.
+  If serde_json’s “preserve_order” feature is enabled, this method
+destroys the original source order or insertion order of the JSON
+objects in favor of an alphanumerical order that matches how a BTreeMap
+with the same contents would be ordered.
+
+## Trait Implementations
+
+### impl Clone for Value
+- `fn clone(&self) -> Value`
+- `fn clone_from(&mut self, source: &Self)`
+
+### impl Debug for Value
+- `fn fmt(&self, formatter: &mut Formatter<'_>) -> Result`
+
+### impl Default for &Value
+- `fn default() -> Self`
+
+### impl Default for Value
+  The default value is Value::Null .
+  This is useful for handling omitted Value fields when deserializing.
+- `fn default() -> Value`
+
+### impl<'de> Deserialize<'de> for Value
+- `fn deserialize<D>(deserializer: D) -> Result<Value, D::Error>where D: Deserializer<'de>,`
+
+### impl<'de> Deserializer<'de> for &'de Value
+- `type Error = Error`
+- `fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i8<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i16<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i128<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u8<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u16<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u128<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_f32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_f64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_option<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_enum<V>( self, name: &'static str, variants: &'static [&'static str], visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_newtype_struct<V>( self, name: &'static str, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_bool<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_char<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_str<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_string<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_bytes<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_byte_buf<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_unit<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_unit_struct<V>( self, _name: &'static str, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_seq<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple<V>( self, _len: usize, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple_struct<V>( self, _name: &'static str, _len: usize, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_map<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_struct<V>( self, _name: &'static str, _fields: &'static [&'static str], visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_identifier<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_ignored_any<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn is_human_readable(&self) -> bool`
+
+### impl<'de> Deserializer<'de> for Value
+- `type Error = Error`
+- `fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i8<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i16<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i128<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u8<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u16<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u128<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_f32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_f64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_option<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_enum<V>( self, name: &'static str, variants: &'static [&'static str], visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_newtype_struct<V>( self, name: &'static str, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_bool<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_char<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_str<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_string<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_bytes<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_byte_buf<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_unit<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_unit_struct<V>( self, _name: &'static str, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_seq<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple<V>( self, _len: usize, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple_struct<V>( self, _name: &'static str, _len: usize, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_map<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_struct<V>( self, _name: &'static str, _fields: &'static [&'static str], visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_identifier<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_ignored_any<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn is_human_readable(&self) -> bool`
+
+### impl Display for Value
+- `fn fmt(&self, f: &mut Formatter<'_>) -> Result`
+  Display a JSON value as a string.
+
+### impl<T: Clone + Into<Value>> From<&[T]> for Value
+- `fn from(f: &[T]) -> Self`
+  Convert a slice to Value::Array .
+
+### impl From<&str> for Value
+- `fn from(f: &str) -> Self`
+  Convert string slice to Value::String .
+
+### impl<T: Into<Value>, const N: usize> From<[T; N]> for Value
+- `fn from(array: [T; N]) -> Self`
+
+### impl From<()> for Value
+- `fn from((): ()) -> Self`
+  Convert () to Value::Null .
+
+### impl<'a> From<Cow<'a, str>> for Value
+- `fn from(f: Cow<'a, str>) -> Self`
+  Convert copy-on-write string to Value::String .
+
+### impl From<Map<String, Value>> for Value
+- `fn from(f: Map<String, Value>) -> Self`
+  Convert map (with string keys) to Value::Object .
+
+### impl From<Number> for Value
+- `fn from(f: Number) -> Self`
+  Convert Number to Value::Number .
+
+### impl<T> From<Option<T>> for Valuewhere T: Into<Value>,
+- `fn from(opt: Option<T>) -> Self`
+
+### impl From<String> for Value
+- `fn from(f: String) -> Self`
+  Convert String to Value::String .
+
+### impl<T: Into<Value>> From<Vec<T>> for Value
+- `fn from(f: Vec<T>) -> Self`
+  Convert a Vec to Value::Array .
+
+### impl From<bool> for Value
+- `fn from(f: bool) -> Self`
+  Convert boolean to Value::Bool .
+
+### impl From<f32> for Value
+- `fn from(f: f32) -> Self`
+  Convert 32-bit floating point number to Value::Number , or Value::Null if infinite or NaN.
+
+### impl From<f64> for Value
+- `fn from(f: f64) -> Self`
+  Convert 64-bit floating point number to Value::Number , or Value::Null if infinite or NaN.
+
+### impl From<i16> for Value
+- `fn from(n: i16) -> Self`
+
+### impl From<i32> for Value
+- `fn from(n: i32) -> Self`
+
+### impl From<i64> for Value
+- `fn from(n: i64) -> Self`
+
+### impl From<i8> for Value
+- `fn from(n: i8) -> Self`
+
+### impl From<isize> for Value
+- `fn from(n: isize) -> Self`
+
+### impl From<u16> for Value
+- `fn from(n: u16) -> Self`
+
+### impl From<u32> for Value
+- `fn from(n: u32) -> Self`
+
+### impl From<u64> for Value
+- `fn from(n: u64) -> Self`
+
+### impl From<u8> for Value
+- `fn from(n: u8) -> Self`
+
+### impl From<usize> for Value
+- `fn from(n: usize) -> Self`
+
+### impl<K: Into<String>, V: Into<Value>> FromIterator<(K, V)> for Value
+- `fn from_iter<I: IntoIterator<Item = (K, V)>>(iter: I) -> Self`
+  Create a Value::Object by collecting an iterator of key-value pairs.
+
+### impl<T: Into<Value>> FromIterator<T> for Value
+- `fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self`
+  Create a Value::Array by collecting an iterator of array elements.
+
+### impl FromStr for Value
+- `type Err = Error`
+- `fn from_str(s: &str) -> Result<Value, Error>`
+
+### impl Hash for Value
+- `fn hash<__H: Hasher>(&self, state: &mut __H)`
+- `fn hash_slice<H>(data: &[Self], state: &mut H)where H: Hasher, Self: Sized,`
+
+### impl<I> Index<I> for Valuewhere I: Index,
+- `fn index(&self, index: I) -> &Value`
+  Index into a serde_json::Value using the syntax value[0] or value["k"] .
+  Returns Value::Null if the type of self does not match the type of
+the index, for example if the index is a string and self is an array
+or a number. Also returns Value::Null if the given key does not exist
+in the map or the given index is not within the bounds of the array.
+  For retrieving deeply nested values, you should have a look at the Value::pointer method.
+- `type Output = Value`
+
+### impl<I> IndexMut<I> for Valuewhere I: Index,
+- `fn index_mut(&mut self, index: I) -> &mut Value`
+  Write into a serde_json::Value using the syntax value[0] = ... or value["k"] = ... .
+  If the index is a number, the value must be an array of length bigger
+than the index. Indexing into a value that is not an array or an array
+that is too small will panic.
+  If the index is a string, the value must be an object or null which is
+treated like an empty object. If the key is not already present in the
+object, it will be inserted with a value of null. Indexing into a value
+that is neither an object nor null will panic.
+
+### impl<'de> IntoDeserializer<'de, Error> for &'de Value
+- `type Deserializer = &'de Value`
+- `fn into_deserializer(self) -> Self::Deserializer`
+
+### impl<'de> IntoDeserializer<'de, Error> for Value
+- `type Deserializer = Value`
+- `fn into_deserializer(self) -> Self::Deserializer`
+
+### impl PartialEq<&str> for Value
+- `fn eq(&self, other: &&str) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<String> for Value
+- `fn eq(&self, other: &String) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for &str
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for String
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for bool
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for f32
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for f64
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for i16
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for i32
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for i64
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for i8
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for isize
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for str
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for u16
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for u32
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for u64
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for u8
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for usize
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<bool> for &'a Value
+- `fn eq(&self, other: &bool) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<bool> for &'a mut Value
+- `fn eq(&self, other: &bool) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<bool> for Value
+- `fn eq(&self, other: &bool) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<f32> for &'a Value
+- `fn eq(&self, other: &f32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<f32> for &'a mut Value
+- `fn eq(&self, other: &f32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<f32> for Value
+- `fn eq(&self, other: &f32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<f64> for &'a Value
+- `fn eq(&self, other: &f64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<f64> for &'a mut Value
+- `fn eq(&self, other: &f64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<f64> for Value
+- `fn eq(&self, other: &f64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i16> for &'a Value
+- `fn eq(&self, other: &i16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i16> for &'a mut Value
+- `fn eq(&self, other: &i16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<i16> for Value
+- `fn eq(&self, other: &i16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i32> for &'a Value
+- `fn eq(&self, other: &i32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i32> for &'a mut Value
+- `fn eq(&self, other: &i32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<i32> for Value
+- `fn eq(&self, other: &i32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i64> for &'a Value
+- `fn eq(&self, other: &i64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i64> for &'a mut Value
+- `fn eq(&self, other: &i64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<i64> for Value
+- `fn eq(&self, other: &i64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i8> for &'a Value
+- `fn eq(&self, other: &i8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i8> for &'a mut Value
+- `fn eq(&self, other: &i8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<i8> for Value
+- `fn eq(&self, other: &i8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<isize> for &'a Value
+- `fn eq(&self, other: &isize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<isize> for &'a mut Value
+- `fn eq(&self, other: &isize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<isize> for Value
+- `fn eq(&self, other: &isize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<str> for Value
+- `fn eq(&self, other: &str) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u16> for &'a Value
+- `fn eq(&self, other: &u16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u16> for &'a mut Value
+- `fn eq(&self, other: &u16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<u16> for Value
+- `fn eq(&self, other: &u16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u32> for &'a Value
+- `fn eq(&self, other: &u32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u32> for &'a mut Value
+- `fn eq(&self, other: &u32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<u32> for Value
+- `fn eq(&self, other: &u32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u64> for &'a Value
+- `fn eq(&self, other: &u64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u64> for &'a mut Value
+- `fn eq(&self, other: &u64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<u64> for Value
+- `fn eq(&self, other: &u64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u8> for &'a Value
+- `fn eq(&self, other: &u8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u8> for &'a mut Value
+- `fn eq(&self, other: &u8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<u8> for Value
+- `fn eq(&self, other: &u8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<usize> for &'a Value
+- `fn eq(&self, other: &usize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<usize> for &'a mut Value
+- `fn eq(&self, other: &usize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<usize> for Value
+- `fn eq(&self, other: &usize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq for Value
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl Serialize for Value
+- `fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>where S: Serializer,`
+
+### impl Eq for Value
+
+### impl StructuralPartialEq for Value

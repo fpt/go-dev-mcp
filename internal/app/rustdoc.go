@@ -193,6 +193,20 @@ func cleanRustDocHeading(text string) string {
 	return strings.TrimSpace(text)
 }
 
+// cleanRustDocSignature normalizes an impl/method signature extracted from a
+// docs.rs code-header via RawInnerText. It drops the "ⓘ" notable-trait marker
+// and flattens the internal newlines/tabs (e.g. from a where clause) into a
+// single spaced line so the signature fits in an inline code span.
+func cleanRustDocSignature(text string) string {
+	text = strings.ReplaceAll(text, "ⓘ", "")
+	text = strings.ReplaceAll(text, "\n", " ")
+	text = strings.ReplaceAll(text, "\t", " ")
+	for strings.Contains(text, "  ") {
+		text = strings.ReplaceAll(text, "  ", " ")
+	}
+	return strings.TrimSpace(text)
+}
+
 func parseDocsRsSearchResult(doc *html.Node) (bool, string) {
 	builder := strings.Builder{}
 
@@ -259,6 +273,15 @@ func parseDocsRsSearchResult(doc *html.Node) (bool, string) {
 func parseDocsRsDocument(doc *html.Node) (bool, string) {
 	builder := strings.Builder{}
 
+	// Struct fields (span.structfield) and their docs (a following div.docblock)
+	// are direct children of section#main-content with no wrapping container,
+	// unlike the overview docblock (nested in details.top-doc) and method
+	// docblocks (nested in the impl lists). inFields, toggled by the section
+	// headers, scopes the top-level div.docblock matcher to the Fields section so
+	// it doesn't double-emit those other docblocks. fieldOpen pairs each field
+	// signature with its optional following docblock.
+	var inFields, fieldOpen bool
+
 	// Title from div.main-heading > h1
 	titleMatcher := dq.NewNodeMatcher(
 		dq.NewMatchFunc("div.main-heading"),
@@ -270,6 +293,19 @@ func parseDocsRsDocument(doc *html.Node) (bool, string) {
 				builder.WriteString(fmt.Sprintf("# %s\n", text))
 			},
 		),
+	)
+
+	// Declaration block: pre.item-decl holds the canonical signature/declaration
+	// on item pages (struct, enum, fn, trait, type alias). Present on every item
+	// page and absent on module index pages, so this is a no-op for the latter.
+	itemDeclMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("pre.item-decl"),
+		func(n *html.Node) {
+			decl := strings.TrimSpace(dq.RawInnerText(n, true))
+			if decl != "" {
+				builder.WriteString(fmt.Sprintf("```rust\n%s\n```\n", decl))
+			}
+		},
 	)
 
 	// Matchers for content inside div.docblock
@@ -332,6 +368,17 @@ func parseDocsRsDocument(doc *html.Node) (bool, string) {
 		dq.NewMatchFunc("h2.section-header"),
 		func(n *html.Node) {
 			text := cleanRustDocHeading(dq.InnerText(n, true))
+			// Track whether we're inside the Fields section so the top-level
+			// div.docblock matcher only fires for field docs. Non-exhaustive
+			// structs render the header as "Fields (Non-exhaustive)", so match on
+			// the prefix rather than the exact string.
+			inFields = strings.HasPrefix(text, "Fields")
+			// Skip headers whose item lists we deliberately don't expand, so item
+			// pages don't end with dangling empty sections.
+			switch text {
+			case "Auto Trait Implementations", "Blanket Implementations":
+				return
+			}
 			builder.WriteString(fmt.Sprintf("\n## %s\n", text))
 		},
 	)
@@ -361,6 +408,105 @@ func parseDocsRsDocument(doc *html.Node) (bool, string) {
 		ddMatcher,
 	)
 
+	// Impl blocks on item pages: each impl carries an h3.code-header ("impl Foo")
+	// and its methods live in section.method > h4.code-header, each followed by a
+	// div.docblock. Scope to the inherent-impl and trait-impl lists; the auto-trait
+	// and blanket-impl lists are high-volume noise (Send/Sync/From<T>/…) and are
+	// intentionally skipped.
+	implHeaderMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("h3.code-header"),
+		func(n *html.Node) {
+			sig := cleanRustDocSignature(dq.RawInnerText(n, true))
+			if sig != "" {
+				builder.WriteString(fmt.Sprintf("\n### %s\n", sig))
+			}
+		},
+	)
+	methodSigMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("h4.code-header"),
+		func(n *html.Node) {
+			sig := cleanRustDocSignature(dq.RawInnerText(n, true))
+			if sig != "" {
+				builder.WriteString(fmt.Sprintf("- `%s`\n", sig))
+			}
+		},
+	)
+	methodDocMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("div.docblock"),
+		nil,
+		dq.NewNodeMatcher(
+			dq.NewMatchFunc("p"),
+			func(n *html.Node) {
+				text := strings.TrimSpace(dq.InnerText(n, true))
+				if text != "" {
+					builder.WriteString(fmt.Sprintf("  %s\n", text))
+				}
+			},
+		),
+	)
+	implsMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("div#implementations-list,div#trait-implementations-list"),
+		nil,
+		implHeaderMatcher,
+		methodSigMatcher,
+		methodDocMatcher,
+	)
+
+	// Enum variants: div.variants holds section.variant > h3.code-header (the
+	// variant signature, e.g. "Number(Number)") each followed by a sibling
+	// div.docblock. The "## Variants" header itself is already emitted by
+	// sectionHeaderMatcher. Reuse methodDocMatcher for the variant docs since the
+	// div.docblock > p shape is identical and the subtrees are disjoint.
+	variantSigMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("h3.code-header"),
+		func(n *html.Node) {
+			sig := cleanRustDocSignature(dq.RawInnerText(n, true))
+			if sig != "" {
+				builder.WriteString(fmt.Sprintf("- `%s`\n", sig))
+			}
+		},
+	)
+	variantsMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("div.variants"),
+		nil,
+		variantSigMatcher,
+		methodDocMatcher,
+	)
+
+	// Struct fields: span.structfield > code holds "name: Type"; a documented
+	// field is followed by a sibling div.docblock. Both are direct children of
+	// section#main-content, so fieldDocMatcher is gated on inFields (set by the
+	// Fields section header) to avoid double-emitting the overview/method docblocks.
+	structFieldMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("span.structfield"),
+		func(n *html.Node) {
+			code := dq.FindOne(n, "code")
+			if code == nil {
+				return
+			}
+			sig := cleanRustDocSignature(dq.RawInnerText(code, true))
+			if sig != "" {
+				builder.WriteString(fmt.Sprintf("- `%s`\n", sig))
+				fieldOpen = true
+			}
+		},
+	)
+	fieldDocMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("div.docblock"),
+		func(n *html.Node) {
+			if !inFields || !fieldOpen {
+				return
+			}
+			fieldOpen = false
+			for _, p := range dq.FindAll(n, "p") {
+				text := strings.TrimSpace(dq.InnerText(p, true))
+				if text != "" {
+					builder.WriteString(fmt.Sprintf("  %s\n", text))
+				}
+			}
+		},
+	)
+
 	// Root: section#main-content
 	var matched bool
 	rootMatcher := dq.NewNodeMatcher(
@@ -369,9 +515,14 @@ func parseDocsRsDocument(doc *html.Node) (bool, string) {
 			matched = true
 		},
 		titleMatcher,
+		itemDeclMatcher,
 		overviewMatcher,
 		sectionHeaderMatcher,
 		itemTableMatcher,
+		structFieldMatcher,
+		fieldDocMatcher,
+		variantsMatcher,
+		implsMatcher,
 	)
 
 	dq.Traverse(doc, []dq.Matcher{rootMatcher})

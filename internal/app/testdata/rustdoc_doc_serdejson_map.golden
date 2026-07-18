@@ -1,0 +1,262 @@
+# Struct Map
+```rust
+pub struct Map<K, V> { /* private fields */ }
+```
+Represents a JSON key/value type.
+
+## Implementations
+
+### impl Map<String, Value>
+- `pub fn new() -> Self`
+  Makes a new empty Map.
+- `pub fn with_capacity(capacity: usize) -> Self`
+  Makes a new empty Map with the given initial capacity.
+- `pub fn clear(&mut self)`
+  Clears the map, removing all values.
+- `pub fn get<Q>(&self, key: &Q) -> Option<&Value>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Returns a reference to the value corresponding to the key.
+  The key may be any borrowed form of the map’s key type, but the ordering
+on the borrowed form must match the ordering on the key type.
+- `pub fn contains_key<Q>(&self, key: &Q) -> boolwhere String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Returns true if the map contains a value for the specified key.
+  The key may be any borrowed form of the map’s key type, but the ordering
+on the borrowed form must match the ordering on the key type.
+- `pub fn get_mut<Q>(&mut self, key: &Q) -> Option<&mut Value>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Returns a mutable reference to the value corresponding to the key.
+  The key may be any borrowed form of the map’s key type, but the ordering
+on the borrowed form must match the ordering on the key type.
+- `pub fn get_key_value<Q>(&self, key: &Q) -> Option<(&String, &Value)>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Returns the key-value pair matching the given key.
+  The key may be any borrowed form of the map’s key type, but the ordering
+on the borrowed form must match the ordering on the key type.
+- `pub fn insert(&mut self, k: String, v: Value) -> Option<Value>`
+  Inserts a key-value pair into the map.
+  If the map did not have this key present, None is returned.
+  If the map did have this key present, the value is updated, and the old
+value is returned.
+- `pub fn shift_insert( &mut self, index: usize, k: String, v: Value, ) -> Option<Value>`
+  Insert a key-value pair in the map at the given index.
+  If the map did not have this key present, None is returned.
+  If the map did have this key present, the key is moved to the new
+position, the value is updated, and the old value is returned.
+- `pub fn remove<Q>(&mut self, key: &Q) -> Option<Value>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Removes a key from the map, returning the value at the key if the key
+was previously in the map.
+  The key may be any borrowed form of the map’s key type, but the ordering
+on the borrowed form must match the ordering on the key type.
+  If serde_json’s “preserve_order” is enabled, .remove(key) is
+equivalent to .swap_remove(key) , replacing this
+entry’s position with the last element. If you need to preserve the
+relative order of the keys in the map, use .shift_remove(key) instead.
+- `pub fn remove_entry<Q>(&mut self, key: &Q) -> Option<(String, Value)>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Removes a key from the map, returning the stored key and value if the
+key was previously in the map.
+  The key may be any borrowed form of the map’s key type, but the ordering
+on the borrowed form must match the ordering on the key type.
+  If serde_json’s “preserve_order” is enabled, .remove_entry(key) is
+equivalent to .swap_remove_entry(key) ,
+replacing this entry’s position with the last element. If you need to
+preserve the relative order of the keys in the map, use .shift_remove_entry(key) instead.
+- `pub fn swap_remove<Q>(&mut self, key: &Q) -> Option<Value>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Removes and returns the value corresponding to the key from the map.
+  Like Vec::swap_remove , the entry is removed by swapping it with the
+last element of the map and popping it off. This perturbs the position
+of what used to be the last element!
+- `pub fn swap_remove_entry<Q>(&mut self, key: &Q) -> Option<(String, Value)>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Remove and return the key-value pair.
+  Like Vec::swap_remove , the entry is removed by swapping it with the
+last element of the map and popping it off. This perturbs the position
+of what used to be the last element!
+- `pub fn shift_remove<Q>(&mut self, key: &Q) -> Option<Value>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Removes and returns the value corresponding to the key from the map.
+  Like Vec::remove , the entry is removed by shifting all of the
+elements that follow it, preserving their relative order. This perturbs
+the index of all of those elements!
+- `pub fn shift_remove_entry<Q>(&mut self, key: &Q) -> Option<(String, Value)>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,`
+  Remove and return the key-value pair.
+  Like Vec::remove , the entry is removed by shifting all of the
+elements that follow it, preserving their relative order. This perturbs
+the index of all of those elements!
+- `pub fn append(&mut self, other: &mut Self)`
+  Moves all elements from other into self, leaving other empty.
+- `pub fn entry<S>(&mut self, key: S) -> Entry<'_>where S: Into<String>,`
+  Gets the given key’s corresponding entry in the map for in-place
+manipulation.
+- `pub fn len(&self) -> usize`
+  Returns the number of elements in the map.
+- `pub fn is_empty(&self) -> bool`
+  Returns true if the map contains no elements.
+- `pub fn iter(&self) -> Iter<'_>`
+  Gets an iterator over the entries of the map.
+- `pub fn iter_mut(&mut self) -> IterMut<'_>`
+  Gets a mutable iterator over the entries of the map.
+- `pub fn keys(&self) -> Keys<'_>`
+  Gets an iterator over the keys of the map.
+- `pub fn values(&self) -> Values<'_>`
+  Gets an iterator over the values of the map.
+- `pub fn values_mut(&mut self) -> ValuesMut<'_>`
+  Gets an iterator over mutable values of the map.
+- `pub fn into_values(self) -> IntoValues`
+  Gets an iterator over the values of the map.
+- `pub fn retain<F>(&mut self, f: F)where F: FnMut(&String, &mut Value) -> bool,`
+  Retains only the elements specified by the predicate.
+  In other words, remove all pairs (k, v) such that f(&k, &mut v) returns false .
+- `pub fn sort_keys(&mut self)`
+  Sorts this map’s entries in-place using str ’s usual ordering.
+  If serde_json’s “preserve_order” feature is not enabled, this method
+does no work because all JSON maps are always kept in a sorted state.
+  If serde_json’s “preserve_order” feature is enabled, this method
+destroys the original source order or insertion order of this map in
+favor of an alphanumerical order that matches how a BTreeMap with the
+same contents would be ordered. This takes O(n log n + c) time where n is the length of the map and c is the capacity.
+  Other maps nested within the values of this map are not sorted. If you
+need the entire data structure to be sorted at all levels, you must also
+call map. values_mut ().for_each( Value::sort_all_objects ) .
+
+## Trait Implementations
+
+### impl Clone for Map<String, Value>
+- `fn clone(&self) -> Self`
+- `fn clone_from(&mut self, source: &Self)`
+
+### impl Debug for Map<String, Value>
+- `fn fmt(&self, formatter: &mut Formatter<'_>) -> Result<(), Error>`
+
+### impl Default for Map<String, Value>
+- `fn default() -> Self`
+
+### impl<'de> Deserialize<'de> for Map<String, Value>
+- `fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>where D: Deserializer<'de>,`
+
+### impl<'de> Deserializer<'de> for &'de Map<String, Value>
+- `type Error = Error`
+- `fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>where V: Visitor<'de>,`
+- `fn deserialize_enum<V>( self, _name: &'static str, _variants: &'static [&'static str], visitor: V, ) -> Result<V::Value, Self::Error>where V: Visitor<'de>,`
+- `fn deserialize_ignored_any<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_bool<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i8<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i16<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i32<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i64<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i128<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u8<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u16<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u32<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u64<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u128<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_f32<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_f64<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_char<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_str<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_string<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_bytes<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_byte_buf<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_option<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_unit<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_unit_struct<V>( self, name: &'static str, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_newtype_struct<V>( self, name: &'static str, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_seq<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple<V>( self, len: usize, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple_struct<V>( self, name: &'static str, len: usize, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_map<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_struct<V>( self, name: &'static str, fields: &'static [&'static str], visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_identifier<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn is_human_readable(&self) -> bool`
+
+### impl<'de> Deserializer<'de> for Map<String, Value>
+- `type Error = Error`
+- `fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>where V: Visitor<'de>,`
+- `fn deserialize_enum<V>( self, _name: &'static str, _variants: &'static [&'static str], visitor: V, ) -> Result<V::Value, Self::Error>where V: Visitor<'de>,`
+- `fn deserialize_ignored_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>where V: Visitor<'de>,`
+- `fn deserialize_bool<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i8<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i16<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i32<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i64<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_i128<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u8<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u16<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u32<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u64<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_u128<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_f32<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_f64<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_char<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_str<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_string<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_bytes<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_byte_buf<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_option<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_unit<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_unit_struct<V>( self, name: &'static str, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_newtype_struct<V>( self, name: &'static str, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_seq<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple<V>( self, len: usize, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple_struct<V>( self, name: &'static str, len: usize, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_map<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_struct<V>( self, name: &'static str, fields: &'static [&'static str], visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn deserialize_identifier<V>( self, visitor: V, ) -> Result<V::Value, <Self as Deserializer<'de>>::Error>where V: Visitor<'de>,`
+- `fn is_human_readable(&self) -> bool`
+
+### impl Extend<(String, Value)> for Map<String, Value>
+- `fn extend<T>(&mut self, iter: T)where T: IntoIterator<Item = (String, Value)>,`
+- `fn extend_one(&mut self, item: A)`
+- `fn extend_reserve(&mut self, additional: usize)`
+
+### impl From<Map<String, Value>> for Value
+- `fn from(f: Map<String, Value>) -> Self`
+  Convert map (with string keys) to Value::Object .
+
+### impl FromIterator<(String, Value)> for Map<String, Value>
+- `fn from_iter<T>(iter: T) -> Selfwhere T: IntoIterator<Item = (String, Value)>,`
+
+### impl FromStr for Map<String, Value>
+- `type Err = Error`
+- `fn from_str(s: &str) -> Result<Self, Error>`
+
+### impl Hash for Map<String, Value>
+- `fn hash<H: Hasher>(&self, state: &mut H)`
+- `fn hash_slice<H>(data: &[Self], state: &mut H)where H: Hasher, Self: Sized,`
+
+### impl<Q> Index<&Q> for Map<String, Value>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,
+  Access an element of this map. Panics if the given key is not present in the
+map.
+- `type Output = Value`
+- `fn index(&self, index: &Q) -> &Value`
+
+### impl<Q> IndexMut<&Q> for Map<String, Value>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,
+  Mutably access an element of this map. Panics if the given key is not
+present in the map.
+- `fn index_mut(&mut self, index: &Q) -> &mut Value`
+
+### impl<'de> IntoDeserializer<'de, Error> for &'de Map<String, Value>
+- `type Deserializer = &'de Map<String, Value>`
+- `fn into_deserializer(self) -> Self::Deserializer`
+
+### impl<'de> IntoDeserializer<'de, Error> for Map<String, Value>
+- `type Deserializer = Map<String, Value>`
+- `fn into_deserializer(self) -> Self::Deserializer`
+
+### impl<'a> IntoIterator for &'a Map<String, Value>
+- `type Item = (&'a String, &'a Value)`
+- `type IntoIter = Iter<'a>`
+- `fn into_iter(self) -> Self::IntoIter`
+
+### impl<'a> IntoIterator for &'a mut Map<String, Value>
+- `type Item = (&'a String, &'a mut Value)`
+- `type IntoIter = IterMut<'a>`
+- `fn into_iter(self) -> Self::IntoIter`
+
+### impl IntoIterator for Map<String, Value>
+- `type Item = (String, Value)`
+- `type IntoIter = IntoIter`
+- `fn into_iter(self) -> Self::IntoIter`
+
+### impl PartialEq for Map<String, Value>
+- `fn eq(&self, other: &Self) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl Serialize for Map<String, Value>
+- `fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>where S: Serializer,`
+
+### impl Eq for Map<String, Value>
