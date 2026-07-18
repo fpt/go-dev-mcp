@@ -1,0 +1,1054 @@
+# Enum Value
+```rust
+pub enum Value {
+    Null,
+    Bool(bool),
+    Number(Number),
+    String(String),
+    Array(Vec<Value>),
+    Object(Map<String, Value>),
+}
+```
+Represents any valid JSON value.
+See the serde_json::value module documentation for usage examples.
+
+## Variants
+- `Null`
+  Represents a JSON null value.
+  ```
+  let v = json!(null);
+  ```
+- `Bool(bool)`
+  Represents a JSON boolean.
+  ```
+  let v = json!(true);
+  ```
+- `Number(Number)`
+  Represents a JSON number, whether integer or floating point.
+  ```
+  let v = json!(12.5);
+  ```
+- `String(String)`
+  Represents a JSON string.
+  ```
+  let v = json!("a string");
+  ```
+- `Array(Vec<Value>)`
+  Represents a JSON array.
+  ```
+  let v = json!(["an", "array"]);
+  ```
+- `Object(Map<String, Value>)`
+  Represents a JSON object.
+  By default the map is backed by a BTreeMap. Enable the preserve_order feature of serde_json to use IndexMap instead, which preserves
+entries in the order they are inserted into the map. In particular, this
+allows JSON data to be deserialized into a Value and serialized to a
+string while retaining the order of map keys in the input.
+  ```
+  let v = json!({ "an": "object" });
+  ```
+
+## Implementations
+
+### impl Value
+- `pub fn get<I: Index>(&self, index: I) -> Option<&Value>`
+  Index into a JSON array or map. A string index can be used to access a
+value in a map, and a usize index can be used to access an element of an
+array.
+  Returns None if the type of self does not match the type of the
+index, for example if the index is a string and self is an array or a
+number. Also returns None if the given key does not exist in the map
+or the given index is not within the bounds of the array.
+  ```
+  let object = json!({ "A": 65, "B": 66, "C": 67 });
+  assert_eq!(*object.get("A").unwrap(), json!(65));
+  
+  let array = json!([ "A", "B", "C" ]);
+  assert_eq!(*array.get(2).unwrap(), json!("C"));
+  
+  assert_eq!(array.get("A"), None);
+  ```
+  Square brackets can also be used to index into a value in a more concise
+way. This returns Value::Null in cases where get would have returned None .
+  ```
+  let object = json!({
+      "A": ["a", "á", "à"],
+      "B": ["b", "b́"],
+      "C": ["c", "ć", "ć̣", "ḉ"],
+  });
+  assert_eq!(object["B"][0], json!("b"));
+  
+  assert_eq!(object["D"], json!(null));
+  assert_eq!(object[0]["x"]["y"]["z"], json!(null));
+  ```
+- `pub fn get_mut<I: Index>(&mut self, index: I) -> Option<&mut Value>`
+  Mutably index into a JSON array or map. A string index can be used to
+access a value in a map, and a usize index can be used to access an
+element of an array.
+  Returns None if the type of self does not match the type of the
+index, for example if the index is a string and self is an array or a
+number. Also returns None if the given key does not exist in the map
+or the given index is not within the bounds of the array.
+  ```
+  let mut object = json!({ "A": 65, "B": 66, "C": 67 });
+  *object.get_mut("A").unwrap() = json!(69);
+  
+  let mut array = json!([ "A", "B", "C" ]);
+  *array.get_mut(2).unwrap() = json!("D");
+  ```
+- `pub fn is_object(&self) -> bool`
+  Returns true if the Value is an Object. Returns false otherwise.
+  For any Value on which is_object returns true, as_object and as_object_mut are guaranteed to return the map representation of the
+object.
+  ```
+  let obj = json!({ "a": { "nested": true }, "b": ["an", "array"] });
+  
+  assert!(obj.is_object());
+  assert!(obj["a"].is_object());
+  
+  // array, not an object
+  assert!(!obj["b"].is_object());
+  ```
+- `pub fn as_object(&self) -> Option<&Map<String, Value>>`
+  If the Value is an Object, returns the associated Map. Returns None
+otherwise.
+  ```
+  let v = json!({ "a": { "nested": true }, "b": ["an", "array"] });
+  
+  // The length of `{"nested": true}` is 1 entry.
+  assert_eq!(v["a"].as_object().unwrap().len(), 1);
+  
+  // The array `["an", "array"]` is not an object.
+  assert_eq!(v["b"].as_object(), None);
+  ```
+- `pub fn as_object_mut(&mut self) -> Option<&mut Map<String, Value>>`
+  If the Value is an Object, returns the associated mutable Map.
+Returns None otherwise.
+  ```
+  let mut v = json!({ "a": { "nested": true } });
+  
+  v["a"].as_object_mut().unwrap().clear();
+  assert_eq!(v, json!({ "a": {} }));
+  ```
+- `pub fn is_array(&self) -> bool`
+  Returns true if the Value is an Array. Returns false otherwise.
+  For any Value on which is_array returns true, as_array and as_array_mut are guaranteed to return the vector representing the
+array.
+  ```
+  let obj = json!({ "a": ["an", "array"], "b": { "an": "object" } });
+  
+  assert!(obj["a"].is_array());
+  
+  // an object, not an array
+  assert!(!obj["b"].is_array());
+  ```
+- `pub fn as_array(&self) -> Option<&Vec<Value>>`
+  If the Value is an Array, returns the associated vector. Returns None
+otherwise.
+  ```
+  let v = json!({ "a": ["an", "array"], "b": { "an": "object" } });
+  
+  // The length of `["an", "array"]` is 2 elements.
+  assert_eq!(v["a"].as_array().unwrap().len(), 2);
+  
+  // The object `{"an": "object"}` is not an array.
+  assert_eq!(v["b"].as_array(), None);
+  ```
+- `pub fn as_array_mut(&mut self) -> Option<&mut Vec<Value>>`
+  If the Value is an Array, returns the associated mutable vector.
+Returns None otherwise.
+  ```
+  let mut v = json!({ "a": ["an", "array"] });
+  
+  v["a"].as_array_mut().unwrap().clear();
+  assert_eq!(v, json!({ "a": [] }));
+  ```
+- `pub fn is_string(&self) -> bool`
+  Returns true if the Value is a String. Returns false otherwise.
+  For any Value on which is_string returns true, as_str is guaranteed
+to return the string slice.
+  ```
+  let v = json!({ "a": "some string", "b": false });
+  
+  assert!(v["a"].is_string());
+  
+  // The boolean `false` is not a string.
+  assert!(!v["b"].is_string());
+  ```
+- `pub fn as_str(&self) -> Option<&str>`
+  If the Value is a String, returns the associated str. Returns None
+otherwise.
+  ```
+  let v = json!({ "a": "some string", "b": false });
+  
+  assert_eq!(v["a"].as_str(), Some("some string"));
+  
+  // The boolean `false` is not a string.
+  assert_eq!(v["b"].as_str(), None);
+  
+  // JSON values are printed in JSON representation, so strings are in quotes.
+  //
+  //    The value is: "some string"
+  println!("The value is: {}", v["a"]);
+  
+  // Rust strings are printed without quotes.
+  //
+  //    The value is: some string
+  println!("The value is: {}", v["a"].as_str().unwrap());
+  ```
+- `pub fn is_number(&self) -> bool`
+  Returns true if the Value is a Number. Returns false otherwise.
+  ```
+  let v = json!({ "a": 1, "b": "2" });
+  
+  assert!(v["a"].is_number());
+  
+  // The string `"2"` is a string, not a number.
+  assert!(!v["b"].is_number());
+  ```
+- `pub fn as_number(&self) -> Option<&Number>`
+  If the Value is a Number, returns the associated Number . Returns
+None otherwise.
+  ```
+  let v = json!({ "a": 1, "b": 2.2, "c": -3, "d": "4" });
+  
+  assert_eq!(v["a"].as_number(), Some(&Number::from(1u64)));
+  assert_eq!(v["b"].as_number(), Some(&Number::from_f64(2.2).unwrap()));
+  assert_eq!(v["c"].as_number(), Some(&Number::from(-3i64)));
+  
+  // The string `"4"` is not a number.
+  assert_eq!(v["d"].as_number(), None);
+  ```
+- `pub fn is_i64(&self) -> bool`
+  Returns true if the Value is an integer between i64::MIN and i64::MAX .
+  For any Value on which is_i64 returns true, as_i64 is guaranteed to
+return the integer value.
+  ```
+  let big = i64::max_value() as u64 + 10;
+  let v = json!({ "a": 64, "b": big, "c": 256.0 });
+  
+  assert!(v["a"].is_i64());
+  
+  // Greater than i64::MAX.
+  assert!(!v["b"].is_i64());
+  
+  // Numbers with a decimal point are not considered integers.
+  assert!(!v["c"].is_i64());
+  ```
+- `pub fn is_u64(&self) -> bool`
+  Returns true if the Value is an integer between zero and u64::MAX .
+  For any Value on which is_u64 returns true, as_u64 is guaranteed to
+return the integer value.
+  ```
+  let v = json!({ "a": 64, "b": -64, "c": 256.0 });
+  
+  assert!(v["a"].is_u64());
+  
+  // Negative integer.
+  assert!(!v["b"].is_u64());
+  
+  // Numbers with a decimal point are not considered integers.
+  assert!(!v["c"].is_u64());
+  ```
+- `pub fn is_f64(&self) -> bool`
+  Returns true if the Value is a number that can be represented by f64.
+  For any Value on which is_f64 returns true, as_f64 is guaranteed to
+return the floating point value.
+  Currently this function returns true if and only if both is_i64 and is_u64 return false but this is not a guarantee in the future.
+  ```
+  let v = json!({ "a": 256.0, "b": 64, "c": -64 });
+  
+  assert!(v["a"].is_f64());
+  
+  // Integers.
+  assert!(!v["b"].is_f64());
+  assert!(!v["c"].is_f64());
+  ```
+- `pub fn as_i64(&self) -> Option<i64>`
+  If the Value is an integer, represent it as i64 if possible. Returns
+None otherwise.
+  ```
+  let big = i64::max_value() as u64 + 10;
+  let v = json!({ "a": 64, "b": big, "c": 256.0 });
+  
+  assert_eq!(v["a"].as_i64(), Some(64));
+  assert_eq!(v["b"].as_i64(), None);
+  assert_eq!(v["c"].as_i64(), None);
+  ```
+- `pub fn as_u64(&self) -> Option<u64>`
+  If the Value is an integer, represent it as u64 if possible. Returns
+None otherwise.
+  ```
+  let v = json!({ "a": 64, "b": -64, "c": 256.0 });
+  
+  assert_eq!(v["a"].as_u64(), Some(64));
+  assert_eq!(v["b"].as_u64(), None);
+  assert_eq!(v["c"].as_u64(), None);
+  ```
+- `pub fn as_f64(&self) -> Option<f64>`
+  If the Value is a number, represent it as f64 if possible. Returns
+None otherwise.
+  ```
+  let v = json!({ "a": 256.0, "b": 64, "c": -64 });
+  
+  assert_eq!(v["a"].as_f64(), Some(256.0));
+  assert_eq!(v["b"].as_f64(), Some(64.0));
+  assert_eq!(v["c"].as_f64(), Some(-64.0));
+  ```
+- `pub fn is_boolean(&self) -> bool`
+  Returns true if the Value is a Boolean. Returns false otherwise.
+  For any Value on which is_boolean returns true, as_bool is
+guaranteed to return the boolean value.
+  ```
+  let v = json!({ "a": false, "b": "false" });
+  
+  assert!(v["a"].is_boolean());
+  
+  // The string `"false"` is a string, not a boolean.
+  assert!(!v["b"].is_boolean());
+  ```
+- `pub fn as_bool(&self) -> Option<bool>`
+  If the Value is a Boolean, returns the associated bool. Returns None
+otherwise.
+  ```
+  let v = json!({ "a": false, "b": "false" });
+  
+  assert_eq!(v["a"].as_bool(), Some(false));
+  
+  // The string `"false"` is a string, not a boolean.
+  assert_eq!(v["b"].as_bool(), None);
+  ```
+- `pub fn is_null(&self) -> bool`
+  Returns true if the Value is a Null. Returns false otherwise.
+  For any Value on which is_null returns true, as_null is guaranteed
+to return Some(()) .
+  ```
+  let v = json!({ "a": null, "b": false });
+  
+  assert!(v["a"].is_null());
+  
+  // The boolean `false` is not null.
+  assert!(!v["b"].is_null());
+  ```
+- `pub fn as_null(&self) -> Option<()>`
+  If the Value is a Null, returns (). Returns None otherwise.
+  ```
+  let v = json!({ "a": null, "b": false });
+  
+  assert_eq!(v["a"].as_null(), Some(()));
+  
+  // The boolean `false` is not null.
+  assert_eq!(v["b"].as_null(), None);
+  ```
+- `pub fn pointer(&self, pointer: &str) -> Option<&Value>`
+  Looks up a value by a JSON Pointer.
+  JSON Pointer defines a string syntax for identifying a specific value
+within a JavaScript Object Notation (JSON) document.
+  A Pointer is a Unicode string with the reference tokens separated by / .
+Inside tokens / is replaced by ~1 and ~ is replaced by ~0 . The
+addressed value is returned and if there is no such value None is
+returned.
+  For more information read RFC6901 .
+  **Examples**
+  ```
+  let data = json!({
+      "x": {
+          "y": ["z", "zz"]
+      }
+  });
+  
+  assert_eq!(data.pointer("/x/y/1").unwrap(), &json!("zz"));
+  assert_eq!(data.pointer("/a/b/c"), None);
+  ```
+- `pub fn pointer_mut(&mut self, pointer: &str) -> Option<&mut Value>`
+  Looks up a value by a JSON Pointer and returns a mutable reference to
+that value.
+  JSON Pointer defines a string syntax for identifying a specific value
+within a JavaScript Object Notation (JSON) document.
+  A Pointer is a Unicode string with the reference tokens separated by / .
+Inside tokens / is replaced by ~1 and ~ is replaced by ~0 . The
+addressed value is returned and if there is no such value None is
+returned.
+  For more information read RFC6901 .
+  **Example of Use**
+  ```
+  use serde_json::Value;
+  
+  fn main() {
+      let s = r#"{"x": 1.0, "y": 2.0}"#;
+      let mut value: Value = serde_json::from_str(s).unwrap();
+  
+      // Check value using read-only pointer
+      assert_eq!(value.pointer("/x"), Some(&1.0.into()));
+      // Change value with direct assignment
+      *value.pointer_mut("/x").unwrap() = 1.5.into();
+      // Check that new value was written
+      assert_eq!(value.pointer("/x"), Some(&1.5.into()));
+      // Or change the value only if it exists
+      value.pointer_mut("/x").map(|v| *v = 1.5.into());
+  
+      // "Steal" ownership of a value. Can replace with any valid Value.
+      let old_x = value.pointer_mut("/x").map(Value::take).unwrap();
+      assert_eq!(old_x, 1.5);
+      assert_eq!(value.pointer("/x").unwrap(), &Value::Null);
+  }
+  ```
+- `pub fn take(&mut self) -> Value`
+  Takes the value out of the Value , leaving a Null in its place.
+  ```
+  let mut v = json!({ "x": "y" });
+  assert_eq!(v["x"].take(), json!("y"));
+  assert_eq!(v, json!({ "x": null }));
+  ```
+- `pub fn sort_all_objects(&mut self)`
+  Reorders the entries of all Value::Object nested within this JSON
+value according to str ’s usual ordering.
+  If serde_json’s “preserve_order” feature is not enabled, this method
+does no work because all JSON maps are always kept in a sorted state.
+  If serde_json’s “preserve_order” feature is enabled, this method
+destroys the original source order or insertion order of the JSON
+objects in favor of an alphanumerical order that matches how a BTreeMap
+with the same contents would be ordered.
+
+## Trait Implementations
+
+### impl Clone for Value
+- `fn clone(&self) -> Value`
+- `fn clone_from(&mut self, source: &Self)`
+
+### impl Debug for Value
+- `fn fmt(&self, formatter: &mut Formatter<'_>) -> Result`
+
+### impl Default for &Value
+- `fn default() -> Self`
+
+### impl Default for Value
+  The default value is Value::Null .
+  This is useful for handling omitted Value fields when deserializing.
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  #[derive(Deserialize)]
+  struct Settings {
+      level: i32,
+      #[serde(default)]
+      extras: Value,
+  }
+  
+  let data = r#" { "level": 42 } "#;
+  let s: Settings = serde_json::from_str(data)?;
+  
+  assert_eq!(s.level, 42);
+  assert_eq!(s.extras, Value::Null);
+  ```
+- `fn default() -> Value`
+
+### impl<'de> Deserialize<'de> for Value
+- `fn deserialize<D>(deserializer: D) -> Result<Value, D::Error>where D: Deserializer<'de>,`
+
+### impl<'de> Deserializer<'de> for &'de Value
+- `type Error = Error`
+- `fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i8<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i16<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i128<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u8<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u16<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u128<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_f32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_f64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_option<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_enum<V>( self, name: &'static str, variants: &'static [&'static str], visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_newtype_struct<V>( self, name: &'static str, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_bool<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_char<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_str<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_string<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_bytes<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_byte_buf<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_unit<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_unit_struct<V>( self, _name: &'static str, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_seq<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple<V>( self, _len: usize, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple_struct<V>( self, _name: &'static str, _len: usize, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_map<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_struct<V>( self, _name: &'static str, _fields: &'static [&'static str], visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_identifier<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_ignored_any<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn is_human_readable(&self) -> bool`
+
+### impl<'de> Deserializer<'de> for Value
+- `type Error = Error`
+- `fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i8<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i16<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_i128<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u8<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u16<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_u128<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_f32<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_f64<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_option<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_enum<V>( self, name: &'static str, variants: &'static [&'static str], visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_newtype_struct<V>( self, name: &'static str, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_bool<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_char<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_str<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_string<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_bytes<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_byte_buf<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_unit<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_unit_struct<V>( self, _name: &'static str, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_seq<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple<V>( self, _len: usize, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_tuple_struct<V>( self, _name: &'static str, _len: usize, visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_map<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_struct<V>( self, _name: &'static str, _fields: &'static [&'static str], visitor: V, ) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_identifier<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn deserialize_ignored_any<V>(self, visitor: V) -> Result<V::Value, Error>where V: Visitor<'de>,`
+- `fn is_human_readable(&self) -> bool`
+
+### impl Display for Value
+- `fn fmt(&self, f: &mut Formatter<'_>) -> Result`
+  Display a JSON value as a string.
+  ```
+  let json = json!({ "city": "London", "street": "10 Downing Street" });
+  
+  // Compact format:
+  //
+  // {"city":"London","street":"10 Downing Street"}
+  let compact = format!("{}", json);
+  assert_eq!(compact,
+      "{\"city\":\"London\",\"street\":\"10 Downing Street\"}");
+  
+  // Pretty format:
+  //
+  // {
+  //   "city": "London",
+  //   "street": "10 Downing Street"
+  // }
+  let pretty = format!("{:#}", json);
+  assert_eq!(pretty,
+      "{\n  \"city\": \"London\",\n  \"street\": \"10 Downing Street\"\n}");
+  ```
+
+### impl<T: Clone + Into<Value>> From<&[T]> for Value
+- `fn from(f: &[T]) -> Self`
+  Convert a slice to Value::Array .
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let v: &[&str] = &["lorem", "ipsum", "dolor"];
+  let x: Value = v.into();
+  ```
+
+### impl From<&str> for Value
+- `fn from(f: &str) -> Self`
+  Convert string slice to Value::String .
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let s: &str = "lorem";
+  let x: Value = s.into();
+  ```
+
+### impl<T: Into<Value>, const N: usize> From<[T; N]> for Value
+- `fn from(array: [T; N]) -> Self`
+
+### impl From<()> for Value
+- `fn from((): ()) -> Self`
+  Convert () to Value::Null .
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let u = ();
+  let x: Value = u.into();
+  ```
+
+### impl<'a> From<Cow<'a, str>> for Value
+- `fn from(f: Cow<'a, str>) -> Self`
+  Convert copy-on-write string to Value::String .
+  **Examples**
+  ```
+  use serde_json::Value;
+  use std::borrow::Cow;
+  
+  let s: Cow<str> = Cow::Borrowed("lorem");
+  let x: Value = s.into();
+  ```
+  ```
+  use serde_json::Value;
+  use std::borrow::Cow;
+  
+  let s: Cow<str> = Cow::Owned("lorem".to_owned());
+  let x: Value = s.into();
+  ```
+
+### impl From<Map<String, Value>> for Value
+- `fn from(f: Map<String, Value>) -> Self`
+  Convert map (with string keys) to Value::Object .
+  **Examples**
+  ```
+  use serde_json::{Map, Value};
+  
+  let mut m = Map::new();
+  m.insert("Lorem".to_owned(), "ipsum".into());
+  let x: Value = m.into();
+  ```
+
+### impl From<Number> for Value
+- `fn from(f: Number) -> Self`
+  Convert Number to Value::Number .
+  **Examples**
+  ```
+  use serde_json::{Number, Value};
+  
+  let n = Number::from(7);
+  let x: Value = n.into();
+  ```
+
+### impl<T> From<Option<T>> for Valuewhere T: Into<Value>,
+- `fn from(opt: Option<T>) -> Self`
+
+### impl From<String> for Value
+- `fn from(f: String) -> Self`
+  Convert String to Value::String .
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let s: String = "lorem".to_owned();
+  let x: Value = s.into();
+  ```
+
+### impl<T: Into<Value>> From<Vec<T>> for Value
+- `fn from(f: Vec<T>) -> Self`
+  Convert a Vec to Value::Array .
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let v = vec!["lorem", "ipsum", "dolor"];
+  let x: Value = v.into();
+  ```
+
+### impl From<bool> for Value
+- `fn from(f: bool) -> Self`
+  Convert boolean to Value::Bool .
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let b = false;
+  let x: Value = b.into();
+  ```
+
+### impl From<f32> for Value
+- `fn from(f: f32) -> Self`
+  Convert 32-bit floating point number to Value::Number , or Value::Null if infinite or NaN.
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let f: f32 = 13.37;
+  let x: Value = f.into();
+  ```
+
+### impl From<f64> for Value
+- `fn from(f: f64) -> Self`
+  Convert 64-bit floating point number to Value::Number , or Value::Null if infinite or NaN.
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let f: f64 = 13.37;
+  let x: Value = f.into();
+  ```
+
+### impl From<i16> for Value
+- `fn from(n: i16) -> Self`
+
+### impl From<i32> for Value
+- `fn from(n: i32) -> Self`
+
+### impl From<i64> for Value
+- `fn from(n: i64) -> Self`
+
+### impl From<i8> for Value
+- `fn from(n: i8) -> Self`
+
+### impl From<isize> for Value
+- `fn from(n: isize) -> Self`
+
+### impl From<u16> for Value
+- `fn from(n: u16) -> Self`
+
+### impl From<u32> for Value
+- `fn from(n: u32) -> Self`
+
+### impl From<u64> for Value
+- `fn from(n: u64) -> Self`
+
+### impl From<u8> for Value
+- `fn from(n: u8) -> Self`
+
+### impl From<usize> for Value
+- `fn from(n: usize) -> Self`
+
+### impl<K: Into<String>, V: Into<Value>> FromIterator<(K, V)> for Value
+- `fn from_iter<I: IntoIterator<Item = (K, V)>>(iter: I) -> Self`
+  Create a Value::Object by collecting an iterator of key-value pairs.
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let v: Vec<_> = vec![("lorem", 40), ("ipsum", 2)];
+  let x: Value = v.into_iter().collect();
+  ```
+
+### impl<T: Into<Value>> FromIterator<T> for Value
+- `fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self`
+  Create a Value::Array by collecting an iterator of array elements.
+  **Examples**
+  ```
+  use serde_json::Value;
+  
+  let v = std::iter::repeat(42).take(5);
+  let x: Value = v.collect();
+  ```
+  ```
+  use serde_json::Value;
+  
+  let v: Vec<_> = vec!["lorem", "ipsum", "dolor"];
+  let x: Value = v.into_iter().collect();
+  ```
+  ```
+  use std::iter::FromIterator;
+  use serde_json::Value;
+  
+  let x: Value = Value::from_iter(vec!["lorem", "ipsum", "dolor"]);
+  ```
+
+### impl FromStr for Value
+- `type Err = Error`
+- `fn from_str(s: &str) -> Result<Value, Error>`
+
+### impl Hash for Value
+- `fn hash<__H: Hasher>(&self, state: &mut __H)`
+- `fn hash_slice<H>(data: &[Self], state: &mut H)where H: Hasher, Self: Sized,`
+
+### impl<I> Index<I> for Valuewhere I: Index,
+- `fn index(&self, index: I) -> &Value`
+  Index into a serde_json::Value using the syntax value[0] or value["k"] .
+  Returns Value::Null if the type of self does not match the type of
+the index, for example if the index is a string and self is an array
+or a number. Also returns Value::Null if the given key does not exist
+in the map or the given index is not within the bounds of the array.
+  For retrieving deeply nested values, you should have a look at the Value::pointer method.
+  **Examples**
+  ```
+  let data = json!({
+      "x": {
+          "y": ["z", "zz"]
+      }
+  });
+  
+  assert_eq!(data["x"]["y"], json!(["z", "zz"]));
+  assert_eq!(data["x"]["y"][0], json!("z"));
+  
+  assert_eq!(data["a"], json!(null)); // returns null for undefined values
+  assert_eq!(data["a"]["b"], json!(null)); // does not panic
+  ```
+- `type Output = Value`
+
+### impl<I> IndexMut<I> for Valuewhere I: Index,
+- `fn index_mut(&mut self, index: I) -> &mut Value`
+  Write into a serde_json::Value using the syntax value[0] = ... or value["k"] = ... .
+  If the index is a number, the value must be an array of length bigger
+than the index. Indexing into a value that is not an array or an array
+that is too small will panic.
+  If the index is a string, the value must be an object or null which is
+treated like an empty object. If the key is not already present in the
+object, it will be inserted with a value of null. Indexing into a value
+that is neither an object nor null will panic.
+  **Examples**
+  ```
+  let mut data = json!({ "x": 0 });
+  
+  // replace an existing key
+  data["x"] = json!(1);
+  
+  // insert a new key
+  data["y"] = json!([false, false, false]);
+  
+  // replace an array value
+  data["y"][0] = json!(true);
+  
+  // inserted a deeply nested key
+  data["a"]["b"]["c"]["d"] = json!(true);
+  
+  println!("{}", data);
+  ```
+
+### impl<'de> IntoDeserializer<'de, Error> for &'de Value
+- `type Deserializer = &'de Value`
+- `fn into_deserializer(self) -> Self::Deserializer`
+
+### impl<'de> IntoDeserializer<'de, Error> for Value
+- `type Deserializer = Value`
+- `fn into_deserializer(self) -> Self::Deserializer`
+
+### impl PartialEq<&str> for Value
+- `fn eq(&self, other: &&str) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<String> for Value
+- `fn eq(&self, other: &String) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for &str
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for String
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for bool
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for f32
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for f64
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for i16
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for i32
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for i64
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for i8
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for isize
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for str
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for u16
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for u32
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for u64
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for u8
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<Value> for usize
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<bool> for &'a Value
+- `fn eq(&self, other: &bool) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<bool> for &'a mut Value
+- `fn eq(&self, other: &bool) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<bool> for Value
+- `fn eq(&self, other: &bool) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<f32> for &'a Value
+- `fn eq(&self, other: &f32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<f32> for &'a mut Value
+- `fn eq(&self, other: &f32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<f32> for Value
+- `fn eq(&self, other: &f32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<f64> for &'a Value
+- `fn eq(&self, other: &f64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<f64> for &'a mut Value
+- `fn eq(&self, other: &f64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<f64> for Value
+- `fn eq(&self, other: &f64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i16> for &'a Value
+- `fn eq(&self, other: &i16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i16> for &'a mut Value
+- `fn eq(&self, other: &i16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<i16> for Value
+- `fn eq(&self, other: &i16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i32> for &'a Value
+- `fn eq(&self, other: &i32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i32> for &'a mut Value
+- `fn eq(&self, other: &i32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<i32> for Value
+- `fn eq(&self, other: &i32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i64> for &'a Value
+- `fn eq(&self, other: &i64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i64> for &'a mut Value
+- `fn eq(&self, other: &i64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<i64> for Value
+- `fn eq(&self, other: &i64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i8> for &'a Value
+- `fn eq(&self, other: &i8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<i8> for &'a mut Value
+- `fn eq(&self, other: &i8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<i8> for Value
+- `fn eq(&self, other: &i8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<isize> for &'a Value
+- `fn eq(&self, other: &isize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<isize> for &'a mut Value
+- `fn eq(&self, other: &isize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<isize> for Value
+- `fn eq(&self, other: &isize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<str> for Value
+- `fn eq(&self, other: &str) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u16> for &'a Value
+- `fn eq(&self, other: &u16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u16> for &'a mut Value
+- `fn eq(&self, other: &u16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<u16> for Value
+- `fn eq(&self, other: &u16) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u32> for &'a Value
+- `fn eq(&self, other: &u32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u32> for &'a mut Value
+- `fn eq(&self, other: &u32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<u32> for Value
+- `fn eq(&self, other: &u32) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u64> for &'a Value
+- `fn eq(&self, other: &u64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u64> for &'a mut Value
+- `fn eq(&self, other: &u64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<u64> for Value
+- `fn eq(&self, other: &u64) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u8> for &'a Value
+- `fn eq(&self, other: &u8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<u8> for &'a mut Value
+- `fn eq(&self, other: &u8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<u8> for Value
+- `fn eq(&self, other: &u8) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<usize> for &'a Value
+- `fn eq(&self, other: &usize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl<'a> PartialEq<usize> for &'a mut Value
+- `fn eq(&self, other: &usize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq<usize> for Value
+- `fn eq(&self, other: &usize) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl PartialEq for Value
+- `fn eq(&self, other: &Value) -> bool`
+- `fn ne(&self, other: &Rhs) -> bool`
+
+### impl Serialize for Value
+- `fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>where S: Serializer,`
+
+### impl Eq for Value
+
+### impl StructuralPartialEq for Value

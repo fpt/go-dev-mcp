@@ -1,0 +1,10 @@
+# Function to_ string
+```rust
+pub fn to_string<T>(value: &T) -> Result<String>where
+    T: ?Sized + Serialize,
+```
+Serialize the given data structure as a String of JSON.
+
+## Errors
+Serialization can fail if T ’s implementation of Serialize decides to
+fail, or if T contains a map with non-string keys.
