@@ -207,6 +207,60 @@ func cleanRustDocSignature(text string) string {
 	return strings.TrimSpace(text)
 }
 
+// writeRustDocBlock renders the full content of a div.docblock (paragraphs,
+// code blocks, lists and headings) into builder, prefixing every line with
+// indent so it nests under the enclosing item bullet. This mirrors the content
+// types the top-level overview matchers handle, so method, enum-variant and
+// struct-field docs no longer silently drop examples, lists or headings.
+// Headings are emitted as bold text rather than "#" headings to avoid clashing
+// with the document's section structure.
+func writeRustDocBlock(builder *strings.Builder, docblock *html.Node, indent string) {
+	headerMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("h1,h2,h3,h4,h5,h6"),
+		func(n *html.Node) {
+			text := cleanRustDocHeading(dq.InnerText(n, true))
+			if text != "" {
+				builder.WriteString(fmt.Sprintf("%s**%s**\n", indent, text))
+			}
+		},
+	)
+	pMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("p"),
+		func(n *html.Node) {
+			text := strings.TrimSpace(dq.InnerText(n, true))
+			if text != "" {
+				builder.WriteString(fmt.Sprintf("%s%s\n", indent, text))
+			}
+		},
+	)
+	preMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("pre"),
+		func(n *html.Node) {
+			code := strings.TrimRight(dq.RawInnerText(n, true), "\n")
+			builder.WriteString(indent + "```\n")
+			for _, line := range strings.Split(code, "\n") {
+				builder.WriteString(indent + line + "\n")
+			}
+			builder.WriteString(indent + "```\n")
+		},
+	)
+	listMatcher := dq.NewNodeMatcher(
+		dq.NewMatchFunc("ul,ol"),
+		nil,
+		dq.NewNodeMatcher(
+			dq.NewMatchFunc("li"),
+			func(n *html.Node) {
+				text := strings.TrimSpace(dq.InnerText(n, true))
+				if text != "" {
+					builder.WriteString(fmt.Sprintf("%s- %s\n", indent, text))
+				}
+			},
+		),
+	)
+
+	dq.Traverse(docblock, []dq.Matcher{headerMatcher, pMatcher, preMatcher, listMatcher})
+}
+
 func parseDocsRsSearchResult(doc *html.Node) (bool, string) {
 	builder := strings.Builder{}
 
@@ -433,16 +487,9 @@ func parseDocsRsDocument(doc *html.Node) (bool, string) {
 	)
 	methodDocMatcher := dq.NewNodeMatcher(
 		dq.NewMatchFunc("div.docblock"),
-		nil,
-		dq.NewNodeMatcher(
-			dq.NewMatchFunc("p"),
-			func(n *html.Node) {
-				text := strings.TrimSpace(dq.InnerText(n, true))
-				if text != "" {
-					builder.WriteString(fmt.Sprintf("  %s\n", text))
-				}
-			},
-		),
+		func(n *html.Node) {
+			writeRustDocBlock(&builder, n, "  ")
+		},
 	)
 	implsMatcher := dq.NewNodeMatcher(
 		dq.NewMatchFunc("div#implementations-list,div#trait-implementations-list"),
@@ -498,12 +545,7 @@ func parseDocsRsDocument(doc *html.Node) (bool, string) {
 				return
 			}
 			fieldOpen = false
-			for _, p := range dq.FindAll(n, "p") {
-				text := strings.TrimSpace(dq.InnerText(p, true))
-				if text != "" {
-					builder.WriteString(fmt.Sprintf("  %s\n", text))
-				}
-			}
+			writeRustDocBlock(&builder, n, "  ")
 		},
 	)
 

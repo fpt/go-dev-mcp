@@ -206,6 +206,14 @@ call map. values_mut ().for_each( Value::sort_all_objects ) .
 ### impl From<Map<String, Value>> for Value
 - `fn from(f: Map<String, Value>) -> Self`
   Convert map (with string keys) to Value::Object .
+  **Examples**
+  ```
+  use serde_json::{Map, Value};
+  
+  let mut m = Map::new();
+  m.insert("Lorem".to_owned(), "ipsum".into());
+  let x: Value = m.into();
+  ```
 
 ### impl FromIterator<(String, Value)> for Map<String, Value>
 - `fn from_iter<T>(iter: T) -> Selfwhere T: IntoIterator<Item = (String, Value)>,`
@@ -221,12 +229,23 @@ call map. values_mut ().for_each( Value::sort_all_objects ) .
 ### impl<Q> Index<&Q> for Map<String, Value>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,
   Access an element of this map. Panics if the given key is not present in the
 map.
+  ```
+  match val {
+      Value::String(s) => Some(s.as_str()),
+      Value::Array(arr) => arr[0].as_str(),
+      Value::Object(map) => map["type"].as_str(),
+      _ => None,
+  }
+  ```
 - `type Output = Value`
 - `fn index(&self, index: &Q) -> &Value`
 
 ### impl<Q> IndexMut<&Q> for Map<String, Value>where String: Borrow<Q>, Q: ?Sized + Ord + Eq + Hash,
   Mutably access an element of this map. Panics if the given key is not
 present in the map.
+  ```
+  map["key"] = json!("value");
+  ```
 - `fn index_mut(&mut self, index: &Q) -> &mut Value`
 
 ### impl<'de> IntoDeserializer<'de, Error> for &'de Map<String, Value>
