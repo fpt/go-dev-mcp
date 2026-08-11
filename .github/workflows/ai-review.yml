@@ -10,8 +10,16 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
+# `contents: write` is not used to push anything — the review writes no code.
+# GitHub gates the `resolveReviewThread` GraphQL mutation on it (not on
+# `pull-requests: write`, as one would expect), and the reusable workflow now
+# resolves threads the reviewer has verified as fixed. It has to be granted
+# here because a reusable workflow can only narrow the permissions it inherits;
+# inside it, the job that checks out and runs this PR's code is narrowed back
+# to `contents: read`, so no job holds both a write token and PR-authored code.
+# See fpt/klein-cli#111.
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
