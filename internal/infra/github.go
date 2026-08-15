@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/fpt/go-dev-mcp/internal/repository"
-	"github.com/google/go-github/v74/github"
+	"github.com/google/go-github/v78/github"
 	"github.com/pkg/errors"
 )
 
