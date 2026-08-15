@@ -8,7 +8,7 @@ import (
 
 	"github.com/fpt/go-dev-mcp/internal/app"
 	"github.com/fpt/go-dev-mcp/internal/infra"
-	"github.com/google/go-github/v74/github"
+	"github.com/google/go-github/v78/github"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
