@@ -37,20 +37,12 @@ jobs:
             echo "No Node dependencies found under vscext/"
           fi
 
-      - name: Install vsce
-        run: |
-          npm install -g vsce
-
       - name: Build Go binaries and package VSIX
         id: package
-        env:
-          VSCE_LOGIN: ${{ vars.VSCE_LOGIN }}
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
-          # Build cross-platform Go binaries and package the extension using the Makefile
-          make vscode-build vscode-check
-          # Install deps and package extension. vsce will read VSCE_LOGIN/VSCE_PAT from env
-          (cd vscext && npm install && vsce package)
+          # Stamp the release tag, build cross-platform Go binaries and package
+          # the extension with the Makefile's pinned vsce (via npx)
+          make vscode-package VERSION=${{ github.event.release.tag_name }}
           # Find produced .vsix in vscext/
           VSIX_PATH=$(ls -1 vscext/*.vsix 2>/dev/null | head -n1 || true)
           if [ -z "$VSIX_PATH" ]; then
