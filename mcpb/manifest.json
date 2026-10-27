@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "go-dev-mcp",
   "display_name": "Go Development MCP Server",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Go development tools for Claude: package documentation (Go, Rust, Python), GitHub integration, code outlining, and local file search.",
   "long_description": "GoDevMCP is a local MCP server that provides Go (and Rust/Python) development tools to Claude. It includes documentation search and reading for pkg.go.dev, docs.rs, and docs.python.org; GitHub code search, content, diffs, issues, pull requests, and workflow runs; directory tree visualization; local file content search; Go package outlining and validation; and markdown scanning. All tools are read-only and run locally over stdio.",
   "author": {
