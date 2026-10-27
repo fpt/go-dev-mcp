@@ -31,7 +31,7 @@ jobs:
         id: package
         run: |
           # Cross-compile the macOS universal binary + Windows .exe and pack the bundle
-          make mcpb-pack
+          make mcpb-pack VERSION=${{ github.event.release.tag_name }}
           MCPB_PATH=output/go-dev-mcp.mcpb
           if [ ! -f "$MCPB_PATH" ]; then
             echo "No .mcpb produced at $MCPB_PATH" >&2

@@ -1,3 +1,7 @@
+# Version stamped into the VSCode extension and MCPB metadata. Defaults to the
+# nearest git tag; a leading "v" is stripped. Override with VERSION=x.y.z.
+VERSION ?= $(shell git describe --tags --abbrev=0 2>/dev/null)
+
 run: ## Run the application
 	go run godevmcp/main.go serve
 
@@ -38,10 +42,15 @@ vscode-build: ## Build binaries for VSCode extension
 vscode-check: ## Check TypeScript code for extension
 	cd vscext && npm run compile
 
-vscode-package: vscode-build vscode-check ## Build and package VSCode extension
+version: ## Stamp VERSION (latest git tag) into vscext/package.json and mcpb/manifest.json
+	@test -n "$(VERSION)" || { echo "No git tag found; set VERSION=x.y.z" >&2; exit 1; }
+	sed -i.bak -E 's/^(  "version": )"[^"]*"/\1"$(patsubst v%,%,$(VERSION))"/' vscext/package.json mcpb/manifest.json
+	rm -f vscext/package.json.bak mcpb/manifest.json.bak
+
+vscode-package: version vscode-build vscode-check ## Build and package VSCode extension
 	cd vscext && npx -y @vscode/vsce@4.0.0 package
 
-vscode-publish: vscode-build vscode-check ## Build and publish VSCode extension
+vscode-publish: version vscode-build vscode-check ## Build and publish VSCode extension
 	cd vscext && npx -y @vscode/vsce@4.0.0 publish
 
 mcpb-build: ## Cross-compile binaries for the MCPB bundle (macOS universal + Windows)
@@ -55,7 +64,7 @@ mcpb-build: ## Cross-compile binaries for the MCPB bundle (macOS universal + Win
 	# Claude Desktop requires the extracted macOS server binary to be executable.
 	chmod +x mcpb/server/godevmcp-darwin
 
-mcpb-pack: mcpb-build ## Build binaries and pack the .mcpb bundle
+mcpb-pack: version mcpb-build ## Build binaries and pack the .mcpb bundle
 	mkdir -p output
 	npx -y @anthropic-ai/mcpb pack mcpb output/go-dev-mcp.mcpb
 

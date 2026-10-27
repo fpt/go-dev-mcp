@@ -48,7 +48,7 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
           # Build cross-platform Go binaries and package the extension using the Makefile
-          make vscode-build vscode-check
+          make version vscode-build vscode-check VERSION=${{ github.event.release.tag_name }}
           # Install deps and package extension. vsce will read VSCE_LOGIN/VSCE_PAT from env
           (cd vscext && npm install && vsce package)
           # Find produced .vsix in vscext/
