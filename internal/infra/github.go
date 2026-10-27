@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/fpt/go-dev-mcp/internal/repository"
-	"github.com/google/go-github/v78/github"
+	"github.com/google/go-github/v93/github"
 	"github.com/pkg/errors"
 )
 
@@ -24,7 +24,10 @@ func NewGitHubClient() (*GitHubClient, error) {
 	}
 
 	// Create a new GitHub client with the token
-	client := github.NewClient(nil).WithAuthToken(token)
+	client, err := github.NewClient(github.WithAuthToken(token))
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to create GitHub client")
+	}
 	return &GitHubClient{Client: client}, nil
 }
 
