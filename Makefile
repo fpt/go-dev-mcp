@@ -39,10 +39,10 @@ vscode-check: ## Check TypeScript code for extension
 	cd vscext && npm run compile
 
 vscode-package: vscode-build vscode-check ## Build and package VSCode extension
-	cd vscext && vsce package
+	cd vscext && npx -y @vscode/vsce@4.0.0 package
 
 vscode-publish: vscode-build vscode-check ## Build and publish VSCode extension
-	cd vscext && vsce publish
+	cd vscext && npx -y @vscode/vsce@4.0.0 publish
 
 mcpb-build: ## Cross-compile binaries for the MCPB bundle (macOS universal + Windows)
 	mkdir -p mcpb/server
